@@ -48,7 +48,11 @@ const assetDir = path.join(outputDir, "assets");
 await mkdir(assetDir, { recursive: true });
 await cp(path.join(rootDir, "styles.css"), path.join(assetDir, stylesAsset));
 await cp(path.join(rootDir, "app.js"), path.join(assetDir, appAsset));
-await cp(path.join(rootDir, "public"), outputDir, { recursive: true });
+await cp(path.join(rootDir, "public"), outputDir, {
+  recursive: true,
+  // Preserve the source video in Git; only publish the optimized playback asset.
+  filter: (source) => source !== path.join(rootDir, "public", "videos", "500-mantras-apresentacao.mp4"),
+});
 await writeFile(
   path.join(outputDir, "runtime-config.js"),
   `window.LANDING_CONFIG = Object.freeze(${safeJson(site)});\n`,

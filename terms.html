@@ -13,7 +13,7 @@
   </head>
   <body class="legal-page">
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-    <header class="legal-header"><div class="legal-header-inner"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21"/><path d="M28.4 11.4a13.1 13.1 0 1 0 9.1 22.4A14.8 14.8 0 0 1 28.4 11.4Z"/><path d="m12 24 1.4.5L14 26l.5-1.5L16 24l-1.5-.5L14 22l-.6 1.5L12 24Z"/></svg></span><span class="brand-name">500 <span>mantras</span></span></a><a href="/">Voltar à página</a></div></header>
+    <header class="legal-header"><div class="legal-header-inner"><a class="brand" href="/" aria-label="500 Mantras, início"><img class="brand-logo" src="/assets/logo-500-mantras.png" width="260" height="86" alt="500 Mantras para Elevar Sua Energia"></a><a href="/">Voltar à página</a></div></header>
     <main class="legal-main" id="conteudo">
       <p class="eyebrow">INFORMAÇÕES DO PRODUTO</p>
       <h1>Termos<br><em>de uso.</em></h1>
@@ -34,10 +34,13 @@
       <h2>Suporte</h2>
       <p>Em caso de dúvida sobre a compra ou o acesso ao material, entre em contato pelo e-mail <a href="mailto:__SUPPORT_EMAIL__">__SUPPORT_EMAIL__</a>. Regras sobre pagamento, entrega, cancelamento e outras condições da transação são apresentadas no checkout da Cakto.</p>
     </main>
-    <footer class="legal-footer">500 Mantras para Elevar Sua Energia · <a href="/privacidade">Privacidade</a></footer>
-    <aside class="consent-banner" id="consentBanner" aria-label="Preferências de privacidade" aria-describedby="consentDescription" hidden>
-      <div class="consent-copy"><p id="consentDescription">Utilizamos cookies opcionais para entender a navegação e melhorar sua experiência.</p><a href="/privacidade">Política de privacidade</a></div>
-      <div class="consent-actions"><button type="button" class="consent-accept" id="acceptAnalytics">Aceitar</button><button type="button" class="consent-reject" id="rejectAnalytics">Só essenciais</button></div>
-    </aside>
+    <footer class="legal-footer">500 Mantras para Elevar Sua Energia · <a href="/privacidade">Privacidade</a> · <a href="/privacidade#preferencias" data-consent-preferences>Preferências de cookies</a></footer>
+    <dialog class="consent-dialog" id="consentPreferences" aria-labelledby="consent-title" aria-describedby="consent-description">
+      <button class="consent-close" type="button" data-consent-close aria-label="Fechar preferências">Fechar <span aria-hidden="true">×</span></button>
+      <p class="eyebrow">SUA PRIVACIDADE</p><h2 class="consent-heading" id="consent-title">Você escolhe.</h2>
+      <div class="consent-copy" id="consent-description"><p>O rastreamento opcional fica desativado até você aceitar. Com sua permissão, o Meta Pixel e o Google Analytics, quando configurado, medem visitas e interações.</p><p>Você pode comprar sem aceitar e revisar sua escolha a qualquer momento no rodapé. <a href="/privacidade">Política de privacidade</a>.</p></div>
+      <p class="consent-status" data-consent-status aria-live="polite"></p>
+      <div class="consent-actions"><button class="consent-reject" type="button" data-consent="denied">Rejeitar opcionais</button><button class="consent-accept" type="button" data-consent="accepted">Aceitar opcionais</button></div>
+    </dialog>
   </body>
 </html>

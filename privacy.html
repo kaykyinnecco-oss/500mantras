@@ -13,18 +13,20 @@
   </head>
   <body class="legal-page">
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-    <header class="legal-header"><div class="legal-header-inner"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21"/><path d="M28.4 11.4a13.1 13.1 0 1 0 9.1 22.4A14.8 14.8 0 0 1 28.4 11.4Z"/><path d="m12 24 1.4.5L14 26l.5-1.5L16 24l-1.5-.5L14 22l-.6 1.5L12 24Z"/></svg></span><span class="brand-name">500 <span>mantras</span></span></a><a href="/">Voltar à página</a></div></header>
+    <header class="legal-header"><div class="legal-header-inner"><a class="brand" href="/" aria-label="500 Mantras, início"><img class="brand-logo" src="/assets/logo-500-mantras.png" width="260" height="86" alt="500 Mantras para Elevar Sua Energia"></a><a href="/">Voltar à página</a></div></header>
     <main class="legal-main" id="conteudo">
       <p class="eyebrow">INFORMAÇÕES DO SITE</p>
       <h1>Privacidade<br><em>e métricas.</em></h1>
       <p class="legal-updated">Aviso da página de vendas, atualizado em outubro de 2026</p>
 
       <h2>Quais informações esta página usa</h2>
-      <p>Esta página não solicita dados de pagamento. Ao escolher métricas, sua preferência fica salva neste navegador para que o site respeite a decisão nas próximas visitas. Quando uma campanha inclui parâmetros como UTM, src ou sck no endereço, eles podem ser encaminhados ao checkout para atribuição da campanha.</p>
+      <p>Esta página não solicita dados de pagamento. Sua escolha sobre rastreamento opcional fica salva neste navegador por até 180 dias, junto com a data e a versão da preferência. Esse registro é usado para respeitar sua decisão nas próximas visitas. Se o navegador impedir o armazenamento, a escolha vale apenas enquanto esta página permanecer aberta.</p>
+      <p>Quando uma campanha inclui parâmetros como UTM, src ou sck no endereço, eles podem ser encaminhados ao checkout para atribuição da campanha.</p>
 
       <h2>Medição opcional</h2>
-      <p>O Meta Pixel só é carregado após você permitir métricas. Quando ativo, recebe eventos de navegação e interação, como visualização da página e início do checkout. O Google Analytics também respeita essa escolha e só é carregado quando configurado. A página não envia Purchase por causa de um clique.</p>
-      <p>Se você escolher “Só essenciais”, essas ferramentas não são carregadas pela página. Você pode mudar a escolha em <a href="#preferencias">Preferências de métricas</a>.</p>
+      <p>O Meta Pixel só é carregado após você aceitar o rastreamento opcional. Quando ativo, mede visitas, visualização da oferta, reprodução do vídeo e abertura do checkout, para avaliar a página e campanhas publicitárias. O Google Analytics também respeita essa escolha e só é carregado quando configurado. Essas ferramentas podem usar cookies e receber informações do navegador, do dispositivo e das interações realizadas após o aceite. Um clique no botão de compra não é informado como compra concluída.</p>
+      <p>Enquanto você não escolher, ou se rejeitar o rastreamento opcional, essas ferramentas permanecem desativadas. Fechar as preferências não significa aceitar. Você pode comprar e navegar normalmente sem permitir o rastreamento.</p>
+      <p>Você pode revisar ou revogar sua escolha no controle de <a href="#preferencias">Preferências de privacidade</a>, disponível também no rodapé da página de vendas. Ao revogar um aceite, a página bloqueia os eventos, remove os cookies opcionais acessíveis neste domínio e recarrega para descarregar as ferramentas. Cookies de outros domínios podem ser gerenciados nas configurações do navegador.</p>
 
       <h2>Checkout e entrega</h2>
       <p>O botão de compra direciona para o checkout da Cakto. Os dados informados durante o pagamento e a disponibilização do e-book são tratados no fluxo da plataforma, conforme as informações e políticas apresentadas por ela. Consulte os avisos da Cakto antes de concluir a compra.</p>
@@ -32,12 +34,24 @@
       <h2>Contato</h2>
       <p>Para dúvidas sobre a página ou o conteúdo, escreva para <a href="mailto:__SUPPORT_EMAIL__">__SUPPORT_EMAIL__</a>.</p>
 
-      <div class="legal-callout" id="preferencias">As preferências de métricas são opcionais. Para atualizar sua escolha agora, <a href="#preferencias" id="openConsentSettings">abra novamente as opções de privacidade</a>.</div>
+      <div class="legal-callout" id="preferencias">
+        <h2>Suas preferências</h2>
+        <p data-consent-status>Rastreamento opcional desativado. Você ainda não fez uma escolha.</p>
+        <a href="#consentPreferences" data-consent-preferences>Revisar preferências de privacidade</a>
+      </div>
     </main>
     <footer class="legal-footer">500 Mantras para Elevar Sua Energia · <a href="/termos">Termos de uso</a></footer>
-    <aside class="consent-banner" id="consentBanner" aria-label="Preferências de privacidade" aria-describedby="consentDescription" hidden>
-      <div class="consent-copy"><p id="consentDescription">Utilizamos cookies opcionais para entender a navegação e melhorar sua experiência.</p><a href="/privacidade">Política de privacidade</a></div>
-      <div class="consent-actions"><button type="button" class="consent-accept" id="acceptAnalytics">Aceitar</button><button type="button" class="consent-reject" id="rejectAnalytics">Só essenciais</button></div>
-    </aside>
+    <dialog class="consent-dialog" id="consentPreferences" aria-labelledby="consent-title" aria-describedby="consent-description">
+      <button class="consent-close" type="button" data-consent-close aria-label="Fechar preferências">Fechar</button>
+      <p class="eyebrow">SUA PRIVACIDADE</p>
+      <h2 class="consent-heading" id="consent-title">Você escolhe o que permite.</h2>
+      <p class="consent-copy" id="consent-description">Com seu aceite, usamos Meta Pixel e, quando configurado, Google Analytics para medir visitas, vídeo e abertura do checkout e avaliar campanhas. Sem aceite, o rastreamento opcional permanece desativado. Sua compra funciona em qualquer escolha.</p>
+      <p class="consent-status" data-consent-status role="status">Rastreamento opcional desativado.</p>
+      <div class="consent-actions">
+        <button class="consent-accept" type="button" data-consent="accepted">Aceitar rastreamento opcional</button>
+        <button class="consent-reject" type="button" data-consent="denied">Rejeitar rastreamento opcional</button>
+      </div>
+      <p class="consent-copy">Você pode revisar esta escolha a qualquer momento. Fechar sem escolher mantém a preferência atual.</p>
+    </dialog>
   </body>
 </html>

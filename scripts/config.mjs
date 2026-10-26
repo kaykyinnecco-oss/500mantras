@@ -54,7 +54,8 @@ export async function getSiteConfig() {
   } catch {
     throw new Error("NEXT_PUBLIC_CAKTO_CHECKOUT_URL precisa ser um endereço HTTPS válido da Cakto.");
   }
-  if (checkout.protocol !== "https:" || !checkout.hostname.endsWith("cakto.com.br")) {
+  const officialDomain = checkout.hostname === "cakto.com.br" || checkout.hostname.endsWith(".cakto.com.br");
+  if (checkout.protocol !== "https:" || !officialDomain) {
     throw new Error("O checkout configurado precisa usar HTTPS e um domínio oficial da Cakto.");
   }
 

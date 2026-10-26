@@ -76,9 +76,30 @@
 
   let analyticsAllowed = false;
   let analyticsInitialized = false;
-  const consentKey = "mantras.analytics.consent.v1";
-  const consentBanner = document.getElementById("consentBanner");
-  const consentSettingsButton = document.getElementById("openConsentSettings");
+  const consentKey = "mantras.analytics.consent.v2";
+  const legacyConsentKey = "mantras.analytics.consent.v1";
+  const consentLifetime = 180 * 24 * 60 * 60 * 1000;
+  const consentDialog = document.getElementById("consentPreferences");
+  let consentExpiryTimer;
+  let offerViewed = false;
+  let offerInView = false;
+  let offerObserver;
+
+  function readConsent() {
+    try {
+      const record = JSON.parse(window.localStorage.getItem(consentKey));
+      const now = Date.now();
+      if (record?.version === 2 && ["accepted", "denied"].includes(record.status)
+        && Number.isFinite(record.updatedAt) && Number.isFinite(record.expiresAt)
+        && record.updatedAt <= now && record.expiresAt > now
+        && record.expiresAt - record.updatedAt <= consentLifetime) return record;
+      // An old acceptance has no timestamp or expiry, so it cannot enable tracking.
+      if (window.localStorage.getItem(legacyConsentKey) === "denied") return { status: "denied" };
+    } catch { /* Missing, malformed or inaccessible storage never authorizes tracking. */ }
+    return null;
+  }
+
+  let consentRecord = readConsent();
   const gaConsentSettings = (analyticsStorage) => ({
     analytics_storage: analyticsStorage,
     ad_storage: "denied",
@@ -91,6 +112,61 @@
     if (typeof window.gtag === "function") {
       window.gtag("consent", "update", gaConsentSettings(allowed ? "granted" : "denied"));
     }
+  }
+
+  function clearOptionalCookies() {
+    const domains = window.location.hostname.split(".");
+    const paths = ["/", window.location.pathname];
+    for (const cookie of document.cookie.split(";")) {
+      const name = cookie.split("=")[0].trim();
+      if (!/^(_fbp|_fbc|_ga(?:_.+)?|_gid|_gat(?:_.+)?|_gcl_.+)$/.test(name)) continue;
+      for (const cookiePath of paths) {
+        const expired = name + "=; Max-Age=0; path=" + cookiePath + "; SameSite=Lax";
+        document.cookie = expired;
+        for (let index = 0; index < domains.length - 1; index += 1) {
+          document.cookie = expired + "; domain=" + domains.slice(index).join(".");
+        }
+      }
+    }
+  }
+
+  function updateConsentStatus() {
+    const message = consentRecord?.status === "accepted" ? "Rastreamento opcional aceito."
+      : consentRecord?.status === "denied" ? "Rastreamento opcional rejeitado."
+        : "Rastreamento opcional desativado. Você ainda não fez uma escolha.";
+    document.querySelectorAll("[data-consent-status]").forEach((element) => { element.textContent = message; });
+  }
+
+  function scheduleConsentExpiry() {
+    window.clearTimeout(consentExpiryTimer);
+    if (!analyticsAllowed || !consentRecord?.expiresAt) return;
+    const remaining = consentRecord.expiresAt - Date.now();
+    if (remaining <= 0) {
+      applyConsent(null);
+      return;
+    }
+    consentExpiryTimer = window.setTimeout(scheduleConsentExpiry, Math.min(remaining, 2147483647));
+  }
+
+  function applyConsent(record) {
+    consentRecord = record;
+    analyticsAllowed = record?.status === "accepted" && record.expiresAt > Date.now();
+    updateConsentStatus();
+    if (!analyticsAllowed) {
+      window.clearTimeout(consentExpiryTimer);
+      if (analyticsInitialized) {
+        const gaId = config.analytics?.ga4MeasurementId?.trim();
+        if (gaId) window["ga-disable-" + gaId] = true;
+        updateLoadedAnalyticsConsent(false);
+      }
+      clearOptionalCookies();
+      // A reload unloads vendor listeners; the persisted rejection keeps them unloaded.
+      if (analyticsInitialized) window.location.reload();
+      return;
+    }
+    initializeAnalytics();
+    reportVisibleOffer();
+    scheduleConsentExpiry();
   }
 
   function initializeAnalytics() {
@@ -121,8 +197,8 @@
     if (gaId) {
       window.dataLayer = window.dataLayer || [];
       window.gtag = function () { window.dataLayer.push(arguments); };
-      window.gtag("js", new Date());
       window.gtag("consent", "default", gaConsentSettings("granted"));
+      window.gtag("js", new Date());
       window.gtag("config", gaId, { send_page_view: true });
       const gaScript = document.createElement("script");
       gaScript.async = true;
@@ -132,33 +208,47 @@
   }
 
   function setConsent(value) {
-    try { window.localStorage.setItem(consentKey, value); } catch { /* Tracking stays off when storage is unavailable. */ }
-    analyticsAllowed = value === "granted";
-    if (analyticsInitialized) updateLoadedAnalyticsConsent(analyticsAllowed);
-    if (consentBanner) consentBanner.hidden = true;
-    initializeAnalytics();
+    if (!["accepted", "denied"].includes(value)) return;
+    const now = Date.now();
+    const record = { version: 2, status: value, updatedAt: now, expiresAt: now + consentLifetime };
+    try {
+      window.localStorage.setItem(consentKey, JSON.stringify(record));
+      window.localStorage.removeItem(legacyConsentKey);
+    } catch {
+      // Removing a previous acceptance also works when a storage quota blocks writes.
+      if (value === "denied") {
+        try { window.localStorage.removeItem(consentKey); } catch { /* Storage is unavailable. */ }
+      }
+      // An explicit choice remains valid for this page when storage is unavailable.
+    }
+    consentDialog?.close();
+    applyConsent(record);
   }
 
-  let savedConsent = null;
-  try { savedConsent = window.localStorage.getItem(consentKey); } catch { /* The page remains usable without storage. */ }
-  const metricsConfigured = Boolean(config.analytics?.metaPixelId?.trim() || config.analytics?.ga4MeasurementId?.trim());
-  if (savedConsent === "granted") {
-    analyticsAllowed = true;
-    initializeAnalytics();
-  } else if (savedConsent !== "denied" && metricsConfigured && consentBanner) {
-    consentBanner.hidden = false;
-  }
-  document.getElementById("acceptAnalytics")?.addEventListener("click", () => setConsent("granted"));
-  document.getElementById("rejectAnalytics")?.addEventListener("click", () => setConsent("denied"));
-  consentSettingsButton?.addEventListener("click", (event) => {
-    event.preventDefault();
-    if (!consentBanner) return;
-    consentBanner.hidden = false;
-    document.getElementById("acceptAnalytics")?.focus({ preventScroll: true });
+  document.querySelectorAll("[data-consent-preferences]").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      if (!consentDialog || typeof consentDialog.showModal !== "function") return;
+      event.preventDefault();
+      updateConsentStatus();
+      if (!consentDialog.open) consentDialog.showModal();
+    });
+  });
+  document.querySelectorAll("[data-consent]").forEach((button) => {
+    button.addEventListener("click", () => setConsent(button.dataset.consent));
+  });
+  document.querySelectorAll("[data-consent-close]").forEach((button) => {
+    button.addEventListener("click", () => consentDialog?.close());
+  });
+  window.addEventListener("storage", (event) => {
+    if (event.key === consentKey || event.key === null) applyConsent(readConsent());
   });
 
   function track(eventName, details = {}) {
-    if (!analyticsAllowed) return;
+    if (!analyticsAllowed) return false;
+    if (!consentRecord || consentRecord.expiresAt <= Date.now()) {
+      applyConsent(null);
+      return false;
+    }
     const payload = {
       product_name: config.productName || "500 Mantras para Elevar Sua Energia",
       experiment_id: experimentId,
@@ -175,6 +265,7 @@
       if (eventName === "video_progress") window.fbq("trackCustom", "VideoProgress", payload);
       if (eventName === "video_complete") window.fbq("trackCustom", "VideoComplete", payload);
     }
+    return true;
   }
 
   const productVideo = document.getElementById("productVideo");
@@ -182,6 +273,8 @@
   const videoEndedCta = document.getElementById("videoEndedCta");
   let videoStarted = false;
   const videoProgressMarks = new Set();
+  // Keep native controls usable if JavaScript is unavailable.
+  if (productVideo && videoPlay) videoPlay.hidden = false;
   videoPlay?.addEventListener("click", () => {
     productVideo?.play().catch(() => {
       if (videoPlay) videoPlay.hidden = false;
@@ -214,16 +307,18 @@
     if (videoEndedCta) videoEndedCta.hidden = false;
   });
 
-  let offerViewed = false;
   const offer = document.getElementById("oferta");
+  function reportVisibleOffer() {
+    if (offerInView && !offerViewed && track("view_offer", { content_name: "Oferta 500 Mantras" })) {
+      offerViewed = true;
+      offerObserver?.disconnect();
+    }
+  }
   if (offer && "IntersectionObserver" in window) {
-    const offerObserver = new IntersectionObserver((entries) => {
-      if (entries.some((entry) => entry.isIntersecting) && !offerViewed) {
-        offerViewed = true;
-        track("view_offer", { content_name: "Oferta 500 Mantras" });
-        offerObserver.disconnect();
-      }
-    }, { threshold: 0.24 });
+    offerObserver = new IntersectionObserver((entries) => {
+      offerInView = entries.some((entry) => entry.isIntersecting);
+      reportVisibleOffer();
+    }, { threshold: 0.15 });
     offerObserver.observe(offer);
   }
 
@@ -258,4 +353,6 @@
 
   const year = document.getElementById("copyrightYear");
   if (year) year.textContent = String(new Date().getFullYear());
+
+  applyConsent(consentRecord);
 })();
