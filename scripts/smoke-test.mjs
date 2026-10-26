@@ -27,6 +27,7 @@ assert.equal(config.checkoutTotalPaymentMethod, "PIX", "the configured total is 
 assert.equal(config.checkoutCardInstallmentCount, 4, "current default card installment count configured");
 assert.equal(config.checkoutCardInstallmentAmount, 5.88, "current default card installment amount configured");
 assert.equal(config.checkoutCardTotal, 23.52, "current default card total configured");
+assert.equal(config.analytics.metaPixelId, "2429955871112248", "the production Meta Pixel ID is configured");
 assert.equal(checkoutLinks.length, 7, "all existing CTAs, the video CTA, and the video completion CTA should be present");
 assert.deepEqual([...new Set(checkoutLinks)], [expectedCheckout], "every CTA should share the same checkout");
 assert.ok(!/__CHECKOUT_URL__|__SUPPORT_EMAIL__|__PRODUCT_PRICE__|__PRODUCT_PRICE_SCHEMA__|__CAKTO_SERVICE_FEE__|__CHECKOUT_TOTAL__|__CHECKOUT_CARD_INSTALLMENTS__|__CHECKOUT_CARD_TOTAL__/.test(html), "production HTML has no unresolved values");
@@ -76,6 +77,10 @@ assert.ok(!/class=\"(?:benefit-card|step-card)/.test(html), "repeated generic ca
 assert.ok(app.includes('"begin_checkout"') && app.includes('"view_offer"'), "checkout and offer events remain configured");
 assert.ok(app.includes('track("video_start"') && app.includes('track("video_progress"') && app.includes('track("video_complete"'), "video start, progress, and completion analytics use the existing consent-aware tracking");
 assert.ok(app.includes("analyticsInitialized") && app.includes("offerViewed"), "analytics and offer events are guarded against duplicates");
+assert.ok(app.includes('typeof window.fbq !== "function"') && app.includes("window._fbq = fbq") && app.includes("fbq.push = fbq"), "Meta Pixel uses a single compatible loader instance");
+assert.ok(app.includes('window.fbq("track", "PageView")'), "Meta Pixel sends the standard PageView event after consent");
+assert.ok(app.includes('window.fbq("track", "InitiateCheckout", payload)'), "Cakto CTA clicks send the standard Meta InitiateCheckout event");
+assert.ok(!app.includes('window.fbq("trackCustom", "CheckoutClick"'), "the legacy custom checkout event is not sent alongside InitiateCheckout");
 assert.ok(!/track(?:Custom)?\s*\(\s*["']Purchase/i.test(app), "checkout clicks must not be reported as purchases");
 assert.ok(app.includes("value: Number(config.price || 19.9)"), "checkout-click analytics reports product price, not the PIX total or a purchase");
 assert.ok(app.includes("data-copy-slot") && app.includes("lp_variant"), "copy test variants are configurable and attributed");
@@ -106,6 +111,7 @@ await assert.rejects(stat(path.join(distDir, "assets/mockup-completo.webp")), { 
 const privacy = await readOutput("privacy.html");
 const terms = await readOutput("terms.html");
 assert.ok(privacy.includes("empresakagency@gmail.com"), "privacy page includes configured support");
+assert.ok(privacy.includes("Meta Pixel só é carregado após você permitir métricas"), "privacy disclosure documents consent-gated Meta tracking");
 assert.ok(terms.includes("empresakagency@gmail.com"), "terms page includes configured support");
 assert.ok(terms.includes("R$ 0,99") && terms.includes("R$ 20,89"), "terms disclose the current checkout fee and PIX total");
 assert.ok(!/reprodução do vídeo|VSL/i.test(privacy + terms), "legal pages match the no-VSL page configuration");
