@@ -1,0 +1,30 @@
+{
+  "productName": "500 Mantras para Elevar Sua Energia",
+  "checkoutUrl": "https://pay.cakto.com.br/323zgdr_1243414",
+  "supportEmail": "empresakagency@gmail.com",
+  "price": "19.90",
+  "checkoutServiceFee": "0.99",
+  "checkoutTotal": "20.89",
+  "checkoutTotalPaymentMethod": "PIX",
+  "checkoutCardInstallmentCount": 4,
+  "checkoutCardInstallmentAmount": "5.88",
+  "checkoutCardTotal": "23.52",
+  "currency": "BRL",
+  "analytics": {
+    "metaPixelId": "",
+    "ga4MeasurementId": ""
+  },
+  "experiment": {
+    "id": "copy-cta-offer-v1",
+    "enabled": false,
+    "variants": {
+      "control": {},
+      "variante-b": {
+        "heroTitle": "Um e-book com 500 mantras para inspirar seus momentos de autocuidado.",
+        "heroCta": "QUERO ACESSAR OS 500 MANTRAS",
+        "offerTitle": "500 mensagens organizadas para acompanhar suas pausas de autocuidado.",
+        "offerCta": "QUERO ACESSAR OS 500 MANTRAS"
+      }
+    }
+  }
+}
