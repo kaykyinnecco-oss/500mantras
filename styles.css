@@ -635,12 +635,10 @@ figure, p, h1, h2, h3 { margin-top: 0; }
 .price-block > span { color: rgba(255, 244, 226, .9); font-size: 12px; font-weight: 700; letter-spacing: .12em; }
 .price { margin: 5px 0 0; color: var(--gold-light); font: 400 clamp(52px, 5.1vw, 64px)/1.02 var(--serif); letter-spacing: -.045em; }
 .payment-note { margin: 7px 0 0; color: rgba(255, 244, 226, .82); font-size: 15px; }
-.fee-total-note { max-width: 430px; margin: 8px 0 0; color: rgba(255, 244, 226, .61); font-size: 12px; line-height: 1.45; text-align: left; }
 .offer-cta { display: block; width: 100%; margin: 17px auto 0; }
 .offer-note { margin: 9px 0 0; color: rgba(255, 244, 226, .78); font-size: 13px; line-height: 1.45; text-align: center; }
 .support-note { margin: 6px 0 0; color: rgba(255, 244, 226, .74); font-size: 13px; line-height: 1.45; text-align: center; }
 .support-note a, .faq-list details > p a { color: var(--gold-light); text-underline-offset: 3px; }
-.checkout-note { margin: 7px 0 0; color: rgba(255, 244, 226, .7); font-size: 13px; line-height: 1.45; text-align: center; }
 
 /* 5. FAQ and compact close */
 .faq-section { padding-block: 76px 64px; }
@@ -891,7 +889,6 @@ figure, p, h1, h2, h3 { margin-top: 0; }
   .offer-list li { font-size: 15px; line-height: 1.48; }
   .price-block { padding-top: 18px; }
   .price { font-size: 52px; }
-  .fee-total-note { font-size: 13px; }
   .offer-cta { min-height: 57px; margin-top: 16px; }
   .faq-section { padding-block: 59px 49px; }
   .faq-heading { margin-bottom: 16px; }
