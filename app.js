@@ -234,24 +234,6 @@
     track("begin_checkout", { cta_location: link.dataset.ctaLocation || "checkout" });
   });
 
-  const previewDialog = document.getElementById("previewDialog");
-  const dialogImage = document.getElementById("dialogImage");
-  const dialogTitle = document.getElementById("dialogTitle");
-  document.querySelectorAll("[data-preview]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const image = button.dataset.src;
-      if (!image || !previewDialog || !dialogImage) return;
-      dialogImage.src = image;
-      dialogImage.alt = button.dataset.alt || "Prévia ampliada de uma página do e-book";
-      dialogTitle.textContent = button.dataset.title || "Página interna";
-      previewDialog.showModal();
-    });
-  });
-  document.getElementById("closePreview")?.addEventListener("click", () => previewDialog?.close());
-  previewDialog?.addEventListener("click", (event) => {
-    if (event.target === previewDialog) previewDialog.close();
-  });
-
   document.querySelectorAll(".faq-list details").forEach((detail) => {
     detail.addEventListener("toggle", () => {
       if (!detail.open) return;

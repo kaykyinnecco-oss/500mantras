@@ -31,6 +31,7 @@
     </script>
     <link rel="icon" href="/assets/simbolo-celestial.svg" type="image/svg+xml">
     <link rel="preload" as="image" href="/assets/mockup-produto.webp" fetchpriority="high">
+    <link rel="preload" as="image" href="/assets/logo-500-mantras.png">
     <link rel="stylesheet" href="/styles.css">
     <script defer src="/runtime-config.js"></script>
     <script defer src="/app.js"></script>
@@ -60,7 +61,7 @@
 
     <header class="site-header">
       <a class="brand" href="#inicio" aria-label="500 Mantras, início">
-        <span class="brand-name">500 <em>mantras</em></span>
+        <img class="brand-logo" src="/assets/logo-500-mantras.png" width="260" height="86" alt="500 Mantras para Elevar Sua Energia">
       </a>
       <a class="button button-gold header-cta" data-checkout data-cta-location="header" href="__CHECKOUT_URL__">QUERO ACESSAR OS 500 MANTRAS</a>
     </header>
@@ -130,26 +131,17 @@
         </header>
 
         <div class="content-layout">
-          <div class="preview-gallery" aria-label="Prévia de três páginas internas reais do e-book. Selecione uma para ampliar.">
+          <div class="preview-gallery" aria-label="Três páginas internas reais do e-book, exibidas diretamente para leitura.">
             <figure class="page-preview page-preview-primary">
-              <button class="page-preview-button" type="button" data-preview data-src="/assets/preview-autocuidado.webp" data-alt="Página 7 real do e-book com cinco mantras sobre amor-próprio e autoestima." data-title="Página 7 · Amor-próprio e autoestima" aria-label="Ampliar página 7: amor-próprio e autoestima">
-                <img src="/assets/preview-autocuidado.webp" width="720" height="1080" alt="Página 7 do e-book com cinco mantras sobre amor-próprio e autoestima." loading="lazy" decoding="async">
-                <span class="preview-open" aria-hidden="true">Ampliar</span>
-              </button>
+              <div class="page-preview-static"><img src="/assets/preview-autocuidado.webp" width="720" height="1080" alt="Página 7 do e-book com cinco mantras sobre amor-próprio e autoestima." loading="lazy" decoding="async"></div>
               <figcaption><span>07</span> Amor-próprio e autoestima</figcaption>
             </figure>
             <figure class="page-preview page-preview-secondary">
-              <button class="page-preview-button" type="button" data-preview data-src="/assets/preview-abundancia.webp" data-alt="Página 19 real do e-book com cinco mantras sobre prosperidade e abundância." data-title="Página 19 · Prosperidade e abundância" aria-label="Ampliar página 19: prosperidade e abundância">
-                <img src="/assets/preview-abundancia.webp" width="720" height="1080" alt="Página 19 do e-book com cinco mantras sobre prosperidade e abundância." loading="lazy" decoding="async">
-                <span class="preview-open" aria-hidden="true">Ampliar</span>
-              </button>
+              <div class="page-preview-static"><img src="/assets/preview-abundancia.webp" width="720" height="1080" alt="Página 19 do e-book com cinco mantras sobre prosperidade e abundância." loading="lazy" decoding="async"></div>
               <figcaption><span>19</span> Prosperidade e abundância</figcaption>
             </figure>
             <figure class="page-preview page-preview-secondary">
-              <button class="page-preview-button" type="button" data-preview data-src="/assets/preview-gratidao.webp" data-alt="Página 43 real do e-book com cinco mantras sobre gratidão e conexão com o universo." data-title="Página 43 · Gratidão e conexão com o universo" aria-label="Ampliar página 43: gratidão e conexão com o universo">
-                <img src="/assets/preview-gratidao.webp" width="720" height="1080" alt="Página 43 do e-book com cinco mantras sobre gratidão e conexão com o universo." loading="lazy" decoding="async">
-                <span class="preview-open" aria-hidden="true">Ampliar</span>
-              </button>
+              <div class="page-preview-static"><img src="/assets/preview-gratidao.webp" width="720" height="1080" alt="Página 43 do e-book com cinco mantras sobre gratidão e conexão com o universo." loading="lazy" decoding="async"></div>
               <figcaption><span>43</span> Gratidão e conexão</figcaption>
             </figure>
           </div>
@@ -209,21 +201,23 @@
               <figcaption>500 MANTRAS · E-BOOK DIGITAL</figcaption>
             </figure>
             <div class="offer-details">
-              <p class="offer-kicker">O QUE VOCÊ RECEBE</p>
+              <p class="offer-kicker">SEU MOMENTO DE LEITURA COMEÇA AQUI</p>
+              <h3 class="offer-lead">Tudo o que você precisa para uma pausa inspiradora.</h3>
+              <p class="offer-intro">Um acervo digital para abrir quando quiser, escolher o tema do momento e voltar às suas mensagens favoritas.</p>
+              <div class="offer-facts" aria-label="O que está incluído"><span><strong>500</strong> mantras</span><span><strong>10</strong> temas</span><span><strong>127</strong> páginas</span></div>
               <ul class="offer-list">
-                <li>E-book digital com 500 mantras.</li>
-                <li>Conteúdo organizado em 10 temas.</li>
-                <li>127 páginas de conteúdo digital.</li>
-                <li>PDF para celular, tablet ou computador.</li>
-                <li>Leitura e consulta no seu próprio ritmo.</li>
-                <li>Compra única, sem assinatura ou cobrança recorrente.</li>
+                <li>PDF digital para ler no celular, tablet ou computador.</li>
+                <li>Mensagens para reflexão, gratidão e autocuidado.</li>
+                <li>Escolha o tema e releia quantas vezes desejar.</li>
+                <li>Compra única, sem assinatura recorrente.</li>
               </ul>
               <div class="price-block">
-                <span>PREÇO DO E-BOOK</span>
+                <span>SEU E-BOOK COMPLETO</span>
                 <p class="price">R$ __PRODUCT_PRICE__</p>
-                <p class="payment-note">Compra única, sem assinatura</p>
+                <p class="payment-note">Pagamento único pelo e-book. Sem mensalidades.</p>
               </div>
               <a class="button button-gold offer-cta" data-copy-slot="offerCta" data-checkout data-cta-location="oferta" href="__CHECKOUT_URL__">QUERO ACESSAR OS 500 MANTRAS</a>
+              <p class="offer-reassurance">✓ Arquivo digital em PDF <span aria-hidden="true">·</span> ✓ Sem assinatura <span aria-hidden="true">·</span> ✓ Confira o total no checkout</p>
               <p class="offer-note">Produto digital. Nenhum item físico será enviado.</p>
               <p class="support-note">Precisa de ajuda? <a href="mailto:__SUPPORT_EMAIL__" data-support-link>__SUPPORT_EMAIL__</a></p>
             </div>
@@ -270,7 +264,7 @@
 
     <footer class="site-footer" id="rodape">
       <div class="footer-main section-shell">
-        <a class="brand footer-brand" href="#inicio"><span class="brand-name">500 <em>mantras</em></span></a>
+        <a class="brand footer-brand" href="#inicio"><img class="brand-logo" src="/assets/logo-500-mantras.png" width="260" height="86" alt="500 Mantras para Elevar Sua Energia"></a>
         <a class="footer-email" href="mailto:__SUPPORT_EMAIL__" data-support-link>__SUPPORT_EMAIL__</a>
         <nav class="footer-links" aria-label="Links legais">
           <a href="/privacidade">Privacidade</a>
@@ -289,12 +283,5 @@
       <div class="consent-actions"><button type="button" class="consent-accept" id="acceptAnalytics">Aceitar</button><button type="button" class="consent-reject" id="rejectAnalytics">Só essenciais</button></div>
     </aside>
 
-    <dialog class="preview-dialog" id="previewDialog" aria-labelledby="dialogTitle">
-      <div class="dialog-header">
-        <div><p class="eyebrow eyebrow-dark">PRÉVIA DO E-BOOK</p><h2 id="dialogTitle">Página interna</h2></div>
-        <button class="dialog-close" type="button" id="closePreview" aria-label="Fechar prévia">Fechar</button>
-      </div>
-      <img id="dialogImage" width="720" height="1080" alt="Prévia ampliada de uma página real do e-book" decoding="async">
-    </dialog>
-  </body>
+</body>
 </html>

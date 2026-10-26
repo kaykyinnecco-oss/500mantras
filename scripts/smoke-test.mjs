@@ -48,10 +48,13 @@ assert.ok(html.includes('preload="none" playsinline poster="/assets/mockup-produ
 assert.ok(html.includes('id="videoEndedCta"') && html.includes('data-cta-location="video-final"'), "the optional post-completion CTA is configured");
 assert.ok(html.includes("500 mantras para transformar pequenos momentos do seu dia em"), "specific product value is clear in the hero");
 assert.ok(html.includes("127 páginas") && html.includes("R$ 19,90"), "page count and price are visible");
-assert.ok(html.includes("PREÇO DO E-BOOK") && html.includes("Compra única, sem assinatura"), "the product price and payment model are disclosed clearly");
+assert.ok(html.includes("SEU E-BOOK COMPLETO") && html.includes("Compra única, sem assinatura"), "the product price and payment model are disclosed clearly");
 assert.ok(!html.includes("No Pix/PicPay, o total é R$ 20,89") && !html.includes("A liberação do material segue a configuração cadastrada na Cakto."), "the two requested checkout and access notes are absent from the sales page");
 assert.equal((html.match(/<details>/g) || []).length, 5, "the compact FAQ should contain five questions");
-assert.equal((html.match(/data-preview\b/g) || []).length, 3, "three authentic PDF page previews should be available");
+assert.equal((html.match(/class="page-preview-static"/g) || []).length, 3, "three authentic PDF page previews are displayed without modal");
+assert.ok(!html.includes("previewDialog") && !app.includes("previewDialog"), "preview zoom is removed");
+assert.ok(html.includes("/assets/logo-500-mantras.png"), "brand logo is present");
+assert.ok(html.includes("offer-facts") && html.includes("offer-reassurance"), "offer communicates value and payment terms");
 const themeList = html.match(/<ol class="theme-list">([\s\S]*?)<\/ol>/);
 assert.ok(themeList, "the ten real ebook themes are presented");
 assert.equal((themeList[1].match(/<li>/g) || []).length, 10, "all ten verified themes are listed");
@@ -111,7 +114,7 @@ assert.equal(product.offers.priceCurrency, "BRL");
 assert.equal(html.match(/<meta property="product:price:amount" content="([^"]+)"/)?.[1], "19.90", "social product price matches schema and configuration");
 
 for (const asset of [
-  "assets/mockup-produto.webp", "assets/preview-autocuidado.webp",
+  "assets/logo-500-mantras.png", "assets/mockup-produto.webp", "assets/preview-autocuidado.webp",
   "assets/preview-abundancia.webp", "assets/preview-gratidao.webp", "assets/simbolo-celestial.svg",
   ...[...html.matchAll(/(?:href|src)="\/(assets\/(?:styles\.[a-f0-9]{12}\.css|app\.[a-f0-9]{12}\.js))"/g)].map((match) => match[1]),
   "videos/500-mantras-apresentacao.mp4",
