@@ -74,6 +74,10 @@ assert.ok(css.includes(".reveal-ready .reveal.is-visible") && css.includes("tran
 assert.ok(!/<track\b/i.test(html), "no unverified or unsynchronized subtitles are declared");
 assert.ok(!/mobileStickyCta|mobile-sticky-cta/.test(html + css + app), "the mobile CTA does not cover reading content");
 assert.ok(!/class=\"(?:benefit-card|step-card)/.test(html), "repeated generic card sections have been removed");
+assert.ok(html.includes("Utilizamos cookies opcionais para entender a navegação e melhorar sua experiência."), "the consent component uses concise copy");
+assert.ok(html.includes('id="acceptAnalytics">Aceitar</button>') && html.includes('id="rejectAnalytics">Só essenciais</button>'), "consent choices remain explicit");
+assert.ok(html.includes('<a href="/privacidade">Política de privacidade</a>'), "the consent component links to the privacy policy");
+assert.ok(css.includes("width: min(680px, calc(100% - 24px))") && css.includes("env(safe-area-inset-bottom)"), "the consent component is compact and safe-area aware");
 assert.ok(app.includes('"begin_checkout"') && app.includes('"view_offer"'), "checkout and offer events remain configured");
 assert.ok(app.includes('track("video_start"') && app.includes('track("video_progress"') && app.includes('track("video_complete"'), "video start, progress, and completion analytics use the existing consent-aware tracking");
 assert.ok(app.includes("analyticsInitialized") && app.includes("offerViewed"), "analytics and offer events are guarded against duplicates");
