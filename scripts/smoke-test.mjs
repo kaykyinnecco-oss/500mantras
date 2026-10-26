@@ -48,7 +48,7 @@ assert.ok(html.includes('preload="none" playsinline poster="/assets/mockup-produ
 assert.ok(html.includes('id="videoEndedCta"') && html.includes('data-cta-location="video-final"'), "the optional post-completion CTA is configured");
 assert.ok(html.includes("500 mantras para transformar pequenos momentos do seu dia em"), "specific product value is clear in the hero");
 assert.ok(html.includes("127 páginas") && html.includes("R$ 19,90"), "page count and price are visible");
-assert.ok(html.includes("PREÇO DO E-BOOK") && html.includes("Compra única, sem assinatura"), "the product price and payment model are disclosed clearly");
+assert.ok(html.includes("SEU E-BOOK COMPLETO") && html.includes("Compra única, sem assinatura"), "the product price and payment model are disclosed clearly");
 assert.ok(!html.includes("No Pix/PicPay, o total é R$ 20,89") && !html.includes("A liberação do material segue a configuração cadastrada na Cakto."), "the two requested checkout and access notes are absent from the sales page");
 assert.equal((html.match(/<details>/g) || []).length, 5, "the compact FAQ should contain five questions");
 assert.equal((html.match(/class="page-preview-static"/g) || []).length, 3, "three authentic PDF page previews are displayed without modal");
