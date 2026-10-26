@@ -78,6 +78,20 @@
   let analyticsInitialized = false;
   const consentKey = "mantras.analytics.consent.v1";
   const consentBanner = document.getElementById("consentBanner");
+  const consentSettingsButton = document.getElementById("openConsentSettings");
+  const gaConsentSettings = (analyticsStorage) => ({
+    analytics_storage: analyticsStorage,
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+  });
+
+  function updateLoadedAnalyticsConsent(allowed) {
+    if (typeof window.fbq === "function") window.fbq("consent", allowed ? "grant" : "revoke");
+    if (typeof window.gtag === "function") {
+      window.gtag("consent", "update", gaConsentSettings(allowed ? "granted" : "denied"));
+    }
+  }
 
   function initializeAnalytics() {
     if (!analyticsAllowed || analyticsInitialized) return;
@@ -99,6 +113,7 @@
         pixelScript.src = "https://connect.facebook.net/en_US/fbevents.js";
         document.head.append(pixelScript);
       }
+      window.fbq("consent", "grant");
       window.fbq("init", metaId);
       window.fbq("track", "PageView");
     }
@@ -107,6 +122,7 @@
       window.dataLayer = window.dataLayer || [];
       window.gtag = function () { window.dataLayer.push(arguments); };
       window.gtag("js", new Date());
+      window.gtag("consent", "default", gaConsentSettings("granted"));
       window.gtag("config", gaId, { send_page_view: true });
       const gaScript = document.createElement("script");
       gaScript.async = true;
@@ -118,6 +134,7 @@
   function setConsent(value) {
     try { window.localStorage.setItem(consentKey, value); } catch { /* Tracking stays off when storage is unavailable. */ }
     analyticsAllowed = value === "granted";
+    if (analyticsInitialized) updateLoadedAnalyticsConsent(analyticsAllowed);
     if (consentBanner) consentBanner.hidden = true;
     initializeAnalytics();
   }
@@ -133,9 +150,11 @@
   }
   document.getElementById("acceptAnalytics")?.addEventListener("click", () => setConsent("granted"));
   document.getElementById("rejectAnalytics")?.addEventListener("click", () => setConsent("denied"));
-  document.getElementById("openConsentSettings")?.addEventListener("click", (event) => {
+  consentSettingsButton?.addEventListener("click", (event) => {
     event.preventDefault();
-    if (consentBanner) consentBanner.hidden = false;
+    if (!consentBanner) return;
+    consentBanner.hidden = false;
+    document.getElementById("acceptAnalytics")?.focus({ preventScroll: true });
   });
 
   function track(eventName, details = {}) {
