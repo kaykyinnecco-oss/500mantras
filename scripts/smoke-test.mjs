@@ -33,23 +33,31 @@ assert.equal(checkoutLinks.length, 7, "all existing CTAs, the video CTA, and the
 assert.deepEqual([...new Set(checkoutLinks)], [expectedCheckout], "every CTA should share the same checkout");
 assert.ok(!/__CHECKOUT_URL__|__SUPPORT_EMAIL__|__PRODUCT_PRICE__|__PRODUCT_PRICE_SCHEMA__|__CAKTO_SERVICE_FEE__|__CHECKOUT_TOTAL__|__CHECKOUT_CARD_INSTALLMENTS__|__CHECKOUT_CARD_TOTAL__/.test(html), "production HTML has no unresolved values");
 const ctaTexts = [...html.matchAll(/<a\b[^>]*\bdata-checkout\b[^>]*>([\s\S]*?)<\/a>/g)].map((match) => match[1].replace(/<[^>]+>/g, "").trim());
-assert.equal(ctaTexts.filter((text) => text === "QUERO ACESSAR OS 500 MANTRAS").length, 6, "all primary purchase CTAs use the same approved label");
-assert.equal(ctaTexts.filter((text) => text === "QUERO ACESSAR").length, 1, "the video completion CTA has its approved label");
-assert.ok(html.includes("class=\"ticker-track\"") && css.includes("@keyframes ticker-marquee"), "the continuous ticker is present and styled");
+assert.equal(ctaTexts.filter((text) => text === "QUERO ACESSAR OS 500 MANTRAS").length, 7, "all seven checkout CTAs use the same approved label");
+assert.equal(config.currency, "BRL", "product currency is preserved");
+for (const location of ["header", "hero", "conteudo", "video", "video-final", "oferta", "fechamento"]) {
+  assert.equal((html.match(new RegExp('data-cta-location="' + location + '"', "g")) || []).length, 1, "checkout location appears once: " + location);
+}
 assert.match(html, /href="\/assets\/styles\.[a-f0-9]{12}\.css"/, "production HTML references a versioned stylesheet");
 assert.match(html, /src="\/assets\/app\.[a-f0-9]{12}\.js"/, "production HTML references a versioned application script");
 assert.ok(!/<p class="eyebrow[^\"]*"><span/i.test(html + await readOutput("privacy.html") + await readOutput("terms.html")), "decorative eyebrow strokes are removed throughout the site");
 assert.ok(!css.includes(".eyebrow > span"), "eyebrow styles no longer render decorative strokes");
 assert.ok(html.includes("id=\"inicio\"") && html.includes("id=\"conteudo-do-ebook\"") && html.includes("id=\"oferta\""));
 assert.ok(html.includes("id=\"duvidas\"") && html.includes("id=\"rodape\""));
-assert.ok(html.indexOf("id=\"pause-title\"") < html.indexOf("id=\"apresentacao-video\"") && html.indexOf("id=\"apresentacao-video\"") < html.indexOf("id=\"conteudo-do-ebook\""), "the video follows the emotional pause section and precedes the real PDF previews");
-assert.ok(html.includes("Alguns minutos para você podem começar aqui.") && html.includes("Dê o play e descubra a proposta do nosso e-book em 40 segundos."), "the approved video section copy is present");
+const sectionOrder = ["pause-title", "conteudo-do-ebook", "themes-title", "apresentacao-video", "oferta", "duvidas", "closing-title"];
+let previousSection = -1;
+for (const id of sectionOrder) {
+  const sectionIndex = html.indexOf('id="' + id + '"');
+  assert.ok(sectionIndex > previousSection, "purchase journey retains logical section order: " + id);
+  previousSection = sectionIndex;
+}
 assert.ok(html.includes('preload="none" playsinline poster="/assets/mockup-produto.webp"') && html.includes('type="video/mp4"'), "the player uses a poster, native controls, and lazy video loading");
 assert.ok(html.includes('id="videoEndedCta"') && html.includes('data-cta-location="video-final"'), "the optional post-completion CTA is configured");
-assert.ok(html.includes("500 mantras para transformar pequenos momentos do seu dia em"), "specific product value is clear in the hero");
+assert.match(html, /<meta name="description" content="[^\"]*500 mantras[^\"]*10 temas[^\"]*127 páginas/, "metadata describes the actual product");
+assert.match(html, /<link rel="canonical" href="https:\/\/500mantras\.vercel\.app\/">/, "production canonical URL is preserved");
 assert.ok(html.includes("127 páginas") && html.includes("R$ 19,90"), "page count and price are visible");
-assert.ok(html.includes("SEU E-BOOK COMPLETO") && html.includes("Compra única, sem assinatura"), "the product price and payment model are disclosed clearly");
-assert.ok(!html.includes("No Pix/PicPay, o total é R$ 20,89") && !html.includes("A liberação do material segue a configuração cadastrada na Cakto."), "the two requested checkout and access notes are absent from the sales page");
+assert.ok(html.includes("Pagamento único") && html.includes("Sem assinatura"), "the payment model is disclosed clearly");
+assert.match(html, /class="checkout-fee-note"[^>]*>[^<]*taxas[^<]*total[^<]*checkout/, "offer explains that fees and final total appear in checkout");
 assert.equal((html.match(/<details>/g) || []).length, 5, "the compact FAQ should contain five questions");
 assert.equal((html.match(/class="page-preview-static"/g) || []).length, 3, "three authentic PDF page previews are displayed without modal");
 assert.ok(!html.includes("previewDialog") && !app.includes("previewDialog"), "preview zoom is removed");
@@ -68,8 +76,7 @@ assert.deepEqual(themeItems, [
 ], "all verified theme names and their order are preserved");
 assert.ok(html.includes("Eu reconheço as oportunidades que surgem quando me preparo para percebê-las."), "the sample mantra is real PDF content");
 assert.equal((html.match(/Eu reconheço as oportunidades que surgem quando me preparo para percebê-las\./g) || []).length, 1, "the real sample mantra is shown only once");
-assert.ok(html.includes("UMA MENSAGEM DO E-BOOK") && html.includes("Palavras para o seu momento."), "the sample mantra panel has its approved editorial copy");
-assert.ok(html.includes("Encontre palavras para diferentes momentos."), "the themes panel has its approved editorial copy");
+assert.ok(html.includes("UMA MENSAGEM DO E-BOOK"), "the authentic sample is identified as ebook content");
 assert.equal((html.match(/class="sample-card reveal"/g) || []).length, 1, "only one sample message panel is rendered");
 assert.equal((html.match(/class="theme-panel reveal"/g) || []).length, 1, "only one ten-theme panel is rendered");
 assert.equal((html.match(/data-cta-location="conteudo"/g) || []).length, 1, "the content panels have one CTA");
@@ -78,11 +85,21 @@ assert.ok(css.includes(".reveal-ready .reveal.is-visible") && css.includes("tran
 assert.ok(!/<track\b/i.test(html), "no unverified or unsynchronized subtitles are declared");
 assert.ok(!/mobileStickyCta|mobile-sticky-cta/.test(html + css + app), "the mobile CTA does not cover reading content");
 assert.ok(!/class=\"(?:benefit-card|step-card)/.test(html), "repeated generic card sections have been removed");
-assert.ok(html.includes("Utilizamos cookies opcionais para entender a navegação e melhorar sua experiência."), "the consent component uses concise copy");
-assert.ok(html.includes('id="acceptAnalytics">Aceitar</button>') && html.includes('id="rejectAnalytics">Só essenciais</button>'), "consent choices remain explicit");
-assert.ok(html.includes('<a href="/privacidade">Política de privacidade</a>'), "the consent component links to the privacy policy");
-assert.ok(css.includes("width: min(680px, calc(100% - 24px))") && css.includes("env(safe-area-inset-bottom)"), "the consent component is compact and safe-area aware");
-assert.ok(html.includes('<button type="button" id="openConsentSettings">Preferências de métricas</button>'), "the landing page reopens consent settings without navigation");
+assert.ok(html.includes('<a href="/privacidade">Política de privacidade</a>'), "privacy preferences link to the policy");
+assert.ok(html.includes('href="/privacidade"') && html.includes('href="/termos"'), "legal links are preserved");
+for (const [, image] of html.matchAll(/(<img\b[^>]+>)/g)) {
+  assert.match(image, /\bwidth="\d+"/, "images reserve intrinsic width");
+  assert.match(image, /\bheight="\d+"/, "images reserve intrinsic height");
+  assert.match(image, /\balt="[^\"]+"/, "product images have alternative text");
+}
+assert.ok(!/<video\b[^>]*\bautoplay/.test(html), "product video does not autoplay");
+assert.ok(app.includes('"mantras.analytics.consent.v2"') && app.includes("record?.version === 2"), "consent is versioned and validated");
+assert.ok(app.includes("record.expiresAt > now") && app.includes("record.updatedAt <= now"), "saved consent requires valid timestamps");
+assert.ok(app.includes("180 * 24 * 60 * 60 * 1000"), "preferences have a bounded lifetime");
+assert.ok(app.includes('querySelectorAll("[data-consent-preferences]")'), "preferences are accessible through explicit controls");
+assert.equal((app.match(/\.showModal\(\)/g) || []).length, 1, "privacy preferences have one explicit opening point");
+assert.ok(!/consentBanner|consent-banner/.test(app), "legacy automatic banner logic is removed");
+assert.ok(app.includes("clearOptionalCookies()") && app.includes("window.location.reload()"), "revocation removes accessible optional cookies and unloads vendor scripts");
 assert.deepEqual(vercelConfig.rewrites, [
   { source: "/privacidade", destination: "/privacy" },
   { source: "/termos", destination: "/terms" },
@@ -98,7 +115,7 @@ assert.equal((app.match(/window\.fbq\("track", "InitiateCheckout", payload\)/g) 
 assert.ok(app.includes('window.fbq("consent", allowed ? "grant" : "revoke")'), "Meta consent can be changed after the initial choice");
 assert.ok(app.includes('window.gtag("consent", "update"'), "GA consent can be changed after the initial choice");
 assert.ok(!app.includes('window.fbq("trackCustom", "CheckoutClick"'), "the legacy custom checkout event is not sent alongside InitiateCheckout");
-assert.ok(!/track(?:Custom)?\s*\(\s*["']Purchase/i.test(app), "checkout clicks must not be reported as purchases");
+assert.ok(!/(?:fbq|gtag)\s*\(\s*["'](?:track(?:Custom)?|event)["']\s*,\s*["']purchase["']|track\s*\(\s*["']purchase["']/i.test(app), "checkout clicks must not be reported as purchases");
 assert.ok(app.includes("value: Number(config.price || 19.9)"), "checkout-click analytics reports product price, not the PIX total or a purchase");
 assert.ok(app.includes("data-copy-slot") && app.includes("lp_variant"), "copy test variants are configurable and attributed");
 assert.equal(config.experiment.enabled, false, "copy experiment stays off until campaign setup");
@@ -111,26 +128,53 @@ const product = JSON.parse(schemaMatch[1]);
 assert.equal(product.name, "500 Mantras para Elevar Sua Energia");
 assert.equal(product.offers.price, "19.90");
 assert.equal(product.offers.priceCurrency, "BRL");
+assert.equal(product.offers.url, expectedCheckout, "Product schema retains the Cakto checkout");
 assert.equal(html.match(/<meta property="product:price:amount" content="([^"]+)"/)?.[1], "19.90", "social product price matches schema and configuration");
 
 for (const asset of [
   "assets/logo-500-mantras.png", "assets/mockup-produto.webp", "assets/preview-autocuidado.webp",
   "assets/preview-abundancia.webp", "assets/preview-gratidao.webp", "assets/simbolo-celestial.svg",
   ...[...html.matchAll(/(?:href|src)="\/(assets\/(?:styles\.[a-f0-9]{12}\.css|app\.[a-f0-9]{12}\.js))"/g)].map((match) => match[1]),
-  "videos/500-mantras-apresentacao.mp4",
+  "videos/500-mantras-apresentacao-mobile.mp4",
   "styles.css", "app.js", "privacy.html", "terms.html", "robots.txt",
 ]) {
   const info = await stat(path.join(distDir, asset));
   assert.ok(info.isFile() && info.size > 0, "production asset exists: " + asset);
 }
 await assert.rejects(stat(path.join(distDir, "assets/mockup-completo.webp")), { code: "ENOENT" }, "unused promo artwork should not ship");
+await assert.rejects(stat(path.join(distDir, "videos/500-mantras-apresentacao.mp4")), { code: "ENOENT" }, "the heavy original video stays in Git, outside the production build");
 
 const privacy = await readOutput("privacy.html");
 const terms = await readOutput("terms.html");
 assert.ok(privacy.includes("empresakagency@gmail.com"), "privacy page includes configured support");
-assert.ok(privacy.includes("Meta Pixel só é carregado após você permitir métricas"), "privacy disclosure documents consent-gated Meta tracking");
+assert.ok(privacy.includes("só é carregado após você aceitar o rastreamento opcional"), "privacy disclosure documents consent-gated tracking");
+assert.ok(privacy.includes("180 dias") && privacy.includes("revogar"), "privacy disclosure describes expiration and revision");
 assert.ok(terms.includes("empresakagency@gmail.com"), "terms page includes configured support");
 assert.ok(terms.includes("R$ 0,99") && terms.includes("R$ 20,89"), "terms disclose the current checkout fee and PIX total");
-assert.ok(!/reprodução do vídeo|VSL/i.test(privacy + terms), "legal pages match the no-VSL page configuration");
+for (const [name, page] of [["index", html], ["privacy", privacy], ["terms", terms]]) {
+  assert.ok(!/__CHECKOUT_URL__|__SUPPORT_EMAIL__|__PRODUCT_PRICE__|__PRODUCT_PRICE_SCHEMA__|__CAKTO_SERVICE_FEE__|__CHECKOUT_TOTAL__|__CHECKOUT_CARD_INSTALLMENTS__|__CHECKOUT_CARD_TOTAL__/.test(page), name + " has no unresolved build values");
+  assert.match(page, /<html lang="pt-BR">/, name + " declares its language");
+  assert.equal((page.match(/<h1\b/g) || []).length, 1, name + " has one primary heading");
+  assert.match(page, /href="\/assets\/styles\.[a-f0-9]{12}\.css"/, name + " references versioned CSS");
+  assert.match(page, /<script defer src="\/runtime-config\.js"><\/script>/, name + " defers runtime configuration");
+  assert.match(page, /<script defer src="\/assets\/app\.[a-f0-9]{12}\.js"><\/script>/, name + " defers versioned JavaScript");
+  assert.ok(!/consentBanner|consent-banner/.test(page), name + " has no intrusive cookie banner");
+  const dialogOpening = page.match(/<dialog\b[^>]*\bid="consentPreferences"[^>]*>/)?.[0];
+  assert.ok(dialogOpening, name + " provides privacy preferences in a native dialog");
+  assert.ok(!/\sopen(?:[\s=>])/.test(dialogOpening), name + " does not open privacy preferences automatically");
+  assert.match(dialogOpening, /aria-labelledby="consent-title"/, name + " labels its privacy dialog");
+  assert.match(dialogOpening, /aria-describedby="consent-description"/, name + " describes its privacy dialog");
+  assert.match(page, /data-consent-preferences/, name + " provides an explicit preferences control");
+  assert.match(page, /<button\b[^>]*\bdata-consent="accepted"[^>]*>[^<]+<\/button>/, name + " provides explicit acceptance");
+  assert.match(page, /<button\b[^>]*\bdata-consent="denied"[^>]*>[^<]+<\/button>/, name + " provides explicit rejection");
+  assert.match(page, /data-consent-close/, name + " allows closing preferences without choosing");
+  const ids = [...page.matchAll(/\bid="([^\"]+)"/g)].map((match) => match[1]);
+  assert.equal(ids.length, new Set(ids).size, name + " has no duplicated IDs");
+  for (const [, references] of page.matchAll(/\baria-(?:labelledby|describedby)="([^\"]+)"/g)) {
+    for (const reference of references.split(/\s+/)) assert.ok(ids.includes(reference), name + " has a valid ARIA reference: " + reference);
+  }
+  for (const [, target] of page.matchAll(/\bhref="#([^\"]+)"/g)) assert.ok(ids.includes(target), name + " has a valid fragment link: " + target);
+  assert.ok(!/<(?:script|img)\b[^>]*(?:src="https?:\/\/(?:connect\.facebook\.net|www\.facebook\.com\/tr|www\.googletagmanager\.com))/.test(page), name + " loads no tracking directly in HTML before consent");
+}
 
-console.log("Smoke test OK: seven checkout CTAs, the lazy video player, ten verified themes, real PDF content, consent-aware analytics, and production assets verified.");
+console.log("Smoke test OK: seven standardized checkout CTAs, commercial terms, lazy video, ten original themes, metadata, accessible privacy controls, consent-aware events and production assets verified.");

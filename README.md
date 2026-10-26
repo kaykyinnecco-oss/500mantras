@@ -1,60 +1,68 @@
 # 500 Mantras para Elevar Sua Energia
 
-Landing page de venda estática, responsiva e sem dependências de front-end. A página usa HTML, CSS e JavaScript nativos para manter a entrega leve e simples de publicar na Vercel.
+Landing page mobile-first em HTML, CSS e JavaScript nativos, sem dependências de front-end. Identidade roxo profundo, dourado e creme; logo, mockup e páginas internas originais preservados.
 
-## Executar localmente
+## Executar e validar
 
-Requer Node.js 20 ou superior. Na pasta do projeto:
+Requer Node.js 20 ou superior. Os scripts também podem ser executados diretamente com Node:
 
+```sh
 npm run dev
-
-Abra http://localhost:4173. Para conferir a versão de produção:
-
 npm run build
 npm test
 npm run preview
+```
 
-A prévia de produção fica em http://localhost:4174.
+Desenvolvimento: http://localhost:4173. Prévia do build: http://localhost:4174. Os dois servidores locais suportam HEAD e requisições de intervalo de bytes para iniciar e buscar trechos do MP4, inclusive no WebKit.
 
-## Estrutura da página
+Não há lint configurado. A sintaxe pode ser validada com `node --check app.js` e `node --check scripts/arquivo.mjs`.
 
-- Faixa superior contínua, com suporte a prefers-reduced-motion.
-- Hero com conteúdo específico do produto, mockup e checkout antes da imagem no mobile.
-- Bloco curto de identificação e três momentos de uso.
-- Galeria ampliável de três páginas reais, mantra de amostra e os dez temas conferidos no PDF.
-- Oferta com entregáveis, 127 páginas, preço de R$ 19,90 e contato de suporte.
-- FAQ compacto, fechamento e rodapé com políticas e suporte.
+## Jornada e apresentação
 
-Esta versão não contém vídeo nem seção de VSL.
+- Hero curto: produto digital, 500 mantras, 10 temas, 127 páginas, preço e compra.
+- Identificação com a rotina e três formas práticas de usar o PDF.
+- Três páginas reais: galeria nativa por deslize no celular, composição escalonada no desktop, sem modal de ampliação. Funciona por toque e teclado.
+- Benefícios breves, amostra textual autêntica e os dez temas originais.
+- Apresentação em vídeo sob demanda, com controles nativos e reprodução inline.
+- Vídeo H.264/AAC 720p com faststart: 3,95 MB, redução de 95,4% em relação aos 85,77 MB originais. O original permanece no repositório; o build publica apenas a versão otimizada.
+- Oferta em áreas de cores distintas: produto e números; benefícios; preço, pagamento único e CTA. Taxas e total são esclarecidos antes da confirmação no checkout.
+- FAQ nativo compacto e chamada final.
+
+A página usa fontes do sistema, imagens WebP com dimensões reservadas, CSS/JS com hash de conteúdo e carregamento adiado de scripts. Revelações usam apenas opacity/transform e respeitam prefers-reduced-motion. Não há movimento contínuo ou CTA fixo cobrindo a leitura.
 
 ## Checkout e suporte
 
-O checkout da Cakto, e-mail de suporte, preço, taxa de serviço atual e total do PIX ficam em site.config.json. O checkout e suporte podem ser substituídos no ambiente de build por:
+Preço, checkout Cakto e contato ficam em `site.config.json`. Os valores comerciais existentes foram preservados. O build aceita estes overrides:
 
 - NEXT_PUBLIC_CAKTO_CHECKOUT_URL
 - NEXT_PUBLIC_SUPPORT_EMAIL
 - NEXT_PUBLIC_META_PIXEL_ID
 - NEXT_PUBLIC_GA4_MEASUREMENT_ID
 
-O build valida que o checkout é um endereço HTTPS em domínio oficial da Cakto. Todos os botões de compra apontam para a mesma URL e recebem os parâmetros src, sck e UTMs presentes na página.
+O domínio do checkout precisa ser cakto.com.br ou um subdomínio oficial com HTTPS. Os sete CTAs usam o mesmo checkout e encaminham src, sck e UTMs da visita. Nenhum dado de pagamento é coletado nesta página.
 
-## Analytics e conversões
+## Privacidade e métricas
 
-Meta Pixel e GA4 só carregam depois do consentimento quando os respectivos IDs estiverem configurados. O Pixel configurado envia `PageView` uma vez após a inicialização e o evento padrão `InitiateCheckout` a cada clique em um CTA da Cakto. A página também envia `view_offer` uma vez ao exibir a oferta e `begin_checkout` ao clicar em um CTA para o GA4, quando configurado. O valor do início de checkout é o preço real do e-book (sem a taxa da Cakto ou eventuais custos de parcelamento), pois o método de pagamento ainda não foi escolhido; nenhum clique é tratado como compra.
+O controle Preferências de cookies fica no rodapé e nas páginas legais. O diálogo só abre mediante ação do visitante. Sem escolha, com rejeição ou com registro inválido/expirado, nenhum SDK opcional é carregado. Fechar o diálogo não autoriza rastreamento.
 
-Configure a confirmação de compra na plataforma de pagamentos para medir vendas aprovadas. A página não simula nem envia um evento Purchase.
+Uma escolha explícita salva um registro versionado em `mantras.analytics.consent.v2` por até 180 dias. Aceites legados sem data não habilitam tracking. Revogar bloqueia novos eventos, revoga consentimento nos SDKs já carregados, remove cookies opcionais acessíveis no domínio e recarrega para descarregar seus listeners. A preferência também se sincroniza entre abas. Sem armazenamento, a escolha vale só na página aberta.
 
-## Teste A/B de copy
+Meta Pixel público: **2429955871112248**. Após consentimento válido, preservam-se PageView, OfferViewed, InitiateCheckout e eventos de vídeo. A inicialização e a visualização da oferta têm proteção contra duplicação. O clique informa o preço do e-book, R$ 19,90, e não é enviado como Purchase. Compras confirmadas devem continuar sendo medidas pela integração real da Cakto.
 
-A variante atual é o controle. A configuração opcional fica em `site.config.json`, em `experiment.variants`; o experimento permanece desativado até que `experiment.enabled` seja alterado para `true`. Para comparar a variante preparada, use `?lp_variant=variante-b`. Hero, CTA e título/CTA da oferta podem ser ajustados pelos slots `data-copy-slot` sem alterar o layout. A variante é anexada ao `utm_content` do checkout e às propriedades de analytics, quando consentimento e IDs estiverem configurados. Para atribuir compras aprovadas, use a integração de conversão da Cakto; cliques continuam registrados como início de checkout, não como compra.
+O experimento de copy permanece desativado. Sua configuração opcional está em `site.config.json`; uma variante só é aplicada e atribuída quando `experiment.enabled` é true e lp_variant corresponde a uma variante conhecida.
 
-## Publicar na Vercel
+## Testes de navegador
 
-Importe o repositório na Vercel. vercel.json define node scripts/build.mjs como comando de build e dist como diretório de saída. Configure as variáveis de ambiente necessárias antes de campanhas.
+```sh
+node scripts/browser-test.mjs
+```
 
-## Revisar antes de publicar
+Requer Playwright disponível no ambiente de QA e a prévia em execução. Nenhuma biblioteca de teste é enviada no build. É possível informar `PLAYWRIGHT_MODULE_PATH`, `CHROMIUM_EXECUTABLE_PATH`, `BASE_URL` e `QA_OUTPUT_DIR`. Use `QA_BROWSER=webkit` para testar o motor do Safari, com o WebKit oficial instalado pelo Playwright em `PLAYWRIGHT_BROWSERS_PATH` (por padrão, `node_modules/.cache/ms-playwright`).
 
-- Confirmar na Cakto o preço, a taxa de serviço, o total, as condições de acesso, a entrega do arquivo e as políticas apresentadas no checkout. Na verificação atual, PIX e PicPay mostraram R$ 19,90 pelo produto + R$ 0,99 de taxa = R$ 20,89; no cartão, o total depende do parcelamento (a opção inicial de 4 parcelas mostrou 4 × R$ 5,88 = R$ 23,52). Revalidar antes de cada campanha.
-- Validar Política de Privacidade e Termos com a pessoa responsável pelo negócio.
-- Configurar Pixel/GA4 e a integração de conversões confirmadas, se forem usados.
-- Definir o domínio final e testar o checkout, os parâmetros de campanha e os links legais na publicação.
+A suíte verifica 320, 375, 390, 430, 768 e 1440 px; overflow, imagens, galeria completa e teclado, CTAs, consentimento, revogação, eventos únicos, UTMs, FAQ, movimento normal/reduzido, reflow equivalente a zoom de 200%, reprodução inline e byte ranges do vídeo. Os serviços de analytics são simulados para não enviar eventos de teste reais. Capturas e relatórios ficam em `node_modules/.cache/browser-qa` e `browser-qa-webkit`, fora do Git.
+
+Emulação de navegador não substitui a conferência em um iPhone físico.
+
+## Publicação
+
+`vercel.json` configura o build estático em `dist` e as rotas /privacidade e /termos. A integração Git da Vercel publica main automaticamente. Antes da publicação, rode build, smoke e a revisão de navegador. Preserve a configuração comercial e confirme o SHA do deploy e os arquivos com hash servidos em produção.

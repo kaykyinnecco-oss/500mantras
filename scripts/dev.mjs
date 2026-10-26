@@ -1,8 +1,8 @@
-import { createReadStream } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
 import http from "node:http";
 import path from "node:path";
 import { getSiteConfig, rootDir, safeJson } from "./config.mjs";
+import { serveFile } from "./http-file.mjs";
 
 const site = await getSiteConfig();
 const port = Number(process.env.PORT || 4173);
@@ -40,8 +40,8 @@ const server = http.createServer(async (request, response) => {
   try {
     const fileInfo = await stat(fullPath);
     if (!fileInfo.isFile()) throw new Error("Not a file");
-    response.writeHead(200, { "Content-Type": mimeTypes.get(path.extname(fullPath)) || "application/octet-stream" });
     if (path.extname(fullPath) === ".html") {
+      response.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
       let html = await readFile(fullPath, "utf8");
       html = html
         .replaceAll("__CHECKOUT_URL__", site.checkoutUrl)
@@ -55,7 +55,7 @@ const server = http.createServer(async (request, response) => {
       response.end(html);
       return;
     }
-    createReadStream(fullPath).pipe(response);
+    await serveFile(request, response, fullPath, mimeTypes.get(path.extname(fullPath)) || "application/octet-stream");
   } catch {
     response.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
     response.end("Página ou arquivo não encontrado.");
