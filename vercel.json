@@ -12,7 +12,7 @@
       ]
     },
     {
-      "source": "/(.*)\\.(css|js|svg|webp|woff2|mp4)",
+      "source": "/(.*)\\.(svg|webp|woff2|mp4)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
       ]

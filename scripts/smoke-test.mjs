@@ -34,6 +34,8 @@ const ctaTexts = [...html.matchAll(/<a\b[^>]*\bdata-checkout\b[^>]*>([\s\S]*?)<\
 assert.equal(ctaTexts.filter((text) => text === "QUERO ACESSAR OS 500 MANTRAS").length, 6, "all primary purchase CTAs use the same approved label");
 assert.equal(ctaTexts.filter((text) => text === "QUERO ACESSAR").length, 1, "the video completion CTA has its approved label");
 assert.ok(html.includes("class=\"ticker-track\"") && css.includes("@keyframes ticker-marquee"), "the continuous ticker is present and styled");
+assert.match(html, /href="\/assets\/styles\.[a-f0-9]{12}\.css"/, "production HTML references a versioned stylesheet");
+assert.match(html, /src="\/assets\/app\.[a-f0-9]{12}\.js"/, "production HTML references a versioned application script");
 assert.ok(html.includes("id=\"inicio\"") && html.includes("id=\"conteudo-do-ebook\"") && html.includes("id=\"oferta\""));
 assert.ok(html.includes("id=\"duvidas\"") && html.includes("id=\"rodape\""));
 assert.ok(html.indexOf("id=\"pause-title\"") < html.indexOf("id=\"apresentacao-video\"") && html.indexOf("id=\"apresentacao-video\"") < html.indexOf("id=\"conteudo-do-ebook\""), "the video follows the emotional pause section and precedes the real PDF previews");
@@ -76,6 +78,7 @@ assert.equal(html.match(/<meta property="product:price:amount" content="([^"]+)"
 for (const asset of [
   "assets/mockup-produto.webp", "assets/preview-autocuidado.webp",
   "assets/preview-abundancia.webp", "assets/preview-gratidao.webp", "assets/simbolo-celestial.svg",
+  ...[...html.matchAll(/(?:href|src)="\/(assets\/(?:styles\.[a-f0-9]{12}\.css|app\.[a-f0-9]{12}\.js))"/g)].map((match) => match[1]),
   "videos/500-mantras-apresentacao.mp4",
   "styles.css", "app.js", "privacy.html", "terms.html", "robots.txt",
 ]) {
