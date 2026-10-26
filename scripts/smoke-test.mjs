@@ -15,6 +15,7 @@ const runtimeSource = await readOutput("runtime-config.js");
 const runtimeMatch = runtimeSource.match(/Object\.freeze\(({[\s\S]*})\);\s*$/);
 assert.ok(runtimeMatch, "runtime-config.js must expose a JSON configuration object");
 const config = JSON.parse(runtimeMatch[1]);
+const vercelConfig = JSON.parse(await readFile(path.join(rootDir, "vercel.json"), "utf8"));
 const checkoutLinks = [...html.matchAll(/<a\b[^>]*\bdata-checkout\b[^>]*\bhref="([^"]+)"/g)].map((match) => match[1]);
 const expectedCheckout = "https://pay.cakto.com.br/323zgdr_1243414";
 
@@ -78,12 +79,21 @@ assert.ok(html.includes("Utilizamos cookies opcionais para entender a navegaçã
 assert.ok(html.includes('id="acceptAnalytics">Aceitar</button>') && html.includes('id="rejectAnalytics">Só essenciais</button>'), "consent choices remain explicit");
 assert.ok(html.includes('<a href="/privacidade">Política de privacidade</a>'), "the consent component links to the privacy policy");
 assert.ok(css.includes("width: min(680px, calc(100% - 24px))") && css.includes("env(safe-area-inset-bottom)"), "the consent component is compact and safe-area aware");
+assert.ok(html.includes('<button type="button" id="openConsentSettings">Preferências de métricas</button>'), "the landing page reopens consent settings without navigation");
+assert.deepEqual(vercelConfig.rewrites, [
+  { source: "/privacidade", destination: "/privacy" },
+  { source: "/termos", destination: "/terms" },
+], "Vercel serves the Portuguese privacy and terms routes");
 assert.ok(app.includes('"begin_checkout"') && app.includes('"view_offer"'), "checkout and offer events remain configured");
 assert.ok(app.includes('track("video_start"') && app.includes('track("video_progress"') && app.includes('track("video_complete"'), "video start, progress, and completion analytics use the existing consent-aware tracking");
 assert.ok(app.includes("analyticsInitialized") && app.includes("offerViewed"), "analytics and offer events are guarded against duplicates");
 assert.ok(app.includes('typeof window.fbq !== "function"') && app.includes("window._fbq = fbq") && app.includes("fbq.push = fbq"), "Meta Pixel uses a single compatible loader instance");
 assert.ok(app.includes('window.fbq("track", "PageView")'), "Meta Pixel sends the standard PageView event after consent");
 assert.ok(app.includes('window.fbq("track", "InitiateCheckout", payload)'), "Cakto CTA clicks send the standard Meta InitiateCheckout event");
+assert.equal((app.match(/window\.fbq\("track", "PageView"\)/g) || []).length, 1, "PageView has one guarded dispatch point");
+assert.equal((app.match(/window\.fbq\("track", "InitiateCheckout", payload\)/g) || []).length, 1, "InitiateCheckout has one delegated dispatch point");
+assert.ok(app.includes('window.fbq("consent", allowed ? "grant" : "revoke")'), "Meta consent can be changed after the initial choice");
+assert.ok(app.includes('window.gtag("consent", "update"'), "GA consent can be changed after the initial choice");
 assert.ok(!app.includes('window.fbq("trackCustom", "CheckoutClick"'), "the legacy custom checkout event is not sent alongside InitiateCheckout");
 assert.ok(!/track(?:Custom)?\s*\(\s*["']Purchase/i.test(app), "checkout clicks must not be reported as purchases");
 assert.ok(app.includes("value: Number(config.price || 19.9)"), "checkout-click analytics reports product price, not the PIX total or a purchase");
