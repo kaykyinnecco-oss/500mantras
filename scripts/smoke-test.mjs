@@ -27,30 +27,36 @@ assert.equal(config.checkoutTotalPaymentMethod, "PIX", "the configured total is 
 assert.equal(config.checkoutCardInstallmentCount, 4, "current default card installment count configured");
 assert.equal(config.checkoutCardInstallmentAmount, 5.88, "current default card installment amount configured");
 assert.equal(config.checkoutCardTotal, 23.52, "current default card total configured");
-assert.equal(checkoutLinks.length, 5, "header, hero, content, offer, and closing CTAs should be present");
+assert.equal(checkoutLinks.length, 7, "all existing CTAs, the video CTA, and the video completion CTA should be present");
 assert.deepEqual([...new Set(checkoutLinks)], [expectedCheckout], "every CTA should share the same checkout");
 assert.ok(!/__CHECKOUT_URL__|__SUPPORT_EMAIL__|__PRODUCT_PRICE__|__PRODUCT_PRICE_SCHEMA__|__CAKTO_SERVICE_FEE__|__CHECKOUT_TOTAL__|__CHECKOUT_CARD_INSTALLMENTS__|__CHECKOUT_CARD_TOTAL__/.test(html), "production HTML has no unresolved values");
 const ctaTexts = [...html.matchAll(/<a\b[^>]*\bdata-checkout\b[^>]*>([\s\S]*?)<\/a>/g)].map((match) => match[1].replace(/<[^>]+>/g, "").trim());
-assert.deepEqual(ctaTexts, Array(5).fill("QUERO ACESSAR OS 500 MANTRAS"), "all purchase CTAs use the same approved label");
+assert.equal(ctaTexts.filter((text) => text === "QUERO ACESSAR OS 500 MANTRAS").length, 6, "all primary purchase CTAs use the same approved label");
+assert.equal(ctaTexts.filter((text) => text === "QUERO ACESSAR").length, 1, "the video completion CTA has its approved label");
 assert.ok(html.includes("class=\"ticker-track\"") && css.includes("@keyframes ticker-marquee"), "the continuous ticker is present and styled");
 assert.ok(html.includes("id=\"inicio\"") && html.includes("id=\"conteudo-do-ebook\"") && html.includes("id=\"oferta\""));
 assert.ok(html.includes("id=\"duvidas\"") && html.includes("id=\"rodape\""));
+assert.ok(html.indexOf("id=\"pause-title\"") < html.indexOf("id=\"apresentacao-video\"") && html.indexOf("id=\"apresentacao-video\"") < html.indexOf("id=\"conteudo-do-ebook\""), "the video follows the emotional pause section and precedes the real PDF previews");
+assert.ok(html.includes("Alguns minutos para você podem começar aqui.") && html.includes("Dê o play e descubra a proposta do nosso e-book em 40 segundos."), "the approved video section copy is present");
+assert.ok(html.includes('preload="none" playsinline poster="/assets/mockup-produto.webp"') && html.includes('type="video/mp4"'), "the player uses a poster, native controls, and lazy video loading");
+assert.ok(html.includes('id="videoEndedCta"') && html.includes('data-cta-location="video-final"'), "the optional post-completion CTA is configured");
 assert.ok(html.includes("500 mantras para transformar pequenos momentos do seu dia em"), "specific product value is clear in the hero");
 assert.ok(html.includes("127 páginas") && html.includes("R$ 19,90"), "page count and price are visible");
-assert.ok(html.includes("PREÇO DO E-BOOK") && html.includes("PIX e PicPay"), "base ebook price and the applicable payment methods are labeled clearly");
+assert.ok(html.includes("PREÇO DO E-BOOK") && html.includes("Pix/PicPay: total de R$ 20,89"), "the product price and applicable PIX/PicPay total are disclosed clearly");
 assert.equal((html.match(/R\$ 0,99/g) || []).length, 1, "mandatory PIX service fee is disclosed once on the sales page");
 assert.equal((html.match(/R\$ 20,89/g) || []).length, 1, "PIX total is disclosed once on the sales page");
-assert.ok(html.includes("4 × R$ 5,88") && html.includes("R$ 23,52"), "current default card installment and total are disclosed");
+assert.ok(html.includes("Cartão: opções e total exibidos no checkout."), "card payment options are referred to the checkout without expanding the offer panel");
 assert.equal((html.match(/<details>/g) || []).length, 5, "the compact FAQ should contain five questions");
 assert.equal((html.match(/data-preview\b/g) || []).length, 3, "three authentic PDF page previews should be available");
 const themeList = html.match(/<ol class="theme-list">([\s\S]*?)<\/ol>/);
 assert.ok(themeList, "the ten real ebook themes are presented");
 assert.equal((themeList[1].match(/<li>/g) || []).length, 10, "all ten verified themes are listed");
 assert.ok(html.includes("Eu reconheço as oportunidades que surgem quando me preparo para percebê-las."), "the sample mantra is real PDF content");
-assert.ok(!/<video\b|vsl-section/i.test(html), "the current page must not include a VSL section or player");
+assert.ok(!/<track\b/i.test(html), "no unverified or unsynchronized subtitles are declared");
 assert.ok(!/mobileStickyCta|mobile-sticky-cta/.test(html + css + app), "the mobile CTA does not cover reading content");
 assert.ok(!/class=\"(?:benefit-card|step-card)/.test(html), "repeated generic card sections have been removed");
 assert.ok(app.includes('"begin_checkout"') && app.includes('"view_offer"'), "checkout and offer events remain configured");
+assert.ok(app.includes('track("video_start"') && app.includes('track("video_progress"') && app.includes('track("video_complete"'), "video start, progress, and completion analytics use the existing consent-aware tracking");
 assert.ok(app.includes("analyticsInitialized") && app.includes("offerViewed"), "analytics and offer events are guarded against duplicates");
 assert.ok(!/track(?:Custom)?\s*\(\s*["']Purchase/i.test(app), "checkout clicks must not be reported as purchases");
 assert.ok(app.includes("value: Number(config.price || 19.9)"), "checkout-click analytics reports product price, not the PIX total or a purchase");
@@ -70,6 +76,7 @@ assert.equal(html.match(/<meta property="product:price:amount" content="([^"]+)"
 for (const asset of [
   "assets/mockup-produto.webp", "assets/preview-autocuidado.webp",
   "assets/preview-abundancia.webp", "assets/preview-gratidao.webp", "assets/simbolo-celestial.svg",
+  "videos/500-mantras-apresentacao.mp4",
   "styles.css", "app.js", "privacy.html", "terms.html", "robots.txt",
 ]) {
   const info = await stat(path.join(distDir, asset));
@@ -84,4 +91,4 @@ assert.ok(terms.includes("empresakagency@gmail.com"), "terms page includes confi
 assert.ok(terms.includes("R$ 0,99") && terms.includes("R$ 20,89"), "terms disclose the current checkout fee and PIX total");
 assert.ok(!/reprodução do vídeo|VSL/i.test(privacy + terms), "legal pages match the no-VSL page configuration");
 
-console.log("Smoke test OK: five checkout CTAs, ten verified themes, a real PDF sample, authentic previews, copy-test config, and production assets verified.");
+console.log("Smoke test OK: seven checkout CTAs, the lazy video player, ten verified themes, real PDF content, consent-aware analytics, and production assets verified.");

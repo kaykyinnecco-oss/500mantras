@@ -131,8 +131,48 @@
     if (typeof window.fbq === "function") {
       if (eventName === "view_offer") window.fbq("trackCustom", "OfferViewed", payload);
       if (eventName === "begin_checkout") window.fbq("trackCustom", "CheckoutClick", payload);
+      if (eventName === "video_start") window.fbq("trackCustom", "VideoStart", payload);
+      if (eventName === "video_progress") window.fbq("trackCustom", "VideoProgress", payload);
+      if (eventName === "video_complete") window.fbq("trackCustom", "VideoComplete", payload);
     }
   }
+
+  const productVideo = document.getElementById("productVideo");
+  const videoPlay = document.getElementById("videoPlay");
+  const videoEndedCta = document.getElementById("videoEndedCta");
+  let videoStarted = false;
+  const videoProgressMarks = new Set();
+  videoPlay?.addEventListener("click", () => {
+    productVideo?.play().catch(() => {
+      if (videoPlay) videoPlay.hidden = false;
+    });
+  });
+  productVideo?.addEventListener("play", () => {
+    if (videoPlay) videoPlay.hidden = true;
+    if (videoEndedCta) videoEndedCta.hidden = true;
+    if (videoStarted) return;
+    videoStarted = true;
+    videoProgressMarks.clear();
+    track("video_start", { video_title: "Apresentação dos 500 Mantras" });
+  });
+  productVideo?.addEventListener("pause", () => {
+    if (productVideo.currentTime === 0 && videoPlay) videoPlay.hidden = false;
+  });
+  productVideo?.addEventListener("timeupdate", () => {
+    const duration = productVideo.duration;
+    if (!Number.isFinite(duration) || duration <= 0) return;
+    for (const percent of [25, 50, 75]) {
+      if (productVideo.currentTime / duration * 100 >= percent && !videoProgressMarks.has(percent)) {
+        videoProgressMarks.add(percent);
+        track("video_progress", { video_title: "Apresentação dos 500 Mantras", video_percent: percent });
+      }
+    }
+  });
+  productVideo?.addEventListener("ended", () => {
+    track("video_complete", { video_title: "Apresentação dos 500 Mantras" });
+    videoStarted = false;
+    if (videoEndedCta) videoEndedCta.hidden = false;
+  });
 
   let offerViewed = false;
   const offer = document.getElementById("oferta");

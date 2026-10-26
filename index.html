@@ -98,6 +98,30 @@
         </div>
       </section>
 
+      <section class="video-section" id="apresentacao-video" aria-labelledby="video-title">
+        <div class="section-shell">
+          <header class="video-heading">
+            <p class="eyebrow"><span aria-hidden="true"></span> CONHEÇA OS 500 MANTRAS</p>
+            <h2 id="video-title">Alguns minutos para você podem começar aqui.</h2>
+            <p>Dê o play e descubra a proposta do nosso e-book em 40 segundos.</p>
+          </header>
+          <div class="video-frame">
+            <video id="productVideo" controls preload="none" playsinline poster="/assets/mockup-produto.webp" aria-label="Apresentação dos 500 Mantras para Elevar Sua Energia, com duração aproximada de 40 segundos.">
+              <source src="/videos/500-mantras-apresentacao.mp4" type="video/mp4">
+              Seu navegador não consegue reproduzir este vídeo. Você pode continuar para o checkout pelo botão abaixo.
+            </video>
+            <button class="video-play" id="videoPlay" type="button" aria-label="Reproduzir a apresentação dos 500 Mantras">
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+          <a class="button button-gold video-cta" data-checkout data-cta-location="video" href="__CHECKOUT_URL__">QUERO ACESSAR OS 500 MANTRAS</a>
+          <div class="video-ended" id="videoEndedCta" role="status" aria-live="polite" hidden>
+            <p>Gostou do que viu? Acesse os 500 Mantras.</p>
+            <a class="button button-gold" data-checkout data-cta-location="video-final" href="__CHECKOUT_URL__">QUERO ACESSAR</a>
+          </div>
+        </div>
+      </section>
+
       <section class="content-section section-shell" id="conteudo-do-ebook" aria-labelledby="content-title">
         <header class="content-heading">
           <p class="eyebrow"><span aria-hidden="true"></span> UMA AMOSTRA DO MATERIAL</p>
@@ -198,7 +222,7 @@
                 <span>PREÇO DO E-BOOK</span>
                 <p class="price">R$ __PRODUCT_PRICE__</p>
                 <p class="payment-note">Compra única, sem assinatura</p>
-                <p class="fee-total-note">PIX e PicPay: R$ __PRODUCT_PRICE__ pelo e-book + taxa de serviço Cakto de R$ __CAKTO_SERVICE_FEE__ = R$ __CHECKOUT_TOTAL__ no total. Cartão: opção inicial atual de __CHECKOUT_CARD_INSTALLMENTS__ (R$ __CHECKOUT_CARD_TOTAL__ no total); os demais parcelamentos são detalhados no checkout.</p>
+                <p class="fee-total-note">Pix/PicPay: total de R$ __CHECKOUT_TOTAL__ (taxa Cakto de R$ __CAKTO_SERVICE_FEE__). Cartão: opções e total exibidos no checkout.</p>
               </div>
               <a class="button button-gold offer-cta" data-copy-slot="offerCta" data-checkout data-cta-location="oferta" href="__CHECKOUT_URL__">QUERO ACESSAR OS 500 MANTRAS</a>
               <p class="offer-note">Produto digital. Nenhum item físico será enviado.</p>
