@@ -36,6 +36,8 @@ assert.equal(ctaTexts.filter((text) => text === "QUERO ACESSAR").length, 1, "the
 assert.ok(html.includes("class=\"ticker-track\"") && css.includes("@keyframes ticker-marquee"), "the continuous ticker is present and styled");
 assert.match(html, /href="\/assets\/styles\.[a-f0-9]{12}\.css"/, "production HTML references a versioned stylesheet");
 assert.match(html, /src="\/assets\/app\.[a-f0-9]{12}\.js"/, "production HTML references a versioned application script");
+assert.ok(!/<p class="eyebrow[^\"]*"><span/i.test(html + await readOutput("privacy.html") + await readOutput("terms.html")), "decorative eyebrow strokes are removed throughout the site");
+assert.ok(!css.includes(".eyebrow > span"), "eyebrow styles no longer render decorative strokes");
 assert.ok(html.includes("id=\"inicio\"") && html.includes("id=\"conteudo-do-ebook\"") && html.includes("id=\"oferta\""));
 assert.ok(html.includes("id=\"duvidas\"") && html.includes("id=\"rodape\""));
 assert.ok(html.indexOf("id=\"pause-title\"") < html.indexOf("id=\"apresentacao-video\"") && html.indexOf("id=\"apresentacao-video\"") < html.indexOf("id=\"conteudo-do-ebook\""), "the video follows the emotional pause section and precedes the real PDF previews");
@@ -53,7 +55,23 @@ assert.equal((html.match(/data-preview\b/g) || []).length, 3, "three authentic P
 const themeList = html.match(/<ol class="theme-list">([\s\S]*?)<\/ol>/);
 assert.ok(themeList, "the ten real ebook themes are presented");
 assert.equal((themeList[1].match(/<li>/g) || []).length, 10, "all ten verified themes are listed");
+const themeItems = [...themeList[1].matchAll(/<li><span>(\d{2})<\/span>([^<]+)<\/li>/g)].map((match) => [match[1], match[2]]);
+assert.deepEqual(themeItems, [
+  ["01", "Amor-próprio e autoestima"], ["02", "Prosperidade e abundância"],
+  ["03", "Proteção e equilíbrio energético"], ["04", "Gratidão e conexão com o universo"],
+  ["05", "Paz interior e serenidade"], ["06", "Confiança e coragem"],
+  ["07", "Recomeços e desapego"], ["08", "Intuição e sabedoria interior"],
+  ["09", "Amor e relacionamentos"], ["10", "Energia positiva e intenção diária"],
+], "all verified theme names and their order are preserved");
 assert.ok(html.includes("Eu reconheço as oportunidades que surgem quando me preparo para percebê-las."), "the sample mantra is real PDF content");
+assert.equal((html.match(/Eu reconheço as oportunidades que surgem quando me preparo para percebê-las\./g) || []).length, 1, "the real sample mantra is shown only once");
+assert.ok(html.includes("UMA MENSAGEM DO E-BOOK") && html.includes("Palavras para o seu momento."), "the sample mantra panel has its approved editorial copy");
+assert.ok(html.includes("Encontre palavras para diferentes momentos."), "the themes panel has its approved editorial copy");
+assert.equal((html.match(/class="sample-card reveal"/g) || []).length, 1, "only one sample message panel is rendered");
+assert.equal((html.match(/class="theme-panel reveal"/g) || []).length, 1, "only one ten-theme panel is rendered");
+assert.equal((html.match(/data-cta-location="conteudo"/g) || []).length, 1, "the content panels have one CTA");
+assert.ok(app.includes("matchMedia(\"(prefers-reduced-motion: reduce)\")") && app.includes("new IntersectionObserver"), "panel reveals respect reduced-motion settings and use intersection observation");
+assert.ok(css.includes(".reveal-ready .reveal.is-visible") && css.includes("transition: none"), "panel reveals remain progressive and motion-safe");
 assert.ok(!/<track\b/i.test(html), "no unverified or unsynchronized subtitles are declared");
 assert.ok(!/mobileStickyCta|mobile-sticky-cta/.test(html + css + app), "the mobile CTA does not cover reading content");
 assert.ok(!/class=\"(?:benefit-card|step-card)/.test(html), "repeated generic card sections have been removed");

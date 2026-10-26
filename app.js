@@ -11,8 +11,21 @@
     && Object.prototype.hasOwnProperty.call(variants, requestedVariant);
   const variant = isExplicitExperimentVariant ? requestedVariant : "control";
   const experimentId = config.experiment?.id || "mantras-2026";
-  body.classList.add("has-js");
   body.dataset.experimentVariant = variant;
+
+  const revealItems = document.querySelectorAll(".reveal");
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (revealItems.length && "IntersectionObserver" in window && !prefersReducedMotion) {
+    body.classList.add("reveal-ready");
+    const revealObserver = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add("is-visible");
+        revealObserver.unobserve(entry.target);
+      }
+    }, { rootMargin: "0px 0px -36px 0px", threshold: 0.08 });
+    revealItems.forEach((item) => revealObserver.observe(item));
+  }
 
   const variantCopy = variants[variant] || {};
   document.querySelectorAll("[data-copy-slot]").forEach((element) => {
