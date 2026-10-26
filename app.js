@@ -86,15 +86,19 @@
     const gaId = config.analytics?.ga4MeasurementId?.trim();
 
     if (metaId) {
-      const fbq = function () { fbq.callMethod ? fbq.callMethod.apply(fbq, arguments) : fbq.queue.push(arguments); };
-      fbq.queue = [];
-      fbq.loaded = true;
-      fbq.version = "2.0";
-      window.fbq = fbq;
-      const pixelScript = document.createElement("script");
-      pixelScript.async = true;
-      pixelScript.src = "https://connect.facebook.net/en_US/fbevents.js";
-      document.head.append(pixelScript);
+      if (typeof window.fbq !== "function") {
+        const fbq = function () { fbq.callMethod ? fbq.callMethod.apply(fbq, arguments) : fbq.queue.push(arguments); };
+        window.fbq = fbq;
+        window._fbq = fbq;
+        fbq.push = fbq;
+        fbq.loaded = true;
+        fbq.version = "2.0";
+        fbq.queue = [];
+        const pixelScript = document.createElement("script");
+        pixelScript.async = true;
+        pixelScript.src = "https://connect.facebook.net/en_US/fbevents.js";
+        document.head.append(pixelScript);
+      }
       window.fbq("init", metaId);
       window.fbq("track", "PageView");
     }
@@ -129,6 +133,10 @@
   }
   document.getElementById("acceptAnalytics")?.addEventListener("click", () => setConsent("granted"));
   document.getElementById("rejectAnalytics")?.addEventListener("click", () => setConsent("denied"));
+  document.getElementById("openConsentSettings")?.addEventListener("click", (event) => {
+    event.preventDefault();
+    if (consentBanner) consentBanner.hidden = false;
+  });
 
   function track(eventName, details = {}) {
     if (!analyticsAllowed) return;
@@ -143,7 +151,7 @@
     if (typeof window.gtag === "function") window.gtag("event", eventName, payload);
     if (typeof window.fbq === "function") {
       if (eventName === "view_offer") window.fbq("trackCustom", "OfferViewed", payload);
-      if (eventName === "begin_checkout") window.fbq("trackCustom", "CheckoutClick", payload);
+      if (eventName === "begin_checkout") window.fbq("track", "InitiateCheckout", payload);
       if (eventName === "video_start") window.fbq("trackCustom", "VideoStart", payload);
       if (eventName === "video_progress") window.fbq("trackCustom", "VideoProgress", payload);
       if (eventName === "video_complete") window.fbq("trackCustom", "VideoComplete", payload);

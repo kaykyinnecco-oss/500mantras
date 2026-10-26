@@ -40,7 +40,7 @@ O build valida que o checkout é um endereço HTTPS em domínio oficial da Cakto
 
 ## Analytics e conversões
 
-Meta Pixel e GA4 só carregam depois do consentimento quando os respectivos IDs estiverem configurados. A página envia view_offer uma vez ao exibir a oferta e begin_checkout ao clicar em um CTA. O valor desse evento é o preço do e-book (sem a taxa da Cakto ou eventuais custos de parcelamento), pois o método de pagamento ainda não foi escolhido; nenhum clique é tratado como compra.
+Meta Pixel e GA4 só carregam depois do consentimento quando os respectivos IDs estiverem configurados. O Pixel configurado envia `PageView` uma vez após a inicialização e o evento padrão `InitiateCheckout` a cada clique em um CTA da Cakto. A página também envia `view_offer` uma vez ao exibir a oferta e `begin_checkout` ao clicar em um CTA para o GA4, quando configurado. O valor do início de checkout é o preço real do e-book (sem a taxa da Cakto ou eventuais custos de parcelamento), pois o método de pagamento ainda não foi escolhido; nenhum clique é tratado como compra.
 
 Configure a confirmação de compra na plataforma de pagamentos para medir vendas aprovadas. A página não simula nem envia um evento Purchase.
 
