@@ -58,7 +58,7 @@ const protectedCtaTags = [
 ];
 for (const openingTag of protectedCtaTags) assert.equal(sourceHtml.split(openingTag).length - 1, 1, "existing checkout opening tag is preserved: " + openingTag);
 const originalVideo = '<video id="productVideo" controls preload="none" playsinline poster="/assets/mockup-produto.webp" aria-label="Apresentação dos 500 Mantras para Elevar Sua Energia, com duração aproximada de 40 segundos."><source src="/videos/500-mantras-apresentacao-mobile.mp4" type="video/mp4">Seu navegador não consegue reproduzir este vídeo. <a href="/videos/500-mantras-apresentacao-mobile.mp4">Abra a apresentação</a> ou continue pelo botão de compra.</video>';
-assert.ok(sourceHtml.includes(originalVideo), "the original video URL, controls, player attributes and fallback are preserved");
+assert.ok(sourceHtml.includes(originalVideo.replace('poster="/assets/mockup-produto.webp"', 'poster="/assets/video-poster-500-mantras-v1.webp"')), "only the poster changes; original video URL, controls, player attributes and fallback are preserved");
 const sourceDialog = sourceHtml.match(/<dialog\b[^>]*id="consentPreferences"[\s\S]*?<\/dialog>/)?.[0];
 assert.ok(sourceDialog, "the original consent dialog is present");
 assert.equal(digest(sourceDialog), "3d1a5351d0d4b6bac3e6cc7423aeac24547faefd012fd57b20c0125cb31c7638", "the native consent dialog is preserved from the original page");
@@ -96,7 +96,9 @@ for (const id of sectionOrder) {
   assert.ok(sectionIndex > previousSection, "purchase journey retains logical section order: " + id);
   previousSection = sectionIndex;
 }
-assert.ok(html.includes('preload="none" playsinline poster="/assets/mockup-produto.webp"') && html.includes('type="video/mp4"'), "the player uses a poster, native controls, and lazy video loading");
+assert.ok(html.includes('preload="none" playsinline poster="/assets/video-poster-500-mantras-v1.webp"') && html.includes('type="video/mp4"'), "the player uses the official poster, native controls, and lazy video loading");
+assert.equal((html.match(/id="videoPlay"/g) || []).length, 1, "one existing play control drives the real player");
+assert.match(html, /<button class="video-play"[^>]*><img src="\/assets\/video-poster-500-mantras-v1\.webp"/, "the provided artwork is the accessible functional play layer");
 assert.equal((html.match(/<video\b/g) || []).length, 1, "the existing player is moved without duplication");
 assert.ok(html.includes('id="videoEndedCta"') && html.includes('data-cta-location="video-final"'), "the optional post-completion CTA is configured");
 assert.match(html, /<meta name="description" content="[^\"]*500 mantras[^\"]*10 temas[^\"]*127 páginas/, "metadata describes the actual product");
@@ -121,7 +123,13 @@ for (const fact of ["500", "10", "127", "PDF", "Pagamento único", "7 dias"]) as
 assert.match(html, /<h3[^>]*>Seu e-book completo<\/h3>/, "commercial area has the requested clear heading");
 const offerSummary = html.match(/<div class="offer-summary">([\s\S]*?)<\/figure>/)?.[1];
 assert.ok(offerSummary && !offerSummary.includes("mockup-produto.webp") && /preview-(?:gratidao|autocuidado|abundancia)\.webp/.test(offerSummary), "offer uses an authentic internal page rather than duplicating the hero mockup");
-assert.equal((html.match(/<img\b[^>]*src="\/assets\/mockup-produto\.webp"/g) || []).length, 1, "the principal mockup image appears only in the hero; video poster remains distinct");
+assert.equal((html.match(/<img\b[^>]*src="\/assets\/hero-mantras-premium-v1-1200\.webp"/g) || []).length, 1, "the new promotional image appears only in the hero");
+const heroImage = html.match(/<figure class="hero-visual">\s*(<img\b[^>]+>)/)?.[1];
+const heroPreload = html.match(/<link rel="preload" as="image"[^>]+>/)?.[0];
+assert.ok(heroImage && heroPreload, "the hero has an image and an early preload");
+assert.equal(heroPreload.match(/imagesrcset="([^"]+)"/)?.[1], heroImage.match(/srcset="([^"]+)"/)?.[1], "preload uses the same responsive candidates as the hero");
+assert.equal(heroPreload.match(/imagesizes="([^"]+)"/)?.[1], heroImage.match(/sizes="([^"]+)"/)?.[1], "preload uses the same responsive sizes as the hero");
+assert.ok(heroImage.includes('fetchpriority="high"') && heroImage.includes('loading="eager"'), "the first-fold image is prioritized rather than lazy-loaded");
 const trustArea = html.match(/<div class="purchase-trust"[\s\S]*?<\/section>/)?.[0];
 assert.ok(trustArea, "offer has a concise purchase-confidence area");
 for (const fact of ["E-book em PDF", "Pagamento por cartão", "Garantia de 7 dias"]) assert.ok(trustArea.includes(fact), "purchase-confidence area discloses: " + fact);
@@ -246,7 +254,7 @@ assert.equal(html.match(/<meta property="product:price:amount" content="([^"]+)"
 
 for (const asset of [
   ...brandLogos.map((tag) => tag.match(/src="\/([^"]+)"/)?.[1]),
-  "assets/selo-garantia-premium-7-dias-v1.webp", "assets/payment-visa-aligned-v1.webp", "assets/payment-mastercard.svg", "assets/payment-elo.svg", "assets/mockup-produto.webp", "assets/preview-autocuidado.webp",
+  "assets/video-poster-500-mantras-v1.webp", "assets/hero-mantras-premium-v1-720.webp", "assets/hero-mantras-premium-v1-1200.webp", "assets/selo-garantia-premium-7-dias-v1.webp", "assets/payment-visa-aligned-v1.webp", "assets/payment-mastercard.svg", "assets/payment-elo.svg", "assets/mockup-produto.webp", "assets/preview-autocuidado.webp",
   "assets/preview-abundancia.webp", "assets/preview-gratidao.webp", "assets/simbolo-celestial.svg",
   ...[...html.matchAll(/(?:href|src)="\/(assets\/(?:styles\.[a-f0-9]{12}\.css|(?:app|ui)\.[a-f0-9]{12}\.js))"/g)].map((match) => match[1]),
   ...[...css.matchAll(/url\(["']?(\/assets\/[^)'"\s]+)["']?\)/g)].map((match) => match[1].slice(1)),
