@@ -138,12 +138,14 @@ button, a { touch-action: manipulation; -webkit-tap-highlight-color: transparent
 .video-section { display: grid; gap: 24px; padding-block: 40px; }
 .video-copy { display: contents; }
 .video-heading { grid-row: 1; }
+.video-heading h2 { font-size: clamp(26px, 6vw, 36px); }
 .video-media { grid-row: 2; min-width: 0; }
 .video-cta { grid-row: 3; width: 100%; }
-.video-frame { position: relative; overflow: hidden; aspect-ratio: 16 / 9; border: 1px solid var(--line); border-radius: 14px; background: var(--purple); }
-.video-frame video { display: block; width: 100%; height: 100%; border-radius: 14px; object-fit: contain; }
-.video-play { position: absolute; top: 50%; left: 50%; display: grid; place-items: center; width: 72px; height: 72px; border: 2px solid var(--gold-light); border-radius: 50%; background: var(--gold); box-shadow: 0 4px 16px #0006; transform: translate(-50%, -50%); }
-.video-play span { margin-left: 4px; border-block: 10px solid transparent; border-left: 15px solid var(--ink); }
+.video-frame { position: relative; overflow: hidden; aspect-ratio: 16 / 9; border: 1px solid var(--line); border-radius: 16px; background: var(--purple); box-shadow: 0 0 16px #e4bf7212; }
+.video-frame video { display: block; width: 100%; height: 100%; border-radius: inherit; object-fit: contain; }
+.video-play { position: absolute; inset: 0; display: block; width: 100%; height: 100%; padding: 0; border: 0; border-radius: inherit; background: transparent; }
+.video-play img { width: 100%; height: 100%; border-radius: inherit; object-fit: contain; }
+.video-play:focus-visible { outline: 3px solid var(--cream); outline-offset: -6px; }
 .video-ended { padding-top: 16px; }
 .video-ended .button { width: 100%; margin-top: 16px; }
 .video-section:has(.video-ended:not([hidden])) .video-cta { display: none; }
