@@ -71,8 +71,7 @@ assert.equal(checkoutLinks.length, 8, "seven original CTAs plus one consent-awar
 assert.deepEqual([...new Set(checkoutLinks)], [expectedCheckout], "every CTA should share the same checkout");
 assert.ok(!/__CHECKOUT_URL__|__SUPPORT_EMAIL__|__PRODUCT_PRICE__|__PRODUCT_PRICE_SCHEMA__|__CAKTO_SERVICE_FEE__|__CHECKOUT_TOTAL__|__CHECKOUT_CARD_INSTALLMENTS__|__CHECKOUT_CARD_TOTAL__/.test(html), "production HTML has no unresolved values");
 const ctaTexts = [...html.matchAll(/<a\b[^>]*\bdata-checkout\b[^>]*>([\s\S]*?)<\/a>/g)].map((match) => match[1].replace(/<[^>]+>/g, "").trim());
-assert.equal(ctaTexts.filter((text) => text === "QUERO RECEBER MEUS 500 MANTRAS").length, 7, "the original purchase CTAs use the approved new copy");
-assert.equal(ctaTexts.filter((text) => text === "QUERO MEUS 500 MANTRAS").length, 1, "the mobile CTA uses the requested shorter label");
+assert.equal(ctaTexts.filter((text) => text === "QUERO RECEBER MEUS 500 MANTRAS").length, 8, "all original purchase CTAs use the approved copy");
 assert.equal(config.currency, "BRL", "product currency is preserved");
 for (const location of ["header", "hero", "conteudo", "video", "video-final", "oferta", "fechamento"]) {
   assert.equal((html.match(new RegExp('data-cta-location="' + location + '"', "g")) || []).length, 1, "checkout location appears once: " + location);
@@ -84,7 +83,7 @@ assert.ok(!/<p class="eyebrow[^\"]*"><span/i.test(html + await readOutput("priva
 assert.ok(!css.includes(".eyebrow > span"), "eyebrow styles no longer render decorative strokes");
 assert.ok(html.includes("id=\"inicio\"") && html.includes("id=\"conteudo-do-ebook\"") && html.includes("id=\"oferta\""));
 assert.ok(html.includes("id=\"duvidas\"") && html.includes("id=\"rodape\""));
-const sectionOrder = ["pause-title", "o-que-recebe", "conteudo-do-ebook", "themes-title", "apresentacao-video", "oferta", "duvidas", "closing-title"];
+const sectionOrder = ["pause-title", "o-que-recebe", "conteudo-do-ebook", "avaliacoes", "themes-title", "apresentacao-video", "oferta", "duvidas", "closing-title"];
 let previousSection = -1;
 for (const id of sectionOrder) {
   const sectionIndex = html.indexOf('id="' + id + '"');
@@ -118,7 +117,8 @@ assert.ok(offerSummary && !offerSummary.includes("mockup-produto.webp") && /prev
 assert.equal((html.match(/<img\b[^>]*src="\/assets\/mockup-produto\.webp"/g) || []).length, 1, "the principal mockup image appears only in the hero; video poster remains distinct");
 const trustArea = html.match(/<div class="purchase-trust"[\s\S]*?<\/section>/)?.[0];
 assert.ok(trustArea, "offer has a concise purchase-confidence area");
-for (const fact of ["Material digital", "Compra única", "7 dias de garantia"]) assert.ok(trustArea.includes(fact), "purchase-confidence area discloses: " + fact);
+for (const fact of ["E-book em PDF", "Pagamento por cartão", "Garantia de 7 dias"]) assert.ok(trustArea.includes(fact), "purchase-confidence area discloses: " + fact);
+for (const brand of ["Visa", "Mastercard", "Elo"]) assert.ok(trustArea.includes('alt="' + brand + '"'), "owner-confirmed payment brand is accessible: " + brand);
 
 const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1];
 const footer = html.match(/<footer\b[^>]*id="rodape"[\s\S]*?<\/footer>/)?.[0];
@@ -151,7 +151,31 @@ assert.ok(!/<track\b/i.test(html), "no unverified or unsynchronized subtitles ar
 const guaranteeText = "Garantia de 7 dias. Se você abrir o e-book e sentir que não era o que esperava, é só pedir o reembolso em até 7 dias após a compra e devolvemos 100% do valor. Sem burocracia.";
 assert.ok(html.includes(guaranteeText), "owner-confirmed full guarantee uses the exact approved text");
 assert.ok(html.replace(/<[^>]+>/g, "").includes("Direito de arrependimento previsto no artigo 49 do Código de Defesa do Consumidor."), "guarantee identifies the applicable right without narrowing it");
-assert.ok(html.includes('/assets/garantia-7-dias.svg'), "the offer displays the original guarantee medallion");
+assert.ok(html.includes('/assets/garantia-7-dias-medalhao.svg'), "the guarantee displays the new premium medallion");
+assert.equal((html.match(/src="\/assets\/garantia-7-dias-compacta.svg"/g) || []).length, 2, "compact guarantee appears by the price and in the trust strip");
+assert.equal((html.match(/<del>R\$ 29,90<\/del>/g) || []).length, 2, "hero and offer display the owner-confirmed prior price");
+const reviewSource = JSON.parse(await readFile(path.join(rootDir, "docs/reader-reviews.json"), "utf8"));
+const reviews = [...html.matchAll(/<article class="review-card" data-rating="(\d)"[\s\S]*?<\/article>/g)];
+assert.equal(reviews.length, 8, "all eight owner-provided reviews are visible in HTML");
+assert.equal(reviewSource.reviews.length, reviews.length);
+let starsTotal = 0;
+for (const [index, match] of reviews.entries()) {
+  const expected = reviewSource.reviews[index];
+  assert.ok(match[0].includes(expected.name), "review author is unchanged: " + expected.name);
+  assert.equal(match[0].match(/<blockquote><p>([\s\S]*?)<\/p><\/blockquote>/)?.[1], expected.text, "review text is reproduced verbatim");
+  assert.equal(Number(match[1]), expected.rating);
+  assert.equal((match[0].match(/class="star-filled"/g) || []).length, expected.rating, "individual star fills match the supplied rating");
+  assert.equal((match[0].match(/class="star-outline"/g) || []).length, 5 - expected.rating);
+  starsTotal += expected.rating;
+}
+assert.equal(starsTotal, 38);
+assert.equal(starsTotal / reviews.length, 4.75);
+assert.equal(Math.round(starsTotal / reviews.length * 10) / 10, 4.8);
+assert.ok(html.includes("4,8</strong> de 5 estrelas") && html.includes("Com base em 8 avaliações de compradores."), "rounded score describes only the eight supplied reviews");
+assert.ok(!html.includes("Compra verificada") && !html.includes("4,9"), "reviews do not invent verification or inflate the score");
+const reviewScript = html.match(/src="\/(assets\/reviews-carousel\.[a-f0-9]{12}\.js)"/)?.[1];
+assert.ok(reviewScript, "isolated testimonial interactions use a versioned asset");
+await stat(path.join(distDir, reviewScript));
 for (const position of ["hero", "included", "offer", "closing"]) {
   assert.equal((html.match(new RegExp('data-guarantee="' + position + '"', "g")) || []).length, 1, "guarantee appears at the approved position: " + position);
 }
@@ -206,7 +230,7 @@ assert.equal(html.match(/<meta property="product:price:amount" content="([^"]+)"
 
 for (const asset of [
   ...brandLogos.map((tag) => tag.match(/src="\/([^"]+)"/)?.[1]),
-  "assets/garantia-7-dias.svg", "assets/mockup-produto.webp", "assets/preview-autocuidado.webp",
+  "assets/garantia-7-dias.svg", "assets/garantia-7-dias-medalhao.svg", "assets/garantia-7-dias-compacta.svg", "assets/payment-visa.png", "assets/payment-mastercard.svg", "assets/payment-elo.svg", "assets/mockup-produto.webp", "assets/preview-autocuidado.webp",
   "assets/preview-abundancia.webp", "assets/preview-gratidao.webp", "assets/simbolo-celestial.svg",
   ...[...html.matchAll(/(?:href|src)="\/(assets\/(?:styles\.[a-f0-9]{12}\.css|(?:app|ui)\.[a-f0-9]{12}\.js))"/g)].map((match) => match[1]),
   ...[...css.matchAll(/url\(["']?(\/assets\/[^)'"\s]+)["']?\)/g)].map((match) => match[1].slice(1)),
