@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 72 72" role="img" aria-labelledby="title">
-  <title id="title">Garantia de 7 dias</title>
-  <circle cx="36" cy="36" r="34" fill="#160c22" stroke="#e4bf72" stroke-width="2"/>
-  <circle cx="36" cy="36" r="29" fill="none" stroke="#f3dca4" stroke-width=".7"/>
-  <text x="36" y="43" text-anchor="middle" fill="#f3dca4" font-family="Georgia, serif" font-size="37" font-weight="700">7</text>
-  <text x="36.5" y="57" text-anchor="middle" fill="#e4bf72" font-family="Arial, sans-serif" font-size="9" font-weight="700" letter-spacing="1">DIAS</text>
-</svg>

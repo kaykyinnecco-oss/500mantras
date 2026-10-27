@@ -124,7 +124,7 @@ try {
     assert.ok(await page.locator(".site-footer").innerText().then((text) => text.includes("Produto digital em PDF. Não inclui versão física.")), `${width}px: final format notice belongs to the footer`);
     assert.equal(await page.locator("main").innerText().then((text) => text.includes("empresakagency@gmail.com")), false, `${width}px: no support email competes with the offer`);
     assert.equal(await page.locator(".offer-summary img").getAttribute("src").then((src) => src.includes("mockup-produto.webp")), false, `${width}px: offer image differs from the hero mockup`);
-    assert.equal(await page.locator('.guarantee-panel img[src="/assets/garantia-7-dias-medalhao.svg"]').isVisible(), true, `${width}px: premium guarantee medallion is visible`);
+    assert.equal(await page.locator('.guarantee-panel img[src="/assets/selo-garantia-premium-7-dias-v1.webp"]').isVisible(), true, `${width}px: official premium guarantee image is visible`);
     assert.equal(await page.locator('.review-card').count(), 8, `${width}px: eight supplied reviews appear`);
     assert.equal(await page.locator('.reviews-summary').getAttribute('data-rating-exact'), '4.75');
     assert.equal(await page.locator('.previous-price del').count(), 2, `${width}px: real former price appears in hero and offer`);
