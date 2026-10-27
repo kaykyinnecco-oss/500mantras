@@ -151,8 +151,16 @@ assert.ok(!/<track\b/i.test(html), "no unverified or unsynchronized subtitles ar
 const guaranteeText = "Garantia de 7 dias. Se você abrir o e-book e sentir que não era o que esperava, é só pedir o reembolso em até 7 dias após a compra e devolvemos 100% do valor. Sem burocracia.";
 assert.ok(html.includes(guaranteeText), "owner-confirmed full guarantee uses the exact approved text");
 assert.ok(html.replace(/<[^>]+>/g, "").includes("Direito de arrependimento previsto no artigo 49 do Código de Defesa do Consumidor."), "guarantee identifies the applicable right without narrowing it");
-assert.ok(html.includes('/assets/garantia-7-dias-medalhao.svg'), "the guarantee displays the new premium medallion");
-assert.equal((html.match(/src="\/assets\/garantia-7-dias-compacta.svg"/g) || []).length, 2, "compact guarantee appears by the price and in the trust strip");
+const guaranteeImages = [...html.matchAll(/<img\b[^>]*src="\/assets\/selo-garantia-premium-7-dias-v1.webp"[^>]*>/g)].map((match) => match[0]);
+assert.equal(guaranteeImages.length, 3, "price, guarantee and trust strip reuse the official premium image");
+for (const image of guaranteeImages) {
+  assert.ok(image.includes('alt="Selo de garantia de 7 dias"'), "the guarantee has the requested accessible description");
+  assert.ok(image.includes('width="640" height="640"') && image.includes('loading="lazy"'), "the guarantee reserves square proportions and loads lazily");
+}
+assert.ok(!/garantia-7-dias(?:-compacta|-medalhao)?\.svg/.test(html), "no previous guarantee artwork is referenced");
+for (const oldAsset of ["garantia-7-dias.svg", "garantia-7-dias-medalhao.svg", "garantia-7-dias-compacta.svg"]) {
+  await assert.rejects(stat(path.join(distDir, "assets", oldAsset)), { code: "ENOENT" }, "unused old guarantee artwork does not ship");
+}
 assert.equal((html.match(/<del>R\$ 29,90<\/del>/g) || []).length, 2, "hero and offer display the owner-confirmed prior price");
 const reviewSource = JSON.parse(await readFile(path.join(rootDir, "docs/reader-reviews.json"), "utf8"));
 const reviews = [...html.matchAll(/<article class="review-card" data-rating="(\d)"[\s\S]*?<\/article>/g)];
@@ -230,7 +238,7 @@ assert.equal(html.match(/<meta property="product:price:amount" content="([^"]+)"
 
 for (const asset of [
   ...brandLogos.map((tag) => tag.match(/src="\/([^"]+)"/)?.[1]),
-  "assets/garantia-7-dias.svg", "assets/garantia-7-dias-medalhao.svg", "assets/garantia-7-dias-compacta.svg", "assets/payment-visa.png", "assets/payment-mastercard.svg", "assets/payment-elo.svg", "assets/mockup-produto.webp", "assets/preview-autocuidado.webp",
+  "assets/selo-garantia-premium-7-dias-v1.webp", "assets/payment-visa.png", "assets/payment-mastercard.svg", "assets/payment-elo.svg", "assets/mockup-produto.webp", "assets/preview-autocuidado.webp",
   "assets/preview-abundancia.webp", "assets/preview-gratidao.webp", "assets/simbolo-celestial.svg",
   ...[...html.matchAll(/(?:href|src)="\/(assets\/(?:styles\.[a-f0-9]{12}\.css|(?:app|ui)\.[a-f0-9]{12}\.js))"/g)].map((match) => match[1]),
   ...[...css.matchAll(/url\(["']?(\/assets\/[^)'"\s]+)["']?\)/g)].map((match) => match[1].slice(1)),

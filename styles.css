@@ -167,9 +167,9 @@ button, a { touch-action: manipulation; -webkit-tap-highlight-color: transparent
 .payment-note { margin-top: 12px; color: var(--cream); font-size: 17px; }
 .offer-cta { width: 100%; margin-top: 24px; }
 .price-guarantee { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 16px; color: var(--gold-light); font-weight: 600; }
-.price-guarantee img { width: 56px; height: 56px; flex-shrink: 0; }
+.price-guarantee img { width: 104px; height: auto; flex-shrink: 0; }
 .guarantee-panel { display: grid; justify-items: center; gap: 24px; margin-top: 32px; padding: 32px 24px; border-radius: 16px; background: #21132f; text-align: center; }
-.guarantee-seal { width: 168px; height: auto; flex-shrink: 0; }
+.guarantee-seal { width: 200px; height: auto; flex-shrink: 0; }
 .guarantee-panel h3 { margin-bottom: 16px; color: var(--gold-light); font-size: 28px; }
 .guarantee-panel p { color: var(--cream); }
 .guarantee-panel .guarantee-legal { margin-top: 16px; color: var(--muted); font-size: 17px; }
@@ -177,7 +177,7 @@ button, a { touch-action: manipulation; -webkit-tap-highlight-color: transparent
 .purchase-trust { display: grid; gap: 24px; margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--line); }
 .purchase-trust > div { display: flex; align-items: start; gap: 16px; padding: 20px; border: 1px solid #e4bf722b; border-radius: 14px; background: #21132f; }
 .purchase-trust svg { width: 40px; height: 40px; flex-shrink: 0; margin-top: 4px; fill: none; stroke: var(--gold); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.purchase-trust .trust-medallion { width: 56px; height: 56px; flex-shrink: 0; }
+.purchase-trust .trust-medallion { width: 96px; height: auto; flex-shrink: 0; }
 .purchase-trust .payment-confidence { flex-direction: column; }
 .payment-brands { display: flex; align-items: center; gap: 8px; width: 100%; }
 .payment-brand { display: grid; place-items: center; flex: 1; min-width: 0; max-width: 72px; height: 44px; overflow: hidden; border: 1px solid #e4bf7238; border-radius: 6px; background: var(--cream); }
@@ -253,7 +253,7 @@ button, a { touch-action: manipulation; -webkit-tap-highlight-color: transparent
   .content-cta, .closing-cta { width: auto; min-width: 360px; }
   .preview-gallery { grid-auto-columns: 46%; gap: 24px; }
   .theme-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .guarantee-panel { grid-template-columns: 152px 1fr; align-items: center; justify-items: start; padding: 32px; text-align: left; }
+  .guarantee-panel { grid-template-columns: 200px 1fr; align-items: center; justify-items: start; padding: 32px; text-align: left; }
   .consent-actions { grid-template-columns: 1fr 1fr; }
 }
 @media (min-width: 768px) {
@@ -289,8 +289,8 @@ button, a { touch-action: manipulation; -webkit-tap-highlight-color: transparent
   .offer-art { grid-column: auto; grid-row: auto; margin-top: 16px; }
   .offer-tablet { width: min(100%, 288px); padding: 12px; border-radius: 28px; }
   .offer-art figcaption { font-size: 14px; }
-  .guarantee-panel { grid-template-columns: 168px 1fr; gap: 32px; padding: 40px; }
-  .guarantee-seal { width: 168px; }
+  .guarantee-panel { grid-template-columns: 216px 1fr; gap: 32px; padding: 40px; }
+  .guarantee-seal { width: 216px; }
   .purchase-trust { grid-template-columns: repeat(3, 1fr); gap: 24px; }
   .purchase-trust > div { flex-direction: column; gap: 12px; }
   .faq-section { grid-template-columns: .85fr 1.15fr; gap: 64px; }
