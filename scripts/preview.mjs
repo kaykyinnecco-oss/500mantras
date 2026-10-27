@@ -5,7 +5,7 @@ import { serveFile } from "./http-file.mjs";
 
 const outputDir = path.join(rootDir, "dist");
 const port = Number(process.env.PORT || 4174);
-const types = new Map([[".html", "text/html; charset=utf-8"], [".css", "text/css; charset=utf-8"], [".js", "text/javascript; charset=utf-8"], [".json", "application/json; charset=utf-8"], [".webp", "image/webp"], [".png", "image/png"], [".svg", "image/svg+xml"], [".mp4", "video/mp4"], [".vtt", "text/vtt; charset=utf-8"]]);
+const types = new Map([[".html", "text/html; charset=utf-8"], [".css", "text/css; charset=utf-8"], [".js", "text/javascript; charset=utf-8"], [".json", "application/json; charset=utf-8"], [".webp", "image/webp"], [".png", "image/png"], [".svg", "image/svg+xml"], [".mp4", "video/mp4"], [".vtt", "text/vtt; charset=utf-8"], [".woff2", "font/woff2"]]);
 const pageFiles = new Map([["/", "index.html"], ["/privacidade", "privacy.html"], ["/termos", "terms.html"]]);
 
 const server = http.createServer(async (request, response) => {

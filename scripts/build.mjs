@@ -16,11 +16,12 @@ const assetHash = async (file) => createHash("sha256")
   .slice(0, 12);
 const stylesAsset = `styles.${await assetHash("styles.css")}.css`;
 const appAsset = `app.${await assetHash("app.js")}.js`;
+const uiAsset = `ui.${await assetHash("ui.js")}.js`;
 
 await rm(outputDir, { recursive: true, force: true });
 await mkdir(outputDir, { recursive: true });
 
-for (const file of ["index.html", "privacy.html", "terms.html", "styles.css", "app.js", "robots.txt"]) {
+for (const file of ["index.html", "privacy.html", "terms.html", "styles.css", "app.js", "ui.js", "robots.txt"]) {
   const sourcePath = path.join(rootDir, file);
   try {
     let source = await readFile(sourcePath, "utf8");
@@ -36,7 +37,8 @@ for (const file of ["index.html", "privacy.html", "terms.html", "styles.css", "a
     if (["index.html", "privacy.html", "terms.html"].includes(file)) {
       source = source
         .replaceAll('href="/styles.css"', `href="/assets/${stylesAsset}"`)
-        .replaceAll('src="/app.js"', `src="/assets/${appAsset}"`);
+        .replaceAll('src="/app.js"', `src="/assets/${appAsset}"`)
+        .replaceAll('src="/ui.js"', `src="/assets/${uiAsset}"`);
     }
     await writeFile(path.join(outputDir, file), source);
   } catch (error) {
@@ -48,6 +50,7 @@ const assetDir = path.join(outputDir, "assets");
 await mkdir(assetDir, { recursive: true });
 await cp(path.join(rootDir, "styles.css"), path.join(assetDir, stylesAsset));
 await cp(path.join(rootDir, "app.js"), path.join(assetDir, appAsset));
+await cp(path.join(rootDir, "ui.js"), path.join(assetDir, uiAsset));
 await cp(path.join(rootDir, "public"), outputDir, {
   recursive: true,
   // Preserve the source video in Git; only publish the optimized playback asset.

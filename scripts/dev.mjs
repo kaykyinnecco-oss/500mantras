@@ -11,12 +11,12 @@ const formatAmount = (amount) => new Intl.NumberFormat("pt-BR", {
   maximumFractionDigits: 2,
 }).format(amount);
 const formatSchemaAmount = (amount) => Number(amount).toFixed(2);
-const pageFiles = new Map([["/", "index.html"], ["/privacidade", "privacy.html"], ["/termos", "terms.html"], ["/styles.css", "styles.css"], ["/app.js", "app.js"], ["/robots.txt", "robots.txt"]]);
+const pageFiles = new Map([["/", "index.html"], ["/privacidade", "privacy.html"], ["/termos", "terms.html"], ["/styles.css", "styles.css"], ["/app.js", "app.js"], ["/ui.js", "ui.js"], ["/robots.txt", "robots.txt"]]);
 const mimeTypes = new Map([
   [".html", "text/html; charset=utf-8"], [".css", "text/css; charset=utf-8"],
   [".js", "text/javascript; charset=utf-8"], [".json", "application/json; charset=utf-8"],
   [".svg", "image/svg+xml"], [".webp", "image/webp"], [".png", "image/png"],
-  [".mp4", "video/mp4"], [".vtt", "text/vtt; charset=utf-8"], [".txt", "text/plain; charset=utf-8"],
+  [".mp4", "video/mp4"], [".vtt", "text/vtt; charset=utf-8"], [".txt", "text/plain; charset=utf-8"], [".woff2", "font/woff2"],
 ]);
 
 const server = http.createServer(async (request, response) => {

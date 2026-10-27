@@ -99,7 +99,7 @@ try {
       document: document.documentElement.scrollWidth,
       visibleDialogs: [...document.querySelectorAll("dialog[open]")].length,
       previews: [...document.querySelectorAll(".page-preview img")].map((image) => ({ loaded: image.complete && image.naturalWidth > 0, fit: getComputedStyle(image).objectFit })),
-      checkouts: [...document.querySelectorAll("a[data-checkout]")].map((link) => ({ href: link.href, label: link.textContent.trim(), height: link.getBoundingClientRect().height, visible: Boolean(link.getClientRects().length) })),
+      checkouts: [...document.querySelectorAll("a[data-checkout]")].map((link) => ({ href: link.href, location: link.dataset.ctaLocation, label: link.textContent.trim(), height: link.getBoundingClientRect().height, visible: Boolean(link.getClientRects().length) })),
       croppedText: [...document.querySelectorAll("h1,h2,h3,figcaption,summary,.offer-list li,.offer-facts > *")].filter((element) => {
         if (element.classList.contains("visually-hidden")) return false;
         const style = getComputedStyle(element);
@@ -110,12 +110,17 @@ try {
     assert.equal(layout.visibleDialogs, 0, `${width}px: no dialog opens automatically`);
     assert.deepEqual(layout.croppedText, [], `${width}px: visible text is not clipped`);
     assert.ok(layout.previews.length === 3 && layout.previews.every((image) => image.loaded), `${width}px: three original page images load`);
-    assert.ok(layout.checkouts.length >= 5, "purchase actions remain distributed throughout the page");
+    assert.equal(layout.checkouts.length, 8, "seven original purchase actions plus the mobile CTA are present");
+    assert.deepEqual(layout.checkouts.map((link) => link.location).sort(), ["header", "hero", "conteudo", "video", "video-final", "oferta", "fechamento", "mobile"].sort(), "all original checkout locations remain unique");
     for (const link of layout.checkouts) {
       assert.equal(link.href, checkout, `${width}px: checkout URL preserved`);
-      assert.equal(link.label, "QUERO ACESSAR OS 500 MANTRAS", `${width}px: consistent purchase label`);
-      if (link.visible) assert.ok(link.height >= 44, `${width}px: purchase tap target at least 44px`);
+      assert.equal(link.label, link.location === "mobile" ? "QUERO MEUS 500 MANTRAS" : "QUERO RECEBER MEUS 500 MANTRAS", `${width}px: purchase copy matches the redesign`);
+      if (link.visible) assert.ok(link.height >= 56, `${width}px: purchase tap target at least 56px`);
     }
+    assert.equal(await page.locator("[data-guarantee]").count(), 4, `${width}px: guarantee appears at the four approved locations`);
+    assert.equal(await page.locator('[data-guarantee="offer"]').innerText().then((text) => text.includes("Garantia de 7 dias. Se você abrir o e-book e sentir que não era o que esperava, é só pedir o reembolso em até 7 dias após a compra e devolvemos 100% do valor. Sem burocracia.")), true, `${width}px: full guarantee matches the owner-confirmed policy`);
+    assert.equal(await page.locator(".faq-list article").count(), 5, `${width}px: all five FAQ answers are present`);
+    for (const answer of await page.locator(".faq-list article p").all()) assert.equal(await answer.isVisible(), true, `${width}px: FAQ answers are visible without a click`);
     assert.deepEqual(trackingRequests, [], `${width}px: no optional tracking without consent`);
     assert.deepEqual(failedAssets, [], `${width}px: no missing local resources`);
     assert.deepEqual(errors, [], `${width}px: no console or runtime errors`);
@@ -139,6 +144,43 @@ try {
       await page.locator(".preview-gallery").focus();
       await page.keyboard.press("ArrowRight");
       await page.waitForFunction(() => document.querySelector(".preview-gallery").scrollLeft > 0);
+      await page.waitForFunction(() => document.querySelector("[data-gallery-status]").textContent === "2 de 3");
+      await page.locator("[data-gallery-next]").click();
+      await page.waitForFunction(() => document.querySelector("[data-gallery-status]").textContent === "3 de 3");
+      assert.equal(await page.locator("[data-gallery-next]").isDisabled(), true, `${width}px: carousel ends at the third authentic page`);
+      await page.locator("[data-gallery-prev]").click();
+      await page.waitForFunction(() => document.querySelector("[data-gallery-status]").textContent === "2 de 3");
+
+      // Find a real reading interval with no standard purchase button in view.
+      const readingPosition = await page.evaluate(() => {
+        const topOf = (element) => element.getBoundingClientRect().top + window.scrollY;
+        const heroBottom = topOf(document.getElementById("inicio")) + document.getElementById("inicio").offsetHeight;
+        const footerTop = topOf(document.getElementById("rodape"));
+        const buttons = [...document.querySelectorAll('a[data-checkout]:not([data-cta-location="mobile"])')]
+          .filter((element) => element.getClientRects().length)
+          .map((element) => ({ top: topOf(element), bottom: topOf(element) + element.offsetHeight }));
+        for (let position = heroBottom + 1; position < footerTop - window.innerHeight - 88; position += 80) {
+          if (buttons.every((button) => button.bottom < position || button.top > position + window.innerHeight + 88)) {
+            window.scrollTo(0, position);
+            return position;
+          }
+        }
+        return null;
+      });
+      assert.notEqual(readingPosition, null, `${width}px: a reading interval exists after the hero`);
+      await page.locator("#mobilePurchaseBar").waitFor({ state: "visible" });
+      const barGeometry = await page.locator("#mobilePurchaseBar").evaluate((element) => {
+        const bounds = element.getBoundingClientRect();
+        return { left: bounds.left, right: bounds.right, bottom: bounds.bottom, viewportWidth: innerWidth, viewportHeight: innerHeight };
+      });
+      assert.ok(barGeometry.left >= 0 && barGeometry.right <= barGeometry.viewportWidth + 1 && barGeometry.bottom <= barGeometry.viewportHeight + 1, `${width}px: mobile purchase bar fits inside the viewport`);
+      await page.locator("#heroCheckout").scrollIntoViewIfNeeded();
+      await page.locator("#mobilePurchaseBar").waitFor({ state: "hidden" });
+      await page.locator("[data-consent-preferences]").first().click();
+      assert.equal(await page.locator("#mobilePurchaseBar").isVisible(), false, `${width}px: privacy preferences are never covered by the purchase bar`);
+      await page.keyboard.press("Escape");
+    } else if (width >= 768) {
+      assert.equal(await page.locator("#mobilePurchaseBar").isVisible(), false, `${width}px: purchase bar is limited to mobile`);
     }
     report.widths.push({ width, horizontalOverflow: false, checkoutCount: layout.checkouts.length, consoleErrors: 0 });
     await context.close();
@@ -260,12 +302,12 @@ try {
   assert.equal(attributedUrl.searchParams.get("sck"), "landing");
   assert.ok(!(await events()).some((args) => args[1] === "Purchase"), "checkout clicks never simulate approved purchases");
 
-  await page.locator(".faq-list summary").nth(0).click();
-  assert.equal(await page.locator(".faq-list details").nth(0).getAttribute("open"), "", "FAQ opens by touch");
-  await page.locator(".faq-list summary").nth(1).focus();
-  await page.keyboard.press("Enter");
-  await page.waitForFunction(() => document.querySelectorAll(".faq-list details[open]").length === 1);
-  assert.equal(await page.locator(".faq-list details[open]").count(), 1, "FAQ supports keyboard and one expanded answer");
+  assert.equal(await page.locator(".faq-list article").count(), 5, "FAQ keeps all five questions visible by default");
+  assert.equal(await page.locator(".faq-list details").count(), 0, "FAQ does not require expanding answers");
+  for (const item of await page.locator(".faq-list article").all()) {
+    assert.equal(await item.locator("h3").isVisible(), true, "FAQ question remains visible");
+    assert.equal(await item.locator("p").isVisible(), true, "FAQ answer remains visible");
+  }
   assert.equal(await page.locator("#previewDialog").count(), 0, "image enlargement modal stays removed");
 
   const video = page.locator("#productVideo");
