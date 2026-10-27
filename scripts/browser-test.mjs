@@ -81,7 +81,7 @@ try {
     report.checks.push("Published mobile baseline captured with optional analytics blocked.");
   }
 
-  for (const width of [320, 375, 390, 430, 768, 1440]) {
+  for (const width of [320, 360, 375, 390, 414, 768, 1440]) {
     const context = await newContext(width);
     const page = await context.newPage();
     const errors = [];
@@ -114,7 +114,7 @@ try {
     assert.deepEqual(layout.checkouts.map((link) => link.location).sort(), ["header", "hero", "conteudo", "video", "video-final", "oferta", "fechamento", "mobile"].sort(), "all original checkout locations remain unique");
     for (const link of layout.checkouts) {
       assert.equal(link.href, checkout, `${width}px: checkout URL preserved`);
-      assert.equal(link.label, link.location === "mobile" ? "QUERO MEUS 500 MANTRAS" : "QUERO RECEBER MEUS 500 MANTRAS", `${width}px: purchase copy matches the redesign`);
+      assert.equal(link.label, "QUERO RECEBER MEUS 500 MANTRAS", `${width}px: purchase copy matches the redesign`);
       if (link.visible) assert.ok(link.height >= 56, `${width}px: purchase tap target at least 56px`);
     }
     assert.equal(await page.locator("[data-guarantee]").count(), 4, `${width}px: guarantee appears at the four approved locations`);
@@ -124,7 +124,10 @@ try {
     assert.ok(await page.locator(".site-footer").innerText().then((text) => text.includes("Produto digital em PDF. Não inclui versão física.")), `${width}px: final format notice belongs to the footer`);
     assert.equal(await page.locator("main").innerText().then((text) => text.includes("empresakagency@gmail.com")), false, `${width}px: no support email competes with the offer`);
     assert.equal(await page.locator(".offer-summary img").getAttribute("src").then((src) => src.includes("mockup-produto.webp")), false, `${width}px: offer image differs from the hero mockup`);
-    assert.equal(await page.locator('.guarantee-panel img[src="/assets/garantia-7-dias.svg"]').isVisible(), true, `${width}px: premium guarantee medallion is visible`);
+    assert.equal(await page.locator('.guarantee-panel img[src="/assets/garantia-7-dias-medalhao.svg"]').isVisible(), true, `${width}px: premium guarantee medallion is visible`);
+    assert.equal(await page.locator('.review-card').count(), 8, `${width}px: eight supplied reviews appear`);
+    assert.equal(await page.locator('.reviews-summary').getAttribute('data-rating-exact'), '4.75');
+    assert.equal(await page.locator('.previous-price del').count(), 2, `${width}px: real former price appears in hero and offer`);
     for (const answer of await page.locator(".faq-list article p").all()) assert.equal(await answer.isVisible(), true, `${width}px: FAQ answers are visible without a click`);
     assert.deepEqual(trackingRequests, [], `${width}px: no optional tracking without consent`);
     assert.deepEqual(failedAssets, [], `${width}px: no missing local resources`);
@@ -132,6 +135,18 @@ try {
     await page.screenshot({ path: path.join(outputDir, `page-${width}.png`), fullPage: true });
     await page.locator(".offer-card").screenshot({ path: path.join(outputDir, `offer-${width}.png`), style: ".reading-progress { visibility: hidden; }" });
     if (width <= 430) {
+      await page.locator('#readerReviews').scrollIntoViewIfNeeded();
+      await page.locator('#readerReviews').focus();
+      await page.keyboard.press('End');
+      await page.waitForFunction(() => document.querySelector('[data-review-status]').textContent === '8 de 8');
+      assert.equal(await page.locator('[data-review-next]').isDisabled(), true, `${width}px: review carousel stops at the eighth card`);
+      await page.keyboard.press('Home');
+      await page.waitForFunction(() => document.querySelector('[data-review-status]').textContent === '1 de 8');
+      assert.equal(await page.locator('[data-review-prev]').isDisabled(), true);
+      await page.locator('[data-review-next]').click();
+      await page.waitForFunction(() => document.querySelector('[data-review-status]').textContent === '2 de 8');
+      await page.locator('[data-review-prev]').click();
+      await page.waitForFunction(() => document.querySelector('[data-review-status]').textContent === '1 de 8');
       for (let index = 0; index < 3; index++) {
         const card = page.locator(".page-preview").nth(index);
         await card.scrollIntoViewIfNeeded();

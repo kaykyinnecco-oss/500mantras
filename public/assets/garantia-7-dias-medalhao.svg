@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" role="img" aria-labelledby="title desc">
+  <title id="title">GARANTIA DE 7 DIAS</title>
+  <desc id="desc">Medalhão próprio da oferta, roxo e dourado, com bordas concêntricas e o número sete. Não representa certificação de terceiros.</desc>
+  <circle cx="120" cy="120" r="117" fill="#c59c4e" stroke="#f4dba1" stroke-width="2"/>
+  <circle cx="120" cy="120" r="111" fill="#3a2917" stroke="#f3dca4" stroke-width="1"/>
+  <circle cx="120" cy="120" r="106" fill="#160c22" stroke="#e4bf72" stroke-width="2"/>
+  <circle cx="120" cy="120" r="98" fill="none" stroke="#c49b50" stroke-width="1" stroke-dasharray="1 7" stroke-linecap="round"/>
+  <path d="M42 99a81 81 0 0 0 0 42m156-42a81 81 0 0 1 0 42" fill="none" stroke="#e4bf72" stroke-width="1.5"/>
+  <g fill="#f3dca4" text-anchor="middle">
+    <text x="120" y="63" font-family="Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="1.7">GARANTIA DE</text>
+    <text x="118" y="154" font-family="Georgia, serif" font-size="108" font-weight="700">7</text>
+    <text x="122" y="184" font-family="Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="4">DIAS</text>
+  </g>
+  <path d="m120 28 3 4-3 4-3-4ZM120 205l3 4-3 4-3-4Z" fill="#e4bf72"/>
+</svg>
