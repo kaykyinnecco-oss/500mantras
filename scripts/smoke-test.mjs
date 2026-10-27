@@ -121,7 +121,13 @@ for (const fact of ["500", "10", "127", "PDF", "Pagamento único", "7 dias"]) as
 assert.match(html, /<h3[^>]*>Seu e-book completo<\/h3>/, "commercial area has the requested clear heading");
 const offerSummary = html.match(/<div class="offer-summary">([\s\S]*?)<\/figure>/)?.[1];
 assert.ok(offerSummary && !offerSummary.includes("mockup-produto.webp") && /preview-(?:gratidao|autocuidado|abundancia)\.webp/.test(offerSummary), "offer uses an authentic internal page rather than duplicating the hero mockup");
-assert.equal((html.match(/<img\b[^>]*src="\/assets\/mockup-produto\.webp"/g) || []).length, 1, "the principal mockup image appears only in the hero; video poster remains distinct");
+assert.equal((html.match(/<img\b[^>]*src="\/assets\/hero-mantras-premium-v1-1200\.webp"/g) || []).length, 1, "the new promotional image appears only in the hero");
+const heroImage = html.match(/<figure class="hero-visual">\s*(<img\b[^>]+>)/)?.[1];
+const heroPreload = html.match(/<link rel="preload" as="image"[^>]+>/)?.[0];
+assert.ok(heroImage && heroPreload, "the hero has an image and an early preload");
+assert.equal(heroPreload.match(/imagesrcset="([^"]+)"/)?.[1], heroImage.match(/srcset="([^"]+)"/)?.[1], "preload uses the same responsive candidates as the hero");
+assert.equal(heroPreload.match(/imagesizes="([^"]+)"/)?.[1], heroImage.match(/sizes="([^"]+)"/)?.[1], "preload uses the same responsive sizes as the hero");
+assert.ok(heroImage.includes('fetchpriority="high"') && heroImage.includes('loading="eager"'), "the first-fold image is prioritized rather than lazy-loaded");
 const trustArea = html.match(/<div class="purchase-trust"[\s\S]*?<\/section>/)?.[0];
 assert.ok(trustArea, "offer has a concise purchase-confidence area");
 for (const fact of ["E-book em PDF", "Pagamento por cartão", "Garantia de 7 dias"]) assert.ok(trustArea.includes(fact), "purchase-confidence area discloses: " + fact);
@@ -246,7 +252,7 @@ assert.equal(html.match(/<meta property="product:price:amount" content="([^"]+)"
 
 for (const asset of [
   ...brandLogos.map((tag) => tag.match(/src="\/([^"]+)"/)?.[1]),
-  "assets/selo-garantia-premium-7-dias-v1.webp", "assets/payment-visa-aligned-v1.webp", "assets/payment-mastercard.svg", "assets/payment-elo.svg", "assets/mockup-produto.webp", "assets/preview-autocuidado.webp",
+  "assets/hero-mantras-premium-v1-720.webp", "assets/hero-mantras-premium-v1-1200.webp", "assets/selo-garantia-premium-7-dias-v1.webp", "assets/payment-visa-aligned-v1.webp", "assets/payment-mastercard.svg", "assets/payment-elo.svg", "assets/mockup-produto.webp", "assets/preview-autocuidado.webp",
   "assets/preview-abundancia.webp", "assets/preview-gratidao.webp", "assets/simbolo-celestial.svg",
   ...[...html.matchAll(/(?:href|src)="\/(assets\/(?:styles\.[a-f0-9]{12}\.css|(?:app|ui)\.[a-f0-9]{12}\.js))"/g)].map((match) => match[1]),
   ...[...css.matchAll(/url\(["']?(\/assets\/[^)'"\s]+)["']?\)/g)].map((match) => match[1].slice(1)),
