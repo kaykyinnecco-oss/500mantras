@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" role="img" aria-labelledby="guarantee-title guarantee-description">
+  <title id="guarantee-title">Garantia de 7 dias</title>
+  <desc id="guarantee-description">Medalhão circular roxo-escuro e dourado com o número 7 em destaque, as palavras DIAS e GARANTIA e detalhes geométricos discretos.</desc>
+  <circle cx="100" cy="100" r="97" fill="#160c22" stroke="#e4bf72" stroke-width="2"/>
+  <circle cx="100" cy="100" r="90" fill="none" stroke="#e4bf72" stroke-width=".75"/>
+  <path d="M30 72a75 75 0 0 0 0 56M170 72a75 75 0 0 1 0 56" fill="none" stroke="#e4bf72" stroke-width=".75" opacity=".55"/>
+  <g fill="#f3dca4" text-anchor="middle">
+    <text x="100" y="49" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" letter-spacing="2.2">GARANTIA</text>
+    <text x="98" y="129" font-family="Georgia, 'Times New Roman', serif" font-size="88" font-weight="700">7</text>
+    <text x="102" y="153" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" letter-spacing="4">DIAS</text>
+  </g>
+  <g fill="#e4bf72">
+    <path d="m100 18 3 4-3 4-3-4ZM22 97l4 3-4 3-4-3ZM178 97l4 3-4 3-4-3ZM100 172l3 4-3 4-3-4Z"/>
+    <path d="M63 175h22v1H63ZM115 175h22v1h-22Z" opacity=".7"/>
+  </g>
+</svg>
