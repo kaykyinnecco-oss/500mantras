@@ -119,7 +119,12 @@ try {
     }
     assert.equal(await page.locator("[data-guarantee]").count(), 4, `${width}px: guarantee appears at the four approved locations`);
     assert.equal(await page.locator('[data-guarantee="offer"]').innerText().then((text) => text.includes("Garantia de 7 dias. Se você abrir o e-book e sentir que não era o que esperava, é só pedir o reembolso em até 7 dias após a compra e devolvemos 100% do valor. Sem burocracia.")), true, `${width}px: full guarantee matches the owner-confirmed policy`);
-    assert.equal(await page.locator(".faq-list article").count(), 5, `${width}px: all five FAQ answers are present`);
+    assert.equal(await page.locator(".faq-list article").count(), 6, `${width}px: all six FAQ answers are present`);
+    assert.equal(await page.locator(".digital-product-note").count(), 1, `${width}px: final format notice appears once`);
+    assert.ok(await page.locator(".site-footer").innerText().then((text) => text.includes("Produto digital em PDF. Não inclui versão física.")), `${width}px: final format notice belongs to the footer`);
+    assert.equal(await page.locator("main").innerText().then((text) => text.includes("empresakagency@gmail.com")), false, `${width}px: no support email competes with the offer`);
+    assert.equal(await page.locator(".offer-summary img").getAttribute("src").then((src) => src.includes("mockup-produto.webp")), false, `${width}px: offer image differs from the hero mockup`);
+    assert.equal(await page.locator('.guarantee-panel img[src="/assets/garantia-7-dias.svg"]').isVisible(), true, `${width}px: premium guarantee medallion is visible`);
     for (const answer of await page.locator(".faq-list article p").all()) assert.equal(await answer.isVisible(), true, `${width}px: FAQ answers are visible without a click`);
     assert.deepEqual(trackingRequests, [], `${width}px: no optional tracking without consent`);
     assert.deepEqual(failedAssets, [], `${width}px: no missing local resources`);
@@ -302,7 +307,7 @@ try {
   assert.equal(attributedUrl.searchParams.get("sck"), "landing");
   assert.ok(!(await events()).some((args) => args[1] === "Purchase"), "checkout clicks never simulate approved purchases");
 
-  assert.equal(await page.locator(".faq-list article").count(), 5, "FAQ keeps all five questions visible by default");
+  assert.equal(await page.locator(".faq-list article").count(), 6, "FAQ keeps all six questions visible by default");
   assert.equal(await page.locator(".faq-list details").count(), 0, "FAQ does not require expanding answers");
   for (const item of await page.locator(".faq-list article").all()) {
     assert.equal(await item.locator("h3").isVisible(), true, "FAQ question remains visible");

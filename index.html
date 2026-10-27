@@ -37,17 +37,22 @@
   <body>
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
     <div class="reading-progress" aria-hidden="true"><span id="readingProgress"></span></div>
-    <svg class="svg-definitions" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><symbol id="shield-check" viewBox="0 0 48 48"><path d="M24 4 40 10v13c0 10-7 17-16 21C15 40 8 33 8 23V10Z"/><path d="m16 23 6 6 11-12"/></symbol></svg>
+    <svg class="svg-definitions" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+      <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+      <symbol id="icon-document" viewBox="0 0 24 24"><path d="M14 3H5v18h14V8Z"/><path d="M14 3v5h5M8 12h8M8 16h6"/></symbol>
+      <symbol id="icon-purchase" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18m-13 5h3"/></symbol>
+      <symbol id="icon-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 10h18m-12 4h6l-4 5"/></symbol>
+    </svg>
     <div class="announcement">500 mantras para ler no seu ritmo, onde você estiver.</div>
     <header class="site-header section-shell">
-      <a class="brand" href="#inicio" aria-label="500 Mantras, início"><img class="brand-logo" src="/assets/logo-500-mantras.png" width="260" height="86" alt="500 Mantras para Elevar Sua Energia"></a>
+      <a class="brand" href="#inicio" aria-label="500 Mantras, início"><img class="brand-logo" src="/assets/logo-500-mantras-celestial-v2.webp" width="480" height="320" alt="500 Mantras para Elevar Sua Energia"></a>
       <a class="button button-gold header-cta" data-checkout data-cta-location="header" href="__CHECKOUT_URL__">QUERO RECEBER MEUS 500 MANTRAS</a>
     </header>
     <main id="conteudo">
       <section class="hero section-shell" id="inicio" aria-labelledby="hero-title">
         <div class="hero-copy">
           <h1 id="hero-title" data-copy-slot="heroTitle">Reserve 1 minuto do seu dia para ler um mantra e <span>fazer uma pausa.</span></h1>
-          <p class="hero-description">Tenha 500 mensagens de reflexão e autocuidado para abrir no celular quando quiser.</p>
+          <p class="hero-description">Tenha 500 mensagens para escolher quando quiser parar um instante, refletir e voltar ao seu dia.</p>
           <p class="hero-facts">500 mantras <span aria-hidden="true">·</span> 10 temas <span aria-hidden="true">·</span> 127 páginas</p>
         </div>
         <figure class="hero-visual">
@@ -57,7 +62,7 @@
           <p class="hero-price"><strong>R$ __PRODUCT_PRICE__</strong><span>Pagamento único.<br>E-book digital em PDF.</span></p>
           <a class="button button-gold hero-cta" id="heroCheckout" data-copy-slot="heroCta" data-checkout data-cta-location="hero" href="__CHECKOUT_URL__">QUERO RECEBER MEUS 500 MANTRAS</a>
           <div class="trust-notes"><span>PDF digital</span><span>Acesso após a compra aprovada</span></div>
-          <p class="guarantee-badge" data-guarantee="hero"><svg aria-hidden="true"><use href="#shield-check"/></svg>Garantia de 7 dias</p>
+          <p class="guarantee-badge" data-guarantee="hero"><svg aria-hidden="true"><use href="#icon-check"/></svg>Garantia de 7 dias</p>
         </div>
       </section>
       <section class="pause-section" aria-labelledby="pause-title">
@@ -73,14 +78,14 @@
         </div>
       </section>
       <section class="included-section section-shell" id="o-que-recebe" aria-labelledby="included-title">
-        <div class="included-heading"><h2 id="included-title">O que vem no seu e-book?</h2><p>Um arquivo digital para guardar e consultar. Nenhum livro físico será enviado.</p></div>
+        <div class="included-heading"><h2 id="included-title">O que vem no seu e-book?</h2><p>Mensagens organizadas para você encontrar uma leitura, marcar suas favoritas e consultar quando quiser.</p></div>
         <ul class="included-list">
           <li><strong>500 mantras</strong><p>Mensagens para ler e revisitar.</p></li>
           <li><strong>10 temas</strong><p>Escolha o assunto que combina com seu momento.</p></li>
           <li><strong>127 páginas</strong><p>Conteúdo organizado em um único PDF.</p></li>
           <li><strong>Leitura no celular</strong><p>Também pode ser aberto em tablet ou computador.</p></li>
           <li><strong>No seu ritmo</strong><p>Escolha qualquer página, sem sequência obrigatória.</p></li>
-          <li class="included-guarantee" data-guarantee="included"><svg aria-hidden="true"><use href="#shield-check"/></svg><strong>Garantia de 7 dias: não gostou, devolvemos seu dinheiro</strong></li>
+          <li class="included-guarantee" data-guarantee="included"><svg aria-hidden="true"><use href="#icon-check"/></svg><strong>Garantia de 7 dias: não gostou, devolvemos seu dinheiro</strong></li>
         </ul>
         <a class="button button-gold content-cta" data-checkout data-cta-location="conteudo" href="__CHECKOUT_URL__">QUERO RECEBER MEUS 500 MANTRAS</a>
       </section>
@@ -148,30 +153,38 @@
       </section>
       <section class="offer-section" id="oferta" aria-labelledby="offer-title">
         <div class="section-shell">
-          <header class="offer-heading reveal"><h2 id="offer-title" data-copy-slot="offerTitle">Tenha seus 500 mantras sempre à mão.</h2><p class="section-description">Um e-book para abrir quando quiser ler uma mensagem e reservar um momento para você.</p></header>
+          <header class="offer-heading reveal"><h2 id="offer-title" data-copy-slot="offerTitle">Tenha seus 500 mantras sempre à mão.</h2><p class="section-description">Escolha uma mensagem quando quiser fazer uma pausa, refletir ou encontrar palavras para o seu momento.</p></header>
           <div class="offer-card">
             <div class="offer-summary">
-              <figure class="offer-art"><img src="/assets/mockup-produto.webp" width="1020" height="777" alt="Composição original do e-book 500 Mantras, com capa e apresentação em telas digitais." loading="lazy" decoding="async"><figcaption>Apresentação ilustrativa · Você recebe um arquivo PDF</figcaption></figure>
+              <p class="offer-format">E-book em PDF</p>
+              <h3 class="offer-product-name">500 Mantras para Elevar Sua Energia</h3>
+              <figure class="offer-art"><div class="offer-tablet"><img src="/assets/preview-gratidao.webp" width="720" height="1080" alt="Página real 43 do e-book, com mantras de gratidão e conexão com o universo, em uma moldura de tablet." loading="lazy" decoding="async"></div><figcaption>Gratidão e conexão com o universo · Página 43</figcaption></figure>
             </div>
             <div class="offer-details">
-              <h3 class="offer-lead">500 Mantras para Elevar Sua Energia</h3>
+              <h3 class="offer-lead">Seu e-book completo</h3>
               <ul class="offer-list">
-                <li>500 mantras em 10 temas.</li>
-                <li>127 páginas em um único PDF.</li>
-                <li>Para celular, tablet ou computador.</li>
+                <li><svg aria-hidden="true"><use href="#icon-check"/></svg><span><strong>500 mensagens para consultar:</strong> escolha uma leitura conforme o seu momento.</span></li>
+                <li><svg aria-hidden="true"><use href="#icon-check"/></svg><span><strong>10 temas organizados:</strong> encontre com facilidade o assunto que procura.</span></li>
+                <li><svg aria-hidden="true"><use href="#icon-check"/></svg><span><strong>127 páginas em PDF:</strong> todo o conteúdo reunido em um arquivo.</span></li>
+                <li><svg aria-hidden="true"><use href="#icon-check"/></svg><span><strong>Leitura no seu ritmo:</strong> abra no celular, tablet ou computador.</span></li>
+                <li><svg aria-hidden="true"><use href="#icon-check"/></svg><span><strong>Pagamento único:</strong> acesso ao material sem mensalidade.</span></li>
+                <li><svg aria-hidden="true"><use href="#icon-check"/></svg><span><strong>Garantia de 7 dias:</strong> direito de solicitar reembolso conforme a legislação aplicável.</span></li>
               </ul>
               <div class="offer-purchase">
-                <div class="price-block"><span class="price-label">E-book completo</span><p class="price">R$ __PRODUCT_PRICE__</p><p class="payment-note">Pagamento único. Sem assinatura.</p></div>
+                <div class="price-block"><span class="price-label">Todo o conteúdo por</span><p class="price">R$ __PRODUCT_PRICE__</p><p class="payment-note">Pagamento único. Sem assinatura.</p></div>
                 <a class="button button-gold offer-cta" data-copy-slot="offerCta" data-checkout data-cta-location="oferta" href="__CHECKOUT_URL__">QUERO RECEBER MEUS 500 MANTRAS</a>
               </div>
-              <p class="offer-note">Produto digital em PDF. Nenhum item físico será enviado.</p>
             </div>
           </div>
           <div class="guarantee-panel" data-guarantee="offer">
-            <div class="guarantee-seal" aria-hidden="true"><svg><use href="#shield-check"/></svg><span>7 dias</span></div>
-            <div><h3>Seu tempo para conhecer o material.</h3><p>Garantia de 7 dias. Se você abrir o e-book e sentir que não era o que esperava, é só pedir o reembolso em até 7 dias após a compra e devolvemos 100% do valor. Sem burocracia.</p></div>
+            <img class="guarantee-seal" src="/assets/garantia-7-dias.svg" width="200" height="200" alt="Selo de garantia de 7 dias" loading="lazy" decoding="async">
+            <div><h3>Seu tempo para conhecer o material.</h3><p>Garantia de 7 dias. Se você abrir o e-book e sentir que não era o que esperava, é só pedir o reembolso em até 7 dias após a compra e devolvemos 100% do valor. Sem burocracia.</p><p class="guarantee-legal">Direito de arrependimento previsto no <a href="https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm#art49">artigo 49 do Código de Defesa do Consumidor</a>.</p></div>
           </div>
-          <p class="support-note">Precisa de ajuda? <a href="mailto:__SUPPORT_EMAIL__" data-support-link>__SUPPORT_EMAIL__</a></p>
+          <div class="purchase-trust" aria-label="Informações da compra">
+            <div><svg aria-hidden="true"><use href="#icon-document"/></svg><p><strong>Material digital</strong><span>Receba um arquivo PDF.</span></p></div>
+            <div><svg aria-hidden="true"><use href="#icon-purchase"/></svg><p><strong>Compra única</strong><span>Sem assinatura ou mensalidade.</span></p></div>
+            <div><svg aria-hidden="true"><use href="#icon-calendar"/></svg><p><strong>7 dias de garantia</strong><span>Você pode solicitar reembolso dentro do prazo aplicável.</span></p></div>
+          </div>
         </div>
       </section>
       <section class="faq-section section-shell" id="duvidas" aria-labelledby="faq-title">
@@ -182,17 +195,19 @@
           <article><h3>Preciso ler em uma ordem específica?</h3><p>Não. Você pode escolher qualquer tema ou página e ler no seu ritmo.</p></article>
           <article><h3>É uma assinatura?</h3><p>Não. O e-book custa R$ __PRODUCT_PRICE__ em pagamento único. Não há mensalidade pelo produto principal.</p></article>
           <article><h3>Como recebo o e-book após a compra?</h3><p>Após a confirmação do pagamento, o acesso ao material digital é disponibilizado conforme as instruções de entrega da compra.</p></article>
+          <article><h3>Como funciona o reembolso de 7 dias?</h3><p>Você pode pedir o reembolso em até 7 dias após a compra pelo <a href="#rodape">canal de atendimento no rodapé</a>. Devolvemos 100% do valor, mesmo que você já tenha aberto ou baixado o e-book.</p></article>
         </div>
       </section>
-      <section class="closing section-shell" aria-labelledby="closing-title"><h2 id="closing-title">Escolha sua próxima leitura.</h2><p>Tenha 500 mantras para consultar quando quiser.</p><a class="button button-gold closing-cta" data-checkout data-cta-location="fechamento" href="__CHECKOUT_URL__">QUERO RECEBER MEUS 500 MANTRAS</a><p class="closing-note">R$ __PRODUCT_PRICE__ · Pagamento único · PDF digital</p><p class="guarantee-badge" data-guarantee="closing"><svg aria-hidden="true"><use href="#shield-check"/></svg>Garantia de 7 dias</p></section>
+      <section class="closing section-shell" aria-labelledby="closing-title"><h2 id="closing-title">Escolha sua próxima leitura.</h2><p>Tenha 500 mantras para consultar quando quiser.</p><a class="button button-gold closing-cta" data-checkout data-cta-location="fechamento" href="__CHECKOUT_URL__">QUERO RECEBER MEUS 500 MANTRAS</a><p class="closing-note">R$ __PRODUCT_PRICE__ · Pagamento único · PDF digital</p><p class="guarantee-badge" data-guarantee="closing"><svg aria-hidden="true"><use href="#icon-check"/></svg>Garantia de 7 dias</p></section>
     </main>
     <footer class="site-footer" id="rodape">
       <div class="footer-main section-shell">
-        <a class="brand footer-brand" href="#inicio"><img class="brand-logo" src="/assets/logo-500-mantras.png" width="260" height="86" alt="500 Mantras para Elevar Sua Energia"></a>
-        <a class="footer-email" href="mailto:__SUPPORT_EMAIL__" data-support-link>__SUPPORT_EMAIL__</a>
+        <a class="brand footer-brand" href="#inicio"><img class="brand-logo" src="/assets/logo-500-mantras-celestial-v2.webp" width="480" height="320" alt="500 Mantras para Elevar Sua Energia" loading="lazy" decoding="async"></a>
+        <a class="footer-email" href="mailto:__SUPPORT_EMAIL__" data-support-link>Dúvidas ou suporte: __SUPPORT_EMAIL__</a>
         <nav class="footer-links" aria-label="Links legais"><a href="/privacidade">Privacidade</a><a href="/termos">Termos de uso</a><a href="/privacidade#preferencias" data-consent-preferences>Preferências de cookies</a></nav>
       </div>
       <div class="footer-bottom section-shell"><span>© <span id="copyrightYear">2026</span> 500 Mantras para Elevar Sua Energia</span><p>Material para reflexão e autoconhecimento. Não substitui cuidados profissionais.</p></div>
+      <p class="digital-product-note section-shell">Produto digital em PDF. Não inclui versão física.</p>
     </footer>
     <aside class="mobile-purchase-bar" id="mobilePurchaseBar" aria-label="Comprar o e-book" hidden><span>PDF digital<strong>R$ __PRODUCT_PRICE__</strong></span><a class="button button-gold" data-checkout data-cta-location="mobile" href="__CHECKOUT_URL__">QUERO MEUS 500 MANTRAS</a></aside>
     <dialog class="consent-dialog" id="consentPreferences" aria-labelledby="consent-title" aria-describedby="consent-description">
