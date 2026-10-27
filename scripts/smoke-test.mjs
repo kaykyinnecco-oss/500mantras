@@ -35,7 +35,13 @@ const protectedSources = {
   "scripts/preview.mjs": "cd27d1ac3056337fd2889ec308d80a38f9d2c955cca8d564fc2927d37d1bc113",
 };
 for (const [file, expectedHash] of Object.entries(protectedSources)) {
-  assert.equal(digest(await readFile(path.join(rootDir, file), "utf8")), expectedHash, "protected source matches pre-redesign baseline: " + file);
+  let protectedSource = await readFile(path.join(rootDir, file), "utf8");
+  if (["privacy.html", "terms.html"].includes(file)) {
+    const officialLogo = '<img class="brand-logo" src="/assets/logo-500-mantras-celestial-v2.webp" width="480" height="320" alt="500 Mantras para Elevar Sua Energia">';
+    assert.equal(protectedSource.split(officialLogo).length - 1, 1, "legal header uses the approved homepage logo: " + file);
+    protectedSource = protectedSource.replace(officialLogo, '<img class="brand-logo" src="/assets/logo-500-mantras.png" width="260" height="86" alt="500 Mantras para Elevar Sua Energia">');
+  }
+  assert.equal(digest(protectedSource), expectedHash, "protected source matches baseline, allowing only the requested legal logo update: " + file);
 }
 assert.equal(digest(app), protectedSources["app.js"], "built analytics and checkout code matches the protected source");
 assert.equal(digest(await readOutput("ui.js")), protectedSources["ui.js"], "built carousel and sticky CTA code matches the protected source");
@@ -83,7 +89,7 @@ assert.ok(!/<p class="eyebrow[^\"]*"><span/i.test(html + await readOutput("priva
 assert.ok(!css.includes(".eyebrow > span"), "eyebrow styles no longer render decorative strokes");
 assert.ok(html.includes("id=\"inicio\"") && html.includes("id=\"conteudo-do-ebook\"") && html.includes("id=\"oferta\""));
 assert.ok(html.includes("id=\"duvidas\"") && html.includes("id=\"rodape\""));
-const sectionOrder = ["pause-title", "o-que-recebe", "conteudo-do-ebook", "avaliacoes", "themes-title", "apresentacao-video", "oferta", "duvidas", "closing-title"];
+const sectionOrder = ["pause-title", "apresentacao-video", "o-que-recebe", "conteudo-do-ebook", "avaliacoes", "themes-title", "oferta", "duvidas", "closing-title"];
 let previousSection = -1;
 for (const id of sectionOrder) {
   const sectionIndex = html.indexOf('id="' + id + '"');
@@ -91,6 +97,7 @@ for (const id of sectionOrder) {
   previousSection = sectionIndex;
 }
 assert.ok(html.includes('preload="none" playsinline poster="/assets/mockup-produto.webp"') && html.includes('type="video/mp4"'), "the player uses a poster, native controls, and lazy video loading");
+assert.equal((html.match(/<video\b/g) || []).length, 1, "the existing player is moved without duplication");
 assert.ok(html.includes('id="videoEndedCta"') && html.includes('data-cta-location="video-final"'), "the optional post-completion CTA is configured");
 assert.match(html, /<meta name="description" content="[^\"]*500 mantras[^\"]*10 temas[^\"]*127 páginas/, "metadata describes the actual product");
 assert.match(html, /<link rel="canonical" href="https:\/\/500mantras\.vercel\.app\/">/, "production canonical URL is preserved");
@@ -179,7 +186,8 @@ for (const [index, match] of reviews.entries()) {
 assert.equal(starsTotal, 38);
 assert.equal(starsTotal / reviews.length, 4.75);
 assert.equal(Math.round(starsTotal / reviews.length * 10) / 10, 4.8);
-assert.ok(html.includes("4,8</strong> de 5 estrelas") && html.includes("Com base em 8 avaliações de compradores."), "rounded score describes only the eight supplied reviews");
+assert.ok(html.includes("4,8</strong> de 5 estrelas") && html.includes('data-rating-exact="4.75"'), "rounded score matches the supplied reviews");
+assert.ok(!html.includes("Com base em 8 avaliações de compradores."), "the requested review-count sentence is removed");
 assert.ok(!html.includes("Compra verificada") && !html.includes("4,9"), "reviews do not invent verification or inflate the score");
 const reviewScript = html.match(/src="\/(assets\/reviews-carousel\.[a-f0-9]{12}\.js)"/)?.[1];
 assert.ok(reviewScript, "isolated testimonial interactions use a versioned asset");
@@ -238,7 +246,7 @@ assert.equal(html.match(/<meta property="product:price:amount" content="([^"]+)"
 
 for (const asset of [
   ...brandLogos.map((tag) => tag.match(/src="\/([^"]+)"/)?.[1]),
-  "assets/selo-garantia-premium-7-dias-v1.webp", "assets/payment-visa.png", "assets/payment-mastercard.svg", "assets/payment-elo.svg", "assets/mockup-produto.webp", "assets/preview-autocuidado.webp",
+  "assets/selo-garantia-premium-7-dias-v1.webp", "assets/payment-visa-aligned-v1.webp", "assets/payment-mastercard.svg", "assets/payment-elo.svg", "assets/mockup-produto.webp", "assets/preview-autocuidado.webp",
   "assets/preview-abundancia.webp", "assets/preview-gratidao.webp", "assets/simbolo-celestial.svg",
   ...[...html.matchAll(/(?:href|src)="\/(assets\/(?:styles\.[a-f0-9]{12}\.css|(?:app|ui)\.[a-f0-9]{12}\.js))"/g)].map((match) => match[1]),
   ...[...css.matchAll(/url\(["']?(\/assets\/[^)'"\s]+)["']?\)/g)].map((match) => match[1].slice(1)),

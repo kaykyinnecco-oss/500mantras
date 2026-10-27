@@ -81,7 +81,7 @@ try {
     report.checks.push("Published mobile baseline captured with optional analytics blocked.");
   }
 
-  for (const width of [320, 360, 375, 390, 414, 768, 1440]) {
+  for (const width of [320, 360, 375, 390, 414, 430, 768, 1440]) {
     const context = await newContext(width);
     const page = await context.newPage();
     const errors = [];
