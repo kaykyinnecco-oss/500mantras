@@ -376,3 +376,25 @@ button, a { touch-action: manipulation; -webkit-tap-highlight-color: transparent
   .hero .hero-description { font-size: 18px; }
   .hero-visual { width: 100%; }
 }
+/* Offer presentation: all refinements remain inside the existing offer card. */
+.offer-card { grid-template-columns: minmax(0, 1fr); grid-template-areas: "heading" "art" "intro" "purchase" "benefits"; gap: 12px; padding: 20px; border-radius: 20px; background: #21132f; }
+.offer-card .offer-heading { grid-area: heading; min-width: 0; max-width: none; margin: 0; }
+.offer-label { margin-bottom: 8px; font-size: 15px; font-weight: 600; color: var(--gold-light); }
+.offer-card .offer-heading h2 { font-size: clamp(22px, 5.6vw, 32px); line-height: 1.25; }
+.offer-card .offer-art { grid-area: art; width: 100%; min-width: 0; align-self: center; justify-self: center; margin: 0; }
+.offer-card .offer-art img { width: 180px; max-width: 100%; height: auto; aspect-ratio: 2 / 3; margin-inline: auto; object-fit: contain; border-radius: 20px; box-shadow: 0 0 0 1px #e4bf7245, 0 12px 28px #0004; }
+.offer-intro { grid-area: intro; font-size: 17px; line-height: 1.55; color: var(--muted); }
+.offer-card .offer-list { grid-area: benefits; min-width: 0; margin: 8px 0 0; }
+.offer-card .offer-purchase { grid-area: purchase; min-width: 0; padding: 20px 16px; border: 1px solid #e4bf7245; border-radius: 16px; background: #12091d; box-shadow: 0 0 20px #e4bf7209; }
+.offer-purchase .price { font-size: clamp(52px, 12.5vw, 72px); }
+.offer-purchase .price-guarantee img { width: 88px; }
+.offer-purchase .price-guarantee p { font-size: 17px; line-height: 1.4; text-align: left; }
+.offer-assurances { display: grid; gap: 8px; margin: 20px 0 0; padding: 16px 0 0; border-top: 1px solid var(--line); list-style: none; text-align: left; color: var(--muted); }
+.offer-assurances li { display: flex; align-items: flex-start; gap: 8px; font-size: 15px; line-height: 1.5; }
+.offer-assurances svg { width: 18px; height: 18px; flex-shrink: 0; fill: none; stroke: var(--gold-light); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+@media (min-width: 600px) { .offer-card { padding: 32px; } .offer-card .offer-art img { width: 240px; } .offer-card .offer-purchase { padding: 24px; } }
+@media (min-width: 960px) {
+ .offer-card { grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); grid-template-areas: "art heading" "art intro" "art benefits" "art purchase"; gap: 16px 40px; padding: 40px; }
+ .offer-card .offer-art img { width: min(100%, 400px); }
+ .offer-card .offer-list { margin-top: 0; }
+}
