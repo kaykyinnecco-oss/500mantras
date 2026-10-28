@@ -207,3 +207,5 @@ h1, h2, h3 { color: var(--heading); }
  .footer-links { gap: 4px 20px; }
 }
 @media (max-width: 767px) { .hero h1 { text-wrap: balance; } }
+/* Owner-approved light footer keeps the original purple logo subtitle readable. */
+.site-footer { --muted: #625a69; --gold-light: #4b246b; --line: #4b246b26; background: #f8f5fa; color: #292333; }
