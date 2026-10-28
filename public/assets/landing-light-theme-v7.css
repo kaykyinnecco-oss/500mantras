@@ -161,3 +161,49 @@ h1, h2, h3 { color: var(--heading); }
 .preview-more summary { padding-block: 8px; font-size: 15px; color: var(--brand); cursor: pointer; }
 .preview-invitation { max-width: 720px; margin-top: 20px; font-size: 16px; line-height: 1.5; }
 @media (min-width: 768px) { .preview-gallery { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; overflow: visible; padding-bottom: 0; } }
+/* Finishing scale: localized typography rather than a global font reduction. */
+.announcement { padding-block: 6px; }
+.ticker-group > span { font-size: 13px; padding-inline: 20px; }
+.hero { padding-bottom: 28px; }
+.included-section, .content-section { padding-block: 32px; }
+.included-cards { margin-block: 24px; }
+.included-cards li { padding: 20px; }
+.included-extras { margin-bottom: 24px; }
+.preview-gallery { margin-top: 20px; }
+.page-preview figcaption { padding: 16px; }
+.review-card { padding: 16px; }
+.review-card header { gap: 5px; min-height: 48px; }
+.review-card blockquote { margin-top: 8px; }
+.faq-list article { padding-block: 16px; }
+.closing { padding-block: 28px 40px; }
+.footer-main { padding-block: 24px 16px; gap: 12px; }
+.footer-bottom { padding-block: 16px; gap: 12px; }
+.digital-product-note { padding-bottom: 20px; }
+@media (max-width: 767px) {
+ .hero { padding-top: 16px; gap: 12px; }
+ .hero h1 { font-size: clamp(27px, 7.2vw, 32px); line-height: 1.18; }
+ .hero .hero-description { font-size: 16px; line-height: 1.5; }
+ .hero .hero-facts { font-size: 12px; letter-spacing: .04em; }
+ .hero-quick-facts li { font-size: 14px; }
+ .hero .hero-cta { margin-top: 12px; }
+ .hero-purchase .guarantee-badge { margin-top: 10px; }
+ .included-section .included-heading h2, .content-heading h2, .reviews-heading h2, .faq-heading h2, .closing h2 { font-size: clamp(25px, 6.5vw, 30px); line-height: 1.22; }
+ .included-section .included-subtitle, .section-description { font-size: 16px; line-height: 1.5; margin-top: 12px; }
+ .included-cards { gap: 12px; }
+ .included-cards li { grid-template-columns: 28px 60px minmax(0, 1fr); gap: 10px; padding: 16px 14px; }
+ .included-cards svg { width: 28px; height: 28px; }
+ .included-number { font-size: 34px; }
+ .included-cards h3 { font-size: 20px; margin-bottom: 4px; }
+ .included-cards p, .included-extras li { font-size: 16px; line-height: 1.5; }
+ .preview-gallery, .reviews-track { grid-auto-columns: 94%; gap: 12px; }
+ .page-preview figcaption > strong { font-size: 18px; }
+ .page-preview blockquote p { font-size: 16px; }
+ .review-card blockquote { font-size: 16px; line-height: 1.55; }
+ .offer-card { padding: 18px; gap: 14px; }
+ .offer-card .offer-heading h2 { font-size: clamp(23px, 5.8vw, 27px); }
+ .offer-intro, .offer-card .offer-list li { font-size: 16px; line-height: 1.5; }
+ .faq-list h3 { font-size: 19px; line-height: 1.35; }
+ .faq-list p { font-size: 16px; line-height: 1.55; }
+ .footer-links { gap: 4px 20px; }
+}
+@media (max-width: 767px) { .hero h1 { text-wrap: balance; } }

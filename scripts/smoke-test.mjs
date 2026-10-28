@@ -11,9 +11,12 @@ async function readOutput(file) {
 
 const html = await readOutput("index.html");
 const css = await readOutput("styles.css");
-const themeAsset = "/assets/landing-light-theme-v6.css";
+const themeAsset = "/assets/landing-light-theme-v7.css";
 assert.ok(html.includes(`href="${themeAsset}"`), "landing loads its isolated light theme");
 await stat(path.join(distDir, themeAsset.slice(1)));
+await stat(path.join(distDir, "assets/brand-horizontal-v1.css"));
+await stat(path.join(distDir, "assets/logo-500-mantras-horizontal-v1.webp"));
+assert.ok(html.includes('src="/assets/logo-500-mantras-horizontal-v1.webp" width="1070" height="369"'), "the supplied horizontal logo reserves its natural proportions");
 const app = await readOutput("app.js");
 const runtimeSource = await readOutput("runtime-config.js");
 const runtimeMatch = runtimeSource.match(/Object\.freeze\(({[\s\S]*})\);\s*$/);
@@ -45,7 +48,8 @@ for (const [file, expectedHash] of Object.entries(protectedSources)) {
       .replace('"checkoutTotal": "10.89"', '"checkoutTotal": "20.89"');
   }
   if (["privacy.html", "terms.html"].includes(file)) {
-    const officialLogo = '<img class="brand-logo" src="/assets/logo-500-mantras-celestial-v2.webp" width="480" height="320" alt="500 Mantras para Elevar Sua Energia">';
+    protectedSource = protectedSource.replace(/    <link rel="stylesheet" href="\/assets\/brand-horizontal-v1.css">\r?\n/, "");
+    const officialLogo = '<img class="brand-logo" src="/assets/logo-500-mantras-horizontal-v1.webp" width="1070" height="369" alt="500 Mantras para Elevar Sua Energia">';
     assert.equal(protectedSource.split(officialLogo).length - 1, 1, "legal header uses the approved homepage logo: " + file);
     protectedSource = protectedSource.replace(officialLogo, '<img class="brand-logo" src="/assets/logo-500-mantras.png" width="260" height="86" alt="500 Mantras para Elevar Sua Energia">');
   }
