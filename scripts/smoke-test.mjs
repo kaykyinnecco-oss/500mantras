@@ -51,6 +51,10 @@ for (const [file, expectedHash] of Object.entries(protectedSources)) {
 assert.equal(digest(app), protectedSources["app.js"], "built analytics and checkout code matches the protected source");
 assert.equal(digest(await readOutput("ui.js")), protectedSources["ui.js"], "built carousel and sticky CTA code matches the protected source");
 const sourceHtml = await readFile(path.join(rootDir, "index.html"), "utf8");
+const includedSection = html.match(/<section class="included-section[\s\S]*?<\/section>/)?.[0];
+assert.ok(includedSection, "post-video content overview exists");
+assert.deepEqual([...includedSection.matchAll(/class="included-number">(\d+)</g)].map((match) => match[1]), ["500", "10", "127"], "three cards show the real product quantities");
+assert.ok(includedSection.includes("Pagamento único • Garantia de 7 dias") && !includedSection.includes("não gostou"), "guarantee remains a purchase condition outside content cards");
 const protectedCtaTags = [
   '<a class="button button-gold header-cta" data-checkout data-cta-location="header" href="__CHECKOUT_URL__">',
   '<a class="button button-gold hero-cta" id="heroCheckout" data-copy-slot="heroCta" data-checkout data-cta-location="hero" href="__CHECKOUT_URL__">',
