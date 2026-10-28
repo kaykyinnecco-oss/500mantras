@@ -36,6 +36,11 @@ const protectedSources = {
 };
 for (const [file, expectedHash] of Object.entries(protectedSources)) {
   let protectedSource = await readFile(path.join(rootDir, file), "utf8");
+  if (file === "site.config.json") {
+    // Only the requested product price and its derived PIX total may differ.
+    protectedSource = protectedSource.replace('"price": "9.90"', '"price": "19.90"')
+      .replace('"checkoutTotal": "10.89"', '"checkoutTotal": "20.89"');
+  }
   if (["privacy.html", "terms.html"].includes(file)) {
     const officialLogo = '<img class="brand-logo" src="/assets/logo-500-mantras-celestial-v2.webp" width="480" height="320" alt="500 Mantras para Elevar Sua Energia">';
     assert.equal(protectedSource.split(officialLogo).length - 1, 1, "legal header uses the approved homepage logo: " + file);
@@ -65,9 +70,9 @@ assert.equal(digest(sourceDialog), "3d1a5351d0d4b6bac3e6cc7423aeac24547faefd012f
 
 assert.equal(config.checkoutUrl, expectedCheckout, "configured Cakto checkout URL");
 assert.equal(config.supportEmail, "empresakagency@gmail.com", "configured support email");
-assert.equal(config.price, 19.9, "ebook price configured");
+assert.equal(config.price, 9.9, "ebook price configured");
 assert.equal(config.checkoutServiceFee, 0.99, "current Cakto service fee configured");
-assert.equal(config.checkoutTotal, 20.89, "current checkout total configured");
+assert.equal(config.checkoutTotal, 10.89, "current checkout total configured");
 assert.equal(config.checkoutTotalPaymentMethod, "PIX", "the configured total is tied to the verified payment method");
 assert.equal(config.checkoutCardInstallmentCount, 4, "current default card installment count configured");
 assert.equal(config.checkoutCardInstallmentAmount, 5.88, "current default card installment amount configured");
@@ -103,7 +108,8 @@ assert.equal((html.match(/<video\b/g) || []).length, 1, "the existing player is 
 assert.ok(html.includes('id="videoEndedCta"') && html.includes('data-cta-location="video-final"'), "the optional post-completion CTA is configured");
 assert.match(html, /<meta name="description" content="[^\"]*500 mantras[^\"]*10 temas[^\"]*127 páginas/, "metadata describes the actual product");
 assert.match(html, /<link rel="canonical" href="https:\/\/500mantras\.vercel\.app\/">/, "production canonical URL is preserved");
-assert.ok(html.includes("127 páginas") && html.includes("R$ 19,90"), "page count and price are visible");
+assert.ok(html.includes("127 páginas") && html.includes("R$ 9,90"), "page count and price are visible");
+assert.ok(!/R\$\s*19,90/.test(html), "the published page has no outdated main product price");
 assert.ok(html.includes("Pagamento único") && html.includes("Não há mensalidade"), "the payment model is disclosed clearly");
 assert.ok(!/<details\b/.test(html), "FAQ answers are visible by default");
 const faq = html.match(/<div class="faq-list">([\s\S]*?)<\/div>/)?.[1];
@@ -247,10 +253,10 @@ const schemaMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*
 assert.ok(schemaMatch, "Product structured data is required");
 const product = JSON.parse(schemaMatch[1]);
 assert.equal(product.name, "500 Mantras para Elevar Sua Energia");
-assert.equal(product.offers.price, "19.90");
+assert.equal(product.offers.price, "9.90");
 assert.equal(product.offers.priceCurrency, "BRL");
 assert.equal(product.offers.url, expectedCheckout, "Product schema retains the Cakto checkout");
-assert.equal(html.match(/<meta property="product:price:amount" content="([^"]+)"/)?.[1], "19.90", "social product price matches schema and configuration");
+assert.equal(html.match(/<meta property="product:price:amount" content="([^"]+)"/)?.[1], "9.90", "social product price matches schema and configuration");
 
 for (const asset of [
   ...brandLogos.map((tag) => tag.match(/src="\/([^"]+)"/)?.[1]),
@@ -273,7 +279,7 @@ assert.ok(privacy.includes("empresakagency@gmail.com"), "privacy page includes c
 assert.ok(privacy.includes("só é carregado após você aceitar o rastreamento opcional"), "privacy disclosure documents consent-gated tracking");
 assert.ok(privacy.includes("180 dias") && privacy.includes("revogar"), "privacy disclosure describes expiration and revision");
 assert.ok(terms.includes("empresakagency@gmail.com"), "terms page includes configured support");
-assert.ok(terms.includes("R$ 0,99") && terms.includes("R$ 20,89"), "terms disclose the current checkout fee and PIX total");
+assert.ok(terms.includes("R$ 0,99") && terms.includes("R$ 10,89"), "terms disclose the configured checkout fee and derived PIX total");
 for (const [name, page] of [["index", html], ["privacy", privacy], ["terms", terms]]) {
   assert.ok(!/__CHECKOUT_URL__|__SUPPORT_EMAIL__|__PRODUCT_PRICE__|__PRODUCT_PRICE_SCHEMA__|__CAKTO_SERVICE_FEE__|__CHECKOUT_TOTAL__|__CHECKOUT_CARD_INSTALLMENTS__|__CHECKOUT_CARD_TOTAL__/.test(page), name + " has no unresolved build values");
   assert.match(page, /<html lang="pt-BR">/, name + " declares its language");

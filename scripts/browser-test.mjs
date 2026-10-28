@@ -314,7 +314,7 @@ try {
   await page.locator("#heroCheckout").click();
   const checkoutEvents = (await events()).filter((args) => args[1] === "InitiateCheckout");
   assert.equal(checkoutEvents.length, 1, "one checkout event per purchase click");
-  assert.equal(checkoutEvents[0][2].value, 19.9, "checkout event reports the product price");
+  assert.equal(checkoutEvents[0][2].value, 9.9, "checkout event reports the product price");
   const attributedUrl = new URL(await page.locator("#heroCheckout").getAttribute("href"));
   assert.equal(attributedUrl.searchParams.get("utm_source"), "qa");
   assert.equal(attributedUrl.searchParams.get("utm_campaign"), "mobile");
