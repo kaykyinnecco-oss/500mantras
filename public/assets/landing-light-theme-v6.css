@@ -144,3 +144,20 @@ h1, h2, h3 { color: var(--heading); }
  .ticker-group:first-child > span:first-child { display: block; white-space: normal; padding-inline: 16px; text-align: center; }
  .ticker-group + .ticker-group { display: none; }
 }
+/* Real previews presented as one coherent card per page. */
+.content-section .content-heading { max-width: 760px; }
+.content-section .section-description { margin-top: 12px; }
+.preview-gallery { gap: 16px; margin-top: 24px; padding: 2px 2px 16px; grid-auto-columns: 92%; }
+.page-preview { display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: #fff; box-shadow: 0 4px 16px #3015430a; }
+.page-preview-static { flex-shrink: 0; border: 0; border-radius: 0; }
+.page-preview-static img { border-radius: 0; }
+.page-preview figcaption { display: block; margin: 0; padding: 18px; }
+.page-preview figcaption > span { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; letter-spacing: .06em; }
+.page-preview figcaption > strong { display: block; color: var(--heading); font-size: 19px; }
+.page-preview blockquote { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+.page-preview blockquote p { font: 600 17px/1.5 var(--serif); color: var(--ink); }
+.page-preview cite { display: block; margin-top: 8px; font-size: 13px; line-height: 1.4; color: var(--muted); }
+.preview-more { margin-top: 14px; }
+.preview-more summary { padding-block: 8px; font-size: 15px; color: var(--brand); cursor: pointer; }
+.preview-invitation { max-width: 720px; margin-top: 20px; font-size: 16px; line-height: 1.5; }
+@media (min-width: 768px) { .preview-gallery { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; overflow: visible; padding-bottom: 0; } }

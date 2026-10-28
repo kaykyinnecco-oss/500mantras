@@ -11,7 +11,7 @@ async function readOutput(file) {
 
 const html = await readOutput("index.html");
 const css = await readOutput("styles.css");
-const themeAsset = "/assets/landing-light-theme-v5.css";
+const themeAsset = "/assets/landing-light-theme-v6.css";
 assert.ok(html.includes(`href="${themeAsset}"`), "landing loads its isolated light theme");
 await stat(path.join(distDir, themeAsset.slice(1)));
 const app = await readOutput("app.js");
@@ -54,6 +54,12 @@ for (const [file, expectedHash] of Object.entries(protectedSources)) {
 assert.equal(digest(app), protectedSources["app.js"], "built analytics and checkout code matches the protected source");
 assert.equal(digest(await readOutput("ui.js")), protectedSources["ui.js"], "built carousel and sticky CTA code matches the protected source");
 const sourceHtml = await readFile(path.join(rootDir, "index.html"), "utf8");
+const previewCards = [...html.matchAll(/<figure class="page-preview[^>]*>([\s\S]*?)<\/figure>/g)];
+assert.equal(previewCards.length, 3, "three real page preview cards remain");
+for (const [index, page] of ["07", "19", "43"].entries()) {
+  assert.ok(previewCards[index][1].includes("PÁGINA " + page) && previewCards[index][1].includes("<blockquote>"), "each preview groups its page and corresponding message");
+}
+assert.ok(!html.includes('class="mantra-excerpts"'), "messages are integrated into their page cards");
 const heroSection = html.match(/<section class="hero section-shell"[\s\S]*?<\/section>/)?.[0];
 assert.ok(heroSection, "hero exists");
 assert.ok(heroSection.indexOf('class="hero-facts"') < heroSection.indexOf('<h1'), "product identification precedes the headline");
@@ -122,7 +128,7 @@ assert.match(html, /<link rel="canonical" href="https:\/\/500mantras\.vercel\.ap
 assert.ok(html.includes("127 páginas") && html.includes("R$ 9,90"), "page count and price are visible");
 assert.ok(!/R\$\s*19,90/.test(html.replace(/<del>[^<]+<\/del>/g, "").replace(/<span class="visually-hidden">Oferta especial[^<]+<\/span>/, "")), "old price is limited to comparisons and their accessible description");
 assert.ok(html.includes("Pagamento único") && html.includes("Não há mensalidade"), "the payment model is disclosed clearly");
-assert.ok(!/<details\b/.test(html), "FAQ answers are visible by default");
+assert.ok(!/<details\b/.test(html.match(/<div class="faq-list">[\s\S]*?<\/section>/)?.[0] || ""), "FAQ answers are visible by default");
 const faq = html.match(/<div class="faq-list">([\s\S]*?)<\/div>/)?.[1];
 assert.ok(faq, "FAQ is present");
 assert.equal((faq.match(/<article\b/g) || []).length, 6, "the FAQ contains six visible questions and answers including reimbursement");
