@@ -104,3 +104,19 @@ h1, h2, h3 { color: var(--heading); }
  .offer-card .offer-heading h2 { font-size: 28px; line-height: 1.2; }
  .offer-label { margin-bottom: 6px; }
 }
+/* One real player in the Hero: mobile copy, video, then the purchase decision. */
+.hero { grid-template-areas: "copy" "video" "purchase"; gap: 16px; }
+.hero .video-media { grid-area: video; width: 100%; min-width: 0; align-self: center; }
+.hero-purchase { padding-top: 16px; }
+.hero .hero-cta { margin-top: 16px; }
+@media (min-width: 768px) {
+ .hero { grid-template-areas: "copy video" "purchase video"; gap: 24px 40px; }
+}
+@media (max-width: 767px) {
+ .hero { gap: 12px; }
+ .hero .hero-facts { margin-bottom: 12px; }
+ .hero .hero-description { margin-top: 12px; }
+ .hero-quick-facts { margin-top: 12px; }
+ .hero-purchase { padding-top: 12px; }
+ .hero .hero-cta { margin-top: 12px; font-size: 15px; }
+}

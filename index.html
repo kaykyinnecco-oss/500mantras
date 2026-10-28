@@ -26,11 +26,11 @@
       }
     </script>
     <link rel="icon" href="/assets/simbolo-celestial.svg" type="image/svg+xml">
-    <link rel="preload" as="image" href="/assets/hero-mantras-premium-v1-1200.webp" imagesrcset="/assets/hero-mantras-premium-v1-720.webp 720w, /assets/hero-mantras-premium-v1-1200.webp 1200w" imagesizes="(min-width: 1184px) 552px, (min-width: 768px) 50vw, (min-width: 600px) 560px, calc(100vw - 40px)" fetchpriority="high">
+    <link rel="preload" as="image" href="/assets/video-poster-500-mantras-v1.webp" fetchpriority="high">
     <link rel="preload" as="font" href="/assets/fonts/lora-600-latin.woff2" type="font/woff2" crossorigin>
     <link rel="preload" as="font" href="/assets/fonts/source-sans-3-latin.woff2" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="/styles.css">
-    <link rel="stylesheet" href="/assets/landing-light-theme-v2.css">
+    <link rel="stylesheet" href="/assets/landing-light-theme-v3.css">
     <script defer src="/runtime-config.js"></script>
     <script defer src="/app.js"></script>
     <script defer src="/ui.js"></script>
@@ -60,27 +60,18 @@
           <p class="hero-description">Encontre palavras para refletir, desacelerar e cuidar de si. Escolha um dos 500 mantras e leia no seu ritmo, pelo celular ou onde preferir.</p>
           <ul class="hero-quick-facts"><li><svg aria-hidden="true"><use href="#icon-check"/></svg>E-book em PDF</li><li><svg aria-hidden="true"><use href="#icon-check"/></svg>Acesso após a compra</li></ul>
         </div>
+        <div class="video-media">
+          <div class="video-frame">
+            <video id="productVideo" controls preload="none" playsinline poster="/assets/video-poster-500-mantras-v1.webp" aria-label="Apresentação dos 500 Mantras para Elevar Sua Energia, com duração aproximada de 40 segundos."><source src="/videos/500-mantras-apresentacao-mobile.mp4" type="video/mp4">Seu navegador não consegue reproduzir este vídeo. <a href="/videos/500-mantras-apresentacao-mobile.mp4">Abra a apresentação</a> ou continue pelo botão de compra.</video>
+            <button class="video-play" id="videoPlay" type="button" aria-label="Reproduzir a apresentação dos 500 Mantras" hidden><img src="/assets/video-poster-500-mantras-v1.webp" width="1200" height="675" alt="Capa da apresentação: mulher segurando uma xícara, e-book 500 Mantras e convite para assistir por 40 segundos." loading="eager" fetchpriority="high" decoding="async"></button>
+          </div>
+          <div class="video-ended" id="videoEndedCta" role="status" aria-live="polite" hidden><p>Uma leitura para ter por perto.</p><a class="button button-gold" data-checkout data-cta-location="video-final" href="__CHECKOUT_URL__">QUERO RECEBER MEUS 500 MANTRAS</a></div>
+        </div>
         <div class="hero-purchase">
           <p class="previous-price">De <del>R$ 19,90</del> por</p>
           <p class="hero-price"><strong>R$ __PRODUCT_PRICE__</strong><span>Pagamento único. Sem mensalidades.</span></p>
           <a class="button button-gold hero-cta" id="heroCheckout" data-copy-slot="heroCta" data-checkout data-cta-location="hero" href="__CHECKOUT_URL__">QUERO RECEBER MEUS 500 MANTRAS</a>
           <p class="guarantee-badge" data-guarantee="hero"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v6c0 5 8 9 8 9s8-4 8-9V6Z"/><path d="m8 12 3 3 5-6"/></svg>Compra segura • Garantia de 7 dias</p>
-        </div>
-        <figure class="hero-visual">
-          <img src="/assets/hero-mantras-premium-v1-1200.webp" srcset="/assets/hero-mantras-premium-v1-720.webp 720w, /assets/hero-mantras-premium-v1-1200.webp 1200w" sizes="(min-width: 1184px) 552px, (min-width: 768px) 50vw, (min-width: 600px) 560px, calc(100vw - 40px)" width="1200" height="800" alt="Cena promocional do e-book 500 Mantras com livro, tablet e celular em um ambiente roxo e dourado." fetchpriority="high" loading="eager" decoding="async">
-        </figure>
-      </section>
-      <section class="video-section section-shell" id="apresentacao-video" aria-labelledby="video-title">
-        <div class="video-copy">
-          <header class="video-heading"><h2 id="video-title">Veja como transformar uma pequena pausa em um momento seu.</h2><p class="section-description">Em apenas 40 segundos, conheça os 500 Mantras e descubra como aproveitar o material no seu dia a dia.</p></header>
-          <a class="button button-gold video-cta" data-checkout data-cta-location="video" href="__CHECKOUT_URL__">QUERO RECEBER MEUS 500 MANTRAS</a>
-        </div>
-        <div class="video-media">
-          <div class="video-frame">
-            <video id="productVideo" controls preload="none" playsinline poster="/assets/video-poster-500-mantras-v1.webp" aria-label="Apresentação dos 500 Mantras para Elevar Sua Energia, com duração aproximada de 40 segundos."><source src="/videos/500-mantras-apresentacao-mobile.mp4" type="video/mp4">Seu navegador não consegue reproduzir este vídeo. <a href="/videos/500-mantras-apresentacao-mobile.mp4">Abra a apresentação</a> ou continue pelo botão de compra.</video>
-            <button class="video-play" id="videoPlay" type="button" aria-label="Reproduzir a apresentação dos 500 Mantras" hidden><img src="/assets/video-poster-500-mantras-v1.webp" width="1200" height="675" alt="Capa da apresentação: mulher segurando uma xícara, e-book 500 Mantras e convite para assistir por 40 segundos." loading="lazy" decoding="async"></button>
-          </div>
-          <div class="video-ended" id="videoEndedCta" role="status" aria-live="polite" hidden><p>Uma leitura para ter por perto.</p><a class="button button-gold" data-checkout data-cta-location="video-final" href="__CHECKOUT_URL__">QUERO RECEBER MEUS 500 MANTRAS</a></div>
         </div>
       </section>
       <section class="included-section section-shell" id="o-que-recebe" aria-labelledby="included-title">

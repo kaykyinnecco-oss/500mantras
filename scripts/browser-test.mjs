@@ -258,8 +258,8 @@ try {
     const motionPage = await motionContext.newPage();
     await motionPage.goto(baseUrl, { waitUntil: "networkidle" });
     await scrollPage(motionPage);
-    await motionPage.locator(".video-section").scrollIntoViewIfNeeded();
-    await motionPage.waitForFunction(() => [...document.querySelectorAll(".video-copy h2,.video-copy p,.video-cta")].every((element) => {
+    await motionPage.locator(".hero").scrollIntoViewIfNeeded();
+    await motionPage.waitForFunction(() => [...document.querySelectorAll(".hero-copy h1,.hero-copy p,#heroCheckout")].every((element) => {
       if (!element.getClientRects().length) return false;
       for (let parent = element; parent; parent = parent.parentElement) {
         const style = getComputedStyle(parent);
@@ -267,8 +267,8 @@ try {
       }
       return true;
     }));
-    assert.equal(await motionPage.locator(".video-cta").isVisible(), true, `${width}px: video CTA remains visible with normal motion`);
-    await motionPage.locator(".video-section").screenshot({ path: path.join(outputDir, `video-normal-motion-${width}.png`), style: ".reading-progress { visibility: hidden; }" });
+    assert.equal(await motionPage.locator("#heroCheckout").isVisible(), true, `${width}px: video CTA remains visible with normal motion`);
+    await motionPage.locator(".hero").screenshot({ path: path.join(outputDir, `video-normal-motion-${width}.png`), style: ".reading-progress { visibility: hidden; }" });
     await motionContext.close();
   }
   report.checks.push("Normal-motion video headings, copy and checkout CTA remain visible at 390px and 1440px.");

@@ -11,7 +11,7 @@ async function readOutput(file) {
 
 const html = await readOutput("index.html");
 const css = await readOutput("styles.css");
-const themeAsset = "/assets/landing-light-theme-v2.css";
+const themeAsset = "/assets/landing-light-theme-v3.css";
 assert.ok(html.includes(`href="${themeAsset}"`), "landing loads its isolated light theme");
 await stat(path.join(distDir, themeAsset.slice(1)));
 const app = await readOutput("app.js");
@@ -57,7 +57,7 @@ const sourceHtml = await readFile(path.join(rootDir, "index.html"), "utf8");
 const heroSection = html.match(/<section class="hero section-shell"[\s\S]*?<\/section>/)?.[0];
 assert.ok(heroSection, "hero exists");
 assert.ok(heroSection.indexOf('class="hero-facts"') < heroSection.indexOf('<h1'), "product identification precedes the headline");
-assert.ok(heroSection.indexOf('id="heroCheckout"') < heroSection.indexOf('class="hero-visual"'), "mobile reading order prioritizes checkout before the approved image");
+assert.ok(heroSection.indexOf('class="video-media"') < heroSection.indexOf('id="heroCheckout"'), "mobile reading order presents video before checkout");
 assert.equal((heroSection.match(/Compra segura • Garantia de 7 dias/g) || []).length, 1, "hero has one concise purchase reassurance");
 const includedSection = html.match(/<section class="included-section[\s\S]*?<\/section>/)?.[0];
 assert.ok(includedSection, "post-video content overview exists");
@@ -67,7 +67,6 @@ const protectedCtaTags = [
   '<a class="button button-gold header-cta" data-checkout data-cta-location="header" href="__CHECKOUT_URL__">',
   '<a class="button button-gold hero-cta" id="heroCheckout" data-copy-slot="heroCta" data-checkout data-cta-location="hero" href="__CHECKOUT_URL__">',
   '<a class="button button-gold content-cta" data-checkout data-cta-location="conteudo" href="__CHECKOUT_URL__">',
-  '<a class="button button-gold video-cta" data-checkout data-cta-location="video" href="__CHECKOUT_URL__">',
   '<a class="button button-gold" data-checkout data-cta-location="video-final" href="__CHECKOUT_URL__">',
   '<a class="button button-gold offer-cta" data-copy-slot="offerCta" data-checkout data-cta-location="oferta" href="__CHECKOUT_URL__">',
   '<a class="button button-gold closing-cta" data-checkout data-cta-location="fechamento" href="__CHECKOUT_URL__">',
@@ -90,13 +89,13 @@ assert.equal(config.checkoutCardInstallmentCount, 4, "current default card insta
 assert.equal(config.checkoutCardInstallmentAmount, 5.88, "current default card installment amount configured");
 assert.equal(config.checkoutCardTotal, 23.52, "current default card total configured");
 assert.equal(config.analytics.metaPixelId, "2429955871112248", "the production Meta Pixel ID is configured");
-assert.equal(checkoutLinks.length, 8, "seven original CTAs plus one consent-aware mobile CTA should be present");
+assert.equal(checkoutLinks.length, 7, "six original CTAs plus one consent-aware mobile CTA remain after removing the redundant video CTA");
 assert.deepEqual([...new Set(checkoutLinks)], [expectedCheckout], "every CTA should share the same checkout");
 assert.ok(!/__CHECKOUT_URL__|__SUPPORT_EMAIL__|__PRODUCT_PRICE__|__PRODUCT_PRICE_SCHEMA__|__CAKTO_SERVICE_FEE__|__CHECKOUT_TOTAL__|__CHECKOUT_CARD_INSTALLMENTS__|__CHECKOUT_CARD_TOTAL__/.test(html), "production HTML has no unresolved values");
 const ctaTexts = [...html.matchAll(/<a\b[^>]*\bdata-checkout\b[^>]*>([\s\S]*?)<\/a>/g)].map((match) => match[1].replace(/<[^>]+>/g, "").trim());
-assert.equal(ctaTexts.filter((text) => text === "QUERO RECEBER MEUS 500 MANTRAS").length, 8, "all original purchase CTAs use the approved copy");
+assert.equal(ctaTexts.filter((text) => text === "QUERO RECEBER MEUS 500 MANTRAS").length, 7, "all remaining purchase CTAs use the approved copy");
 assert.equal(config.currency, "BRL", "product currency is preserved");
-for (const location of ["header", "hero", "conteudo", "video", "video-final", "oferta", "fechamento"]) {
+for (const location of ["header", "hero", "conteudo", "video-final", "oferta", "fechamento"]) {
   assert.equal((html.match(new RegExp('data-cta-location="' + location + '"', "g")) || []).length, 1, "checkout location appears once: " + location);
 }
 assert.match(html, /href="\/assets\/styles\.[a-f0-9]{12}\.css"/, "production HTML references a versioned stylesheet");
@@ -106,7 +105,7 @@ assert.ok(!/<p class="eyebrow[^\"]*"><span/i.test(html + await readOutput("priva
 assert.ok(!css.includes(".eyebrow > span"), "eyebrow styles no longer render decorative strokes");
 assert.ok(html.includes("id=\"inicio\"") && html.includes("id=\"conteudo-do-ebook\"") && html.includes("id=\"oferta\""));
 assert.ok(html.includes("id=\"duvidas\"") && html.includes("id=\"rodape\""));
-const sectionOrder = ["hero-title", "apresentacao-video", "o-que-recebe", "conteudo-do-ebook", "avaliacoes", "oferta", "duvidas", "closing-title"];
+const sectionOrder = ["hero-title", "o-que-recebe", "conteudo-do-ebook", "avaliacoes", "oferta", "duvidas", "closing-title"];
 let previousSection = -1;
 for (const id of sectionOrder) {
   const sectionIndex = html.indexOf('id="' + id + '"');
@@ -142,13 +141,9 @@ assert.match(html, /<p class="offer-label">Seu e-book completo<\/p>/, "commercia
 const offerSummary = html.match(/<figure class="offer-art">([\s\S]*?)<\/figure>/)?.[1];
 assert.ok(offerSummary?.includes("oferta-mantras-acolhedor-v2-960.webp"), "offer uses the owner-supplied promotional art");
 for (const width of [480, 960]) await stat(path.join(distDir, `assets/oferta-mantras-acolhedor-v2-${width}.webp`));
-assert.equal((html.match(/<img\b[^>]*src="\/assets\/hero-mantras-premium-v1-1200\.webp"/g) || []).length, 1, "the new promotional image appears only in the hero");
-const heroImage = html.match(/<figure class="hero-visual">\s*(<img\b[^>]+>)/)?.[1];
-const heroPreload = html.match(/<link rel="preload" as="image"[^>]+>/)?.[0];
-assert.ok(heroImage && heroPreload, "the hero has an image and an early preload");
-assert.equal(heroPreload.match(/imagesrcset="([^"]+)"/)?.[1], heroImage.match(/srcset="([^"]+)"/)?.[1], "preload uses the same responsive candidates as the hero");
-assert.equal(heroPreload.match(/imagesizes="([^"]+)"/)?.[1], heroImage.match(/sizes="([^"]+)"/)?.[1], "preload uses the same responsive sizes as the hero");
-assert.ok(heroImage.includes('fetchpriority="high"') && heroImage.includes('loading="eager"'), "the first-fold image is prioritized rather than lazy-loaded");
+assert.ok(!html.includes('class="hero-visual"') && !html.includes('class="video-section'), "redundant hero image and standalone video section removed");
+assert.ok(heroSection.includes('id="productVideo"'), "the real player is inside the hero");
+assert.ok(html.includes('<link rel="preload" as="image" href="/assets/video-poster-500-mantras-v1.webp"'), "hero poster is prioritized");
 const trustArea = html.match(/<div class="offer-payment"[\s\S]*?<\/section>/)?.[0];
 assert.ok(trustArea, "offer has a concise purchase-confidence area");
 for (const fact of ["Pagamento seguro pela Cakto.", "Compra única, sem assinatura."]) assert.ok(trustArea.includes(fact), "purchase-confidence area discloses: " + fact);
@@ -311,4 +306,4 @@ for (const [name, page] of [["index", html], ["privacy", privacy], ["terms", ter
   assert.ok(!/<(?:script|img)\b[^>]*(?:src="https?:\/\/(?:connect\.facebook\.net|www\.facebook\.com\/tr|www\.googletagmanager\.com))/.test(page), name + " loads no tracking directly in HTML before consent");
 }
 
-console.log("Smoke test OK: protected integrations and eight original CTAs, premium offer and guarantee, six visible FAQs, unique footer disclosures, genuine previews, compact offer, native consent and production assets verified.");
+console.log("Smoke test OK: protected integrations and seven original CTAs, premium offer and guarantee, six visible FAQs, unique footer disclosures, genuine previews, compact offer, native consent and production assets verified.");
