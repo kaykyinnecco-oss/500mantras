@@ -120,3 +120,12 @@ h1, h2, h3 { color: var(--heading); }
  .hero-purchase { padding-top: 12px; }
  .hero .hero-cta { margin-top: 12px; font-size: 15px; }
 }
+/* Compact guarantee/payment band directly below the offer CTA. */
+.offer-trust-row { display: grid; gap: 12px; margin-top: 16px; text-align: left; }
+.offer-trust-row .price-guarantee { justify-content: flex-start; margin: 0; }
+.offer-trust-row .offer-payment { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 8px 12px; margin: 0; padding: 12px 0 0; border-top: 1px solid var(--line); }
+.offer-trust-row .offer-payment p { margin: 0; }
+@media (min-width: 960px) {
+ .offer-trust-row { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: center; gap: 16px; }
+ .offer-trust-row .offer-payment { display: grid; gap: 6px; padding: 0 0 0 16px; border-top: 0; border-left: 1px solid var(--line); }
+}

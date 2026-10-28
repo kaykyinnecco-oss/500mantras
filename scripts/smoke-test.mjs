@@ -11,7 +11,7 @@ async function readOutput(file) {
 
 const html = await readOutput("index.html");
 const css = await readOutput("styles.css");
-const themeAsset = "/assets/landing-light-theme-v3.css";
+const themeAsset = "/assets/landing-light-theme-v4.css";
 assert.ok(html.includes(`href="${themeAsset}"`), "landing loads its isolated light theme");
 await stat(path.join(distDir, themeAsset.slice(1)));
 const app = await readOutput("app.js");
@@ -145,8 +145,11 @@ assert.ok(!html.includes('class="hero-visual"') && !html.includes('class="video-
 assert.ok(heroSection.includes('id="productVideo"'), "the real player is inside the hero");
 assert.ok(html.includes('<link rel="preload" as="image" href="/assets/video-poster-500-mantras-v1.webp"'), "hero poster is prioritized");
 const trustArea = html.match(/<div class="offer-payment"[\s\S]*?<\/section>/)?.[0];
+const trustBand = html.match(/<div class="offer-trust-row">([\s\S]*?)<p class="offer-refund">/)?.[1];
+assert.ok(trustBand?.includes('class="price-guarantee"') && trustBand.includes('class="offer-payment"'), "guarantee and payment share a band before the refund explanation");
+assert.equal((html.match(/class="offer-payment"/g) || []).length, 1, "payment band is not duplicated");
 assert.ok(trustArea, "offer has a concise purchase-confidence area");
-for (const fact of ["Pagamento seguro pela Cakto.", "Compra única, sem assinatura."]) assert.ok(trustArea.includes(fact), "purchase-confidence area discloses: " + fact);
+for (const fact of ["Pagamento seguro pela Cakto."]) assert.ok(trustArea.includes(fact), "purchase-confidence area discloses: " + fact);
 for (const brand of ["Visa", "Mastercard", "Elo"]) assert.ok(trustArea.includes('alt="' + brand + '"'), "owner-confirmed payment brand is accessible: " + brand);
 
 const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1];
