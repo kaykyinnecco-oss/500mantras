@@ -11,7 +11,7 @@ async function readOutput(file) {
 
 const html = await readOutput("index.html");
 const css = await readOutput("styles.css");
-const themeAsset = "/assets/landing-light-theme-v1.css";
+const themeAsset = "/assets/landing-light-theme-v2.css";
 assert.ok(html.includes(`href="${themeAsset}"`), "landing loads its isolated light theme");
 await stat(path.join(distDir, themeAsset.slice(1)));
 const app = await readOutput("app.js");
@@ -106,7 +106,7 @@ assert.ok(!/<p class="eyebrow[^\"]*"><span/i.test(html + await readOutput("priva
 assert.ok(!css.includes(".eyebrow > span"), "eyebrow styles no longer render decorative strokes");
 assert.ok(html.includes("id=\"inicio\"") && html.includes("id=\"conteudo-do-ebook\"") && html.includes("id=\"oferta\""));
 assert.ok(html.includes("id=\"duvidas\"") && html.includes("id=\"rodape\""));
-const sectionOrder = ["pause-title", "apresentacao-video", "o-que-recebe", "conteudo-do-ebook", "avaliacoes", "themes-title", "oferta", "duvidas", "closing-title"];
+const sectionOrder = ["hero-title", "apresentacao-video", "o-que-recebe", "conteudo-do-ebook", "avaliacoes", "oferta", "duvidas", "closing-title"];
 let previousSection = -1;
 for (const id of sectionOrder) {
   const sectionIndex = html.indexOf('id="' + id + '"');
@@ -121,7 +121,7 @@ assert.ok(html.includes('id="videoEndedCta"') && html.includes('data-cta-locatio
 assert.match(html, /<meta name="description" content="[^\"]*500 mantras[^\"]*10 temas[^\"]*127 páginas/, "metadata describes the actual product");
 assert.match(html, /<link rel="canonical" href="https:\/\/500mantras\.vercel\.app\/">/, "production canonical URL is preserved");
 assert.ok(html.includes("127 páginas") && html.includes("R$ 9,90"), "page count and price are visible");
-assert.ok(!/R\$\s*19,90/.test(html), "the published page has no outdated main product price");
+assert.ok(!/R\$\s*19,90/.test(html.replace(/<del>[^<]+<\/del>/g, "")), "the old price appears only as a struck-through comparison");
 assert.ok(html.includes("Pagamento único") && html.includes("Não há mensalidade"), "the payment model is disclosed clearly");
 assert.ok(!/<details\b/.test(html), "FAQ answers are visible by default");
 const faq = html.match(/<div class="faq-list">([\s\S]*?)<\/div>/)?.[1];
@@ -135,9 +135,9 @@ assert.equal(brandLogos.length, 2, "header and footer display a real brand asset
 assert.equal(brandLogos[0].match(/src="([^"]+)"/)?.[1], brandLogos[1].match(/src="([^"]+)"/)?.[1], "header and footer use the same official logo");
 const offerList = html.match(/<ul class="offer-list"[^>]*>([\s\S]*?)<\/ul>/)?.[1];
 assert.ok(offerList, "offer contains a practical benefits list");
-assert.equal((offerList.match(/<li\b/g) || []).length, 6, "offer explains the six real product and purchase benefits");
+assert.equal((offerList.match(/<li\b/g) || []).length, 5, "offer explains five compact product and purchase benefits");
 const offerText = offerList.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
-for (const fact of ["500", "10", "127", "e-book", "Pagamento único", "7 dias"]) assert.ok(offerText.includes(fact), "offer explains the verified benefit: " + fact);
+for (const fact of ["500", "10 jornadas temáticas", "127", "PDF", "Pagamento único"]) assert.ok(offerText.includes(fact), "offer explains the verified benefit: " + fact);
 assert.match(html, /<p class="offer-label">Seu e-book completo<\/p>/, "commercial area retains a clear product label");
 const offerSummary = html.match(/<figure class="offer-art">([\s\S]*?)<\/figure>/)?.[1];
 assert.ok(offerSummary?.includes("oferta-mantras-acolhedor-v2-960.webp"), "offer uses the owner-supplied promotional art");
@@ -149,9 +149,9 @@ assert.ok(heroImage && heroPreload, "the hero has an image and an early preload"
 assert.equal(heroPreload.match(/imagesrcset="([^"]+)"/)?.[1], heroImage.match(/srcset="([^"]+)"/)?.[1], "preload uses the same responsive candidates as the hero");
 assert.equal(heroPreload.match(/imagesizes="([^"]+)"/)?.[1], heroImage.match(/sizes="([^"]+)"/)?.[1], "preload uses the same responsive sizes as the hero");
 assert.ok(heroImage.includes('fetchpriority="high"') && heroImage.includes('loading="eager"'), "the first-fold image is prioritized rather than lazy-loaded");
-const trustArea = html.match(/<div class="purchase-trust"[\s\S]*?<\/section>/)?.[0];
+const trustArea = html.match(/<div class="offer-payment"[\s\S]*?<\/section>/)?.[0];
 assert.ok(trustArea, "offer has a concise purchase-confidence area");
-for (const fact of ["E-book em PDF", "Pagamento por cartão", "Garantia de 7 dias"]) assert.ok(trustArea.includes(fact), "purchase-confidence area discloses: " + fact);
+for (const fact of ["Pagamento seguro pela Cakto.", "Compra única, sem assinatura."]) assert.ok(trustArea.includes(fact), "purchase-confidence area discloses: " + fact);
 for (const brand of ["Visa", "Mastercard", "Elo"]) assert.ok(trustArea.includes('alt="' + brand + '"'), "owner-confirmed payment brand is accessible: " + brand);
 
 const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1];
@@ -163,17 +163,8 @@ assert.equal(html.split(formatNotice).length - 1, 1, "the final digital-product 
 assert.ok(footer.includes(formatNotice), "the sole physical-version notice belongs to the legal footer");
 assert.equal(html.split(config.supportEmail).length - 1, 2, "landing page has one visible support email and its mailto destination");
 assert.ok(!main.includes(config.supportEmail) && footer.includes("Dúvidas ou suporte:"), "contact appears visibly in the footer, outside the offer");
-const themeList = html.match(/<ol class="theme-list">([\s\S]*?)<\/ol>/);
-assert.ok(themeList, "the ten real ebook themes are presented");
-assert.equal((themeList[1].match(/<li>/g) || []).length, 10, "all ten verified themes are listed");
-const themeItems = [...themeList[1].matchAll(/<li>([^<]+)<\/li>/g)].map((match, index) => [String(index + 1).padStart(2, "0"), match[1]]);
-assert.deepEqual(themeItems, [
-  ["01", "Amor-próprio e autoestima"], ["02", "Prosperidade e abundância"],
-  ["03", "Proteção e equilíbrio energético"], ["04", "Gratidão e conexão com o universo"],
-  ["05", "Paz interior e serenidade"], ["06", "Confiança e coragem"],
-  ["07", "Recomeços e desapego"], ["08", "Intuição e sabedoria interior"],
-  ["09", "Amor e relacionamentos"], ["10", "Energia positiva e intenção diária"],
-], "all verified theme names and their order are preserved");
+assert.ok(!html.includes('class="themes-section"') && !html.includes('class="pause-section"'), "redundant sections are removed");
+assert.ok(html.includes("10 jornadas temáticas"), "the offer still identifies ten thematic journeys");
 for (const mantra of ["Eu mereço o mesmo cuidado que ofereço às pessoas que amo.", "Meu valor não diminui nos dias em que produzo menos.", "Posso reconhecer minhas imperfeições sem deixar de me respeitar."]) {
   assert.ok(html.includes(mantra), "verified text from the authentic PDF preview is present: " + mantra);
 }
@@ -182,11 +173,11 @@ assert.ok(app.includes("matchMedia(\"(prefers-reduced-motion: reduce)\")") && ap
 assert.ok(!/\.reveal-ready\s+\.reveal\s*\{[^}]*opacity:\s*0(?:[;\s}]|$)/.test(css), "content is not hidden while waiting for an observation callback");
 assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/, "reduced-motion visitors have a dedicated stylesheet override");
 assert.ok(!/<track\b/i.test(html), "no unverified or unsynchronized subtitles are declared");
-const guaranteeText = "Garantia de 7 dias. Se você abrir o e-book e sentir que não era o que esperava, é só pedir o reembolso em até 7 dias após a compra e devolvemos 100% do valor. Sem burocracia.";
-assert.ok(html.includes(guaranteeText), "owner-confirmed full guarantee uses the exact approved text");
-assert.ok(html.replace(/<[^>]+>/g, "").includes("Direito de arrependimento previsto no artigo 49 do Código de Defesa do Consumidor."), "guarantee identifies the applicable right without narrowing it");
+assert.ok(html.includes("Reembolso integral em até 7 dias após a compra, mesmo após abrir ou baixar o e-book."), "compact guarantee preserves full refund after opening the material");
+assert.ok(html.replace(/<[^>]+>/g, "").includes("Direito de arrependimento previsto no artigo 49 do Código de Defesa do Consumidor."), "the offer preserves the right of withdrawal");
+assert.ok(!html.includes('class="guarantee-panel"') && !html.includes('class="purchase-trust"'), "duplicated guarantee and payment sections are removed");
 const guaranteeImages = [...html.matchAll(/<img\b[^>]*src="\/assets\/selo-garantia-premium-7-dias-v1.webp"[^>]*>/g)].map((match) => match[0]);
-assert.equal(guaranteeImages.length, 3, "price, guarantee and trust strip reuse the official premium image");
+assert.equal(guaranteeImages.length, 1, "offer uses the official premium seal once");
 for (const image of guaranteeImages) {
   assert.ok(image.includes('alt="Selo de garantia de 7 dias"'), "the guarantee has the requested accessible description");
   assert.ok(image.includes('width="640" height="640"') && image.includes('loading="lazy"'), "the guarantee reserves square proportions and loads lazily");
@@ -195,7 +186,7 @@ assert.ok(!/garantia-7-dias(?:-compacta|-medalhao)?\.svg/.test(html), "no previo
 for (const oldAsset of ["garantia-7-dias.svg", "garantia-7-dias-medalhao.svg", "garantia-7-dias-compacta.svg"]) {
   await assert.rejects(stat(path.join(distDir, "assets", oldAsset)), { code: "ENOENT" }, "unused old guarantee artwork does not ship");
 }
-assert.equal((html.match(/<del>R\$ 29,90<\/del>/g) || []).length, 2, "hero and offer display the owner-confirmed prior price");
+assert.equal((html.match(/<del>R\$ 19,90<\/del>/g) || []).length, 2, "hero and offer display the owner-confirmed prior price");
 const reviewSource = JSON.parse(await readFile(path.join(rootDir, "docs/reader-reviews.json"), "utf8"));
 const reviews = [...html.matchAll(/<article class="review-card" data-rating="(\d)"[\s\S]*?<\/article>/g)];
 assert.equal(reviews.length, 8, "all eight owner-provided reviews are visible in HTML");
@@ -320,4 +311,4 @@ for (const [name, page] of [["index", html], ["privacy", privacy], ["terms", ter
   assert.ok(!/<(?:script|img)\b[^>]*(?:src="https?:\/\/(?:connect\.facebook\.net|www\.facebook\.com\/tr|www\.googletagmanager\.com))/.test(page), name + " loads no tracking directly in HTML before consent");
 }
 
-console.log("Smoke test OK: protected integrations and eight original CTAs, premium offer and guarantee, six visible FAQs, unique footer disclosures, genuine previews, ten themes, native consent and production assets verified.");
+console.log("Smoke test OK: protected integrations and eight original CTAs, premium offer and guarantee, six visible FAQs, unique footer disclosures, genuine previews, compact offer, native consent and production assets verified.");
