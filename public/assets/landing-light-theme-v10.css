@@ -227,3 +227,17 @@ h1, h2, h3 { color: var(--heading); }
  .site-footer .footer-bottom p { text-align: right; }
  .site-footer .digital-product-note { text-align: left; }
 }
+/* Accommodate the approved longer copy without changing the visual system. */
+.offer-price-intro { margin-bottom: 12px; font-size: 16px; line-height: 1.5; color: var(--heading); font-weight: 600; }
+.hero .hero-facts { max-width: 480px; }
+.hero .hero-quick-facts { gap: 6px 16px; }
+.offer-label { font-size: 13px; letter-spacing: .04em; }
+@media (max-width: 767px) {
+ .hero h1 { font-size: clamp(25px, 6.4vw, 30px); line-height: 1.18; }
+ .hero h1 span { display: inline; }
+ .hero .hero-description { font-size: 16px; }
+ .hero .hero-quick-facts li { font-size: 14px; }
+ .hero-cta, .offer-cta, .closing-cta { padding-inline: 14px; font-size: 15px; line-height: 1.4; }
+ .hero-purchase .guarantee-badge { font-size: 13px; }
+}
+@media (min-width: 768px) { .hero h1 { font-size: clamp(32px, 3vw, 40px); line-height: 1.2; } }

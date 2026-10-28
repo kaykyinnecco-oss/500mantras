@@ -11,7 +11,7 @@ async function readOutput(file) {
 
 const html = await readOutput("index.html");
 const css = await readOutput("styles.css");
-const themeAsset = "/assets/landing-light-theme-v9.css";
+const themeAsset = "/assets/landing-light-theme-v10.css";
 assert.ok(html.includes(`href="${themeAsset}"`), "landing loads its isolated light theme");
 await stat(path.join(distDir, themeAsset.slice(1)));
 await stat(path.join(distDir, "assets/brand-horizontal-v1.css"));
@@ -68,11 +68,11 @@ const heroSection = html.match(/<section class="hero section-shell"[\s\S]*?<\/se
 assert.ok(heroSection, "hero exists");
 assert.ok(heroSection.indexOf('class="hero-facts"') < heroSection.indexOf('<h1'), "product identification precedes the headline");
 assert.ok(heroSection.indexOf('class="video-media"') < heroSection.indexOf('id="heroCheckout"'), "mobile reading order presents video before checkout");
-assert.equal((heroSection.match(/Compra segura • Garantia de 7 dias/g) || []).length, 1, "hero has one concise purchase reassurance");
+assert.equal((heroSection.match(/Pagamento único • Acesso digital • Garantia de 7 dias./g) || []).length, 1, "hero has one concise purchase reassurance");
 const includedSection = html.match(/<section class="included-section[\s\S]*?<\/section>/)?.[0];
 assert.ok(includedSection, "post-video content overview exists");
 assert.deepEqual([...includedSection.matchAll(/class="included-number">(\d+)</g)].map((match) => match[1]), ["500", "10", "127"], "three cards show the real product quantities");
-assert.ok(includedSection.includes("Pagamento único • Garantia de 7 dias") && !includedSection.includes("não gostou"), "guarantee remains a purchase condition outside content cards");
+assert.ok(includedSection.includes("Acesso digital • Pagamento único • Sem mensalidades.") && !includedSection.includes("não gostou"), "guarantee remains a purchase condition outside content cards");
 const protectedCtaTags = [
   '<a class="button button-gold header-cta" data-checkout data-cta-location="header" href="__CHECKOUT_URL__">',
   '<a class="button button-gold hero-cta" id="heroCheckout" data-copy-slot="heroCta" data-checkout data-cta-location="hero" href="__CHECKOUT_URL__">',
@@ -103,7 +103,8 @@ assert.equal(checkoutLinks.length, 7, "six original CTAs plus one consent-aware 
 assert.deepEqual([...new Set(checkoutLinks)], [expectedCheckout], "every CTA should share the same checkout");
 assert.ok(!/__CHECKOUT_URL__|__SUPPORT_EMAIL__|__PRODUCT_PRICE__|__PRODUCT_PRICE_SCHEMA__|__CAKTO_SERVICE_FEE__|__CHECKOUT_TOTAL__|__CHECKOUT_CARD_INSTALLMENTS__|__CHECKOUT_CARD_TOTAL__/.test(html), "production HTML has no unresolved values");
 const ctaTexts = [...html.matchAll(/<a\b[^>]*\bdata-checkout\b[^>]*>([\s\S]*?)<\/a>/g)].map((match) => match[1].replace(/<[^>]+>/g, "").trim());
-assert.equal(ctaTexts.filter((text) => text === "QUERO RECEBER MEUS 500 MANTRAS").length, 7, "all remaining purchase CTAs use the approved copy");
+const approvedCtaCopy = { header: "QUERO ACESSAR POR R$ 9,90", hero: "QUERO MEUS 500 MANTRAS POR R$ 9,90", conteudo: "QUERO COMEÇAR MINHA JORNADA", oferta: "SIM, QUERO MEUS 500 MANTRAS POR R$ 9,90", fechamento: "QUERO ACESSAR MEUS 500 MANTRAS POR R$ 9,90", "video-final": "QUERO MEUS 500 MANTRAS POR R$ 9,90", mobile: "QUERO MEUS 500 MANTRAS POR R$ 9,90" };
+for (const [, location, text] of html.matchAll(/<a[^>]*data-cta-location="([^"]+)"[^>]*>([^<]+)<\/a>/g)) assert.equal(text, approvedCtaCopy[location], "approved strategic CTA: " + location);
 assert.equal(config.currency, "BRL", "product currency is preserved");
 for (const location of ["header", "hero", "conteudo", "video-final", "oferta", "fechamento"]) {
   assert.equal((html.match(new RegExp('data-cta-location="' + location + '"', "g")) || []).length, 1, "checkout location appears once: " + location);
@@ -147,7 +148,7 @@ assert.ok(offerList, "offer contains a practical benefits list");
 assert.equal((offerList.match(/<li\b/g) || []).length, 5, "offer explains five compact product and purchase benefits");
 const offerText = offerList.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
 for (const fact of ["500", "10 jornadas temáticas", "127", "PDF", "Pagamento único"]) assert.ok(offerText.includes(fact), "offer explains the verified benefit: " + fact);
-assert.match(html, /<p class="offer-label">Seu e-book completo<\/p>/, "commercial area retains a clear product label");
+assert.match(html, /<p class="offer-label">SEU MOMENTO DE AUTOCUIDADO COMEÇA AQUI<\/p>/, "commercial area retains a clear product label");
 const offerSummary = html.match(/<figure class="offer-art">([\s\S]*?)<\/figure>/)?.[1];
 assert.ok(offerSummary?.includes("oferta-mantras-acolhedor-v2-960.webp"), "offer uses the owner-supplied promotional art");
 for (const width of [480, 960]) await stat(path.join(distDir, `assets/oferta-mantras-acolhedor-v2-${width}.webp`));
@@ -181,7 +182,7 @@ assert.ok(app.includes("matchMedia(\"(prefers-reduced-motion: reduce)\")") && ap
 assert.ok(!/\.reveal-ready\s+\.reveal\s*\{[^}]*opacity:\s*0(?:[;\s}]|$)/.test(css), "content is not hidden while waiting for an observation callback");
 assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/, "reduced-motion visitors have a dedicated stylesheet override");
 assert.ok(!/<track\b/i.test(html), "no unverified or unsynchronized subtitles are declared");
-assert.ok(html.includes("Reembolso integral em até 7 dias após a compra, mesmo após abrir ou baixar o e-book."), "compact guarantee preserves full refund after opening the material");
+assert.ok(html.includes("O reembolso é integral, mesmo após abrir ou baixar o e-book."), "compact guarantee preserves full refund after opening the material");
 assert.ok(html.replace(/<[^>]+>/g, "").includes("Direito de arrependimento previsto no artigo 49 do Código de Defesa do Consumidor."), "the offer preserves the right of withdrawal");
 assert.ok(!html.includes('class="guarantee-panel"') && !html.includes('class="purchase-trust"'), "duplicated guarantee and payment sections are removed");
 const guaranteeImages = [...html.matchAll(/<img\b[^>]*src="\/assets\/selo-garantia-premium-7-dias-v1.webp"[^>]*>/g)].map((match) => match[0]);
