@@ -51,6 +51,11 @@ for (const [file, expectedHash] of Object.entries(protectedSources)) {
 assert.equal(digest(app), protectedSources["app.js"], "built analytics and checkout code matches the protected source");
 assert.equal(digest(await readOutput("ui.js")), protectedSources["ui.js"], "built carousel and sticky CTA code matches the protected source");
 const sourceHtml = await readFile(path.join(rootDir, "index.html"), "utf8");
+const heroSection = html.match(/<section class="hero section-shell"[\s\S]*?<\/section>/)?.[0];
+assert.ok(heroSection, "hero exists");
+assert.ok(heroSection.indexOf('class="hero-facts"') < heroSection.indexOf('<h1'), "product identification precedes the headline");
+assert.ok(heroSection.indexOf('id="heroCheckout"') < heroSection.indexOf('class="hero-visual"'), "mobile reading order prioritizes checkout before the approved image");
+assert.equal((heroSection.match(/Compra segura • Garantia de 7 dias/g) || []).length, 1, "hero has one concise purchase reassurance");
 const includedSection = html.match(/<section class="included-section[\s\S]*?<\/section>/)?.[0];
 assert.ok(includedSection, "post-video content overview exists");
 assert.deepEqual([...includedSection.matchAll(/class="included-number">(\d+)</g)].map((match) => match[1]), ["500", "10", "127"], "three cards show the real product quantities");
