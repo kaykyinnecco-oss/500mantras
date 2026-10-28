@@ -1,0 +1,68 @@
+/* Landing-only color system. Geometry, content and commercial behavior stay shared. */
+:root {
+  color-scheme: light;
+  --night: #ffffff;
+  --purple: #f8f5fa;
+  --cream: #ffffff;
+  --ink: #292333;
+  --ink-soft: #625a69;
+  --muted: #625a69;
+  --line: #4b246b26;
+  --gold: #a87925;
+  --gold-light: #4b246b;
+  --brand: #4b246b;
+  --heading: #301543;
+  --surface: #ffffff;
+  --surface-soft: #f8f5fa;
+  --conversion: #16834a;
+  --conversion-hover: #116b3c;
+  --previous: #b63b45;
+  --support-gold: #d8ae60;
+  --soft-shadow: 0 6px 24px #3015430a;
+}
+body { color: var(--ink); }
+h1, h2, h3 { color: var(--heading); }
+::selection { color: #fff; background: var(--brand); }
+:focus-visible { outline-color: var(--brand); }
+.announcement { background: var(--surface-soft); color: var(--brand); }
+.brand-logo { background: var(--heading); }
+.hero h1 span { color: var(--brand); }
+.hero-purchase { border-top-color: var(--line); }
+.hero-price strong, .price, .mobile-purchase-bar strong { color: var(--conversion); }
+.previous-price del { color: var(--previous); }
+.price-prefix { color: var(--muted); }
+.button[data-checkout] { border-color: var(--conversion); color: #fff; background: var(--conversion); box-shadow: 0 4px 12px #116b3c20; }
+.button[data-checkout]:focus-visible { outline: 3px solid var(--heading); outline-offset: 4px; box-shadow: 0 0 0 2px #fff; }
+.button[data-checkout]:active { background: var(--conversion-hover); box-shadow: 0 2px 6px #116b3c20; }
+@media (hover: hover) { .button[data-checkout]:hover { background: var(--conversion-hover); box-shadow: 0 6px 16px #116b3c26; } }
+.pause-section, .themes-section, .social-proof { background: var(--surface-soft); }
+.moments-list h3, .theme-list li::before { color: var(--brand); }
+.theme-list li::before { background: var(--brand); }
+.theme-list li { border-bottom-color: var(--line); }
+.video-section { background: var(--surface-soft); }
+.video-frame { background: var(--heading); border-color: var(--line); box-shadow: var(--soft-shadow); }
+.video-play:focus-visible { outline-color: #fff; }
+.included-cards li { background: var(--surface-soft); border-color: var(--line); box-shadow: var(--soft-shadow); }
+.included-number { color: var(--brand); }
+@media (hover: hover) { .included-cards li:hover { background: #f1ebf6; border-color: #4b246b60; } }
+.page-preview-static { border-color: var(--line); }
+.hero-visual img, .offer-card .offer-art img { box-shadow: 0 0 0 1px #4b246b1a, 0 8px 24px #30154312; }
+.review-card { background: var(--surface); border-color: var(--line); border-top-color: var(--support-gold); box-shadow: var(--soft-shadow); }
+.average-stars, .review-stars { color: #936819; }
+.offer-section { background: var(--surface-soft); }
+.offer-card { background: var(--surface); border-color: #4b246b30; box-shadow: var(--soft-shadow); }
+.offer-list strong, .payment-note, .guarantee-panel p, .purchase-trust strong { color: var(--ink); }
+.offer-list svg { background: #4b246b0c; stroke: var(--brand); }
+.offer-card .offer-purchase { background: var(--surface-soft); border-color: #4b246b30; box-shadow: none; }
+.guarantee-panel, .purchase-trust > div { background: var(--surface); border-color: var(--line); }
+.purchase-trust svg { stroke: var(--brand); }
+.payment-brand { background: #fff; border-color: var(--line); }
+.payment-elo { background: #29163d; }
+.closing { border-top: 1px solid var(--line); }
+.mobile-purchase-bar { background: var(--surface); border-top-color: var(--line); box-shadow: 0 -4px 16px #3015430c; }
+/* Institutional footer retains the recognizable dark purple identity. */
+.site-footer { --muted: #e4d8e9; --gold-light: #f3dca4; --line: #e4bf7238; background: var(--heading); color: #fff; }
+/* Keep the consent interface's existing palette and controls unchanged. */
+.consent-dialog { color-scheme: dark; --night: #160c22; --purple: #29163d; --gold: #e4bf72; --gold-light: #f3dca4; --cream: #fff8ed; --ink: #28172f; --muted: #e4d8e9; --line: #e4bf7238; }
+.consent-dialog .consent-heading { color: var(--cream); }
+.consent-dialog :focus-visible { outline-color: var(--gold); }
