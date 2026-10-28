@@ -20,6 +20,7 @@ async function loadDotEnv() {
 export async function getSiteConfig() {
   await loadDotEnv();
   const stored = JSON.parse(await readFile(path.join(rootDir, "site.config.json"), "utf8"));
+  const content = JSON.parse(await readFile(path.join(rootDir, "data", "product-content.json"), "utf8"));
   const checkoutUrl = process.env.NEXT_PUBLIC_CAKTO_CHECKOUT_URL || stored.checkoutUrl;
   const supportEmail = process.env.NEXT_PUBLIC_SUPPORT_EMAIL || stored.supportEmail;
   const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID || stored.analytics.metaPixelId;
@@ -28,9 +29,6 @@ export async function getSiteConfig() {
   const checkoutServiceFee = Number(stored.checkoutServiceFee || 0);
   const checkoutTotal = Number(stored.checkoutTotal ?? (price + checkoutServiceFee).toFixed(2));
   const checkoutTotalPaymentMethod = String(stored.checkoutTotalPaymentMethod || "PIX").toUpperCase();
-  const checkoutCardInstallmentCount = Number(stored.checkoutCardInstallmentCount);
-  const checkoutCardInstallmentAmount = Number(stored.checkoutCardInstallmentAmount);
-  const checkoutCardTotal = Number(stored.checkoutCardTotal);
 
   if (![price, checkoutServiceFee, checkoutTotal].every(Number.isFinite)
     || Math.round((price + checkoutServiceFee) * 100) !== Math.round(checkoutTotal * 100)) {
@@ -38,11 +36,6 @@ export async function getSiteConfig() {
   }
   if (checkoutTotalPaymentMethod !== "PIX") {
     throw new Error("checkoutTotalPaymentMethod deve corresponder à forma de pagamento usada para validar o total configurado.");
-  }
-  if (![checkoutCardInstallmentCount, checkoutCardInstallmentAmount, checkoutCardTotal].every(Number.isFinite)
-    || checkoutCardInstallmentCount < 1
-    || Math.round(checkoutCardInstallmentCount * checkoutCardInstallmentAmount * 100) !== Math.round(checkoutCardTotal * 100)) {
-    throw new Error("As parcelas e o total de cartão precisam corresponder em site.config.json.");
   }
 
   if (!checkoutUrl) {
@@ -67,12 +60,14 @@ export async function getSiteConfig() {
     checkoutServiceFee,
     checkoutTotal,
     checkoutTotalPaymentMethod,
-    checkoutCardInstallmentCount,
-    checkoutCardInstallmentAmount,
-    checkoutCardTotal,
     currency: stored.currency,
     analytics: { metaPixelId, ga4MeasurementId },
     experiment: { ...stored.experiment },
+    campaign: { ...stored.campaign },
+    popup: { ...stored.popup },
+    guarantee: { ...stored.guarantee },
+    socialProof: { ...stored.socialProof },
+    content,
   };
 }
 
