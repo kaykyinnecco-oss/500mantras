@@ -1,0 +1,475 @@
+{
+  "productName": "500 Mantras para Elevar Sua Energia",
+  "edition": "Edição Premium",
+  "pageCount": 127,
+  "mantraCount": 500,
+  "journeyCount": 10,
+  "source": {
+    "filename": "500_Mantras_Edicao_Premium.pdf",
+    "sha256": "71d550262903d609dc5cdecbb6cdeac6abc8bcaada839b9b3e8072802b831c4c",
+    "note": "Somente amostras reais selecionadas. O PDF completo não é publicado na página de vendas."
+  },
+  "journeys": [
+    {
+      "id": "amor-proprio",
+      "number": 1,
+      "title": "O amor que começa em mim",
+      "theme": "Amor-próprio e autoestima",
+      "startPage": 6,
+      "mantraRange": {
+        "first": 1,
+        "last": 50
+      },
+      "samples": [
+        {
+          "number": 1,
+          "text": "Eu mereço o mesmo cuidado que ofereço às pessoas que amo.",
+          "page": 7
+        },
+        {
+          "number": 2,
+          "text": "Meu valor não diminui nos dias em que produzo menos.",
+          "page": 7
+        },
+        {
+          "number": 3,
+          "text": "Posso reconhecer minhas imperfeições sem deixar de me respeitar.",
+          "page": 7
+        }
+      ]
+    },
+    {
+      "id": "abundancia",
+      "number": 2,
+      "title": "A abundância que cultivo",
+      "theme": "Prosperidade e abundância",
+      "startPage": 18,
+      "mantraRange": {
+        "first": 51,
+        "last": 100
+      },
+      "samples": [
+        {
+          "number": 51,
+          "text": "Eu reconheço as oportunidades que surgem quando me preparo para percebê-las.",
+          "page": 19
+        },
+        {
+          "number": 52,
+          "text": "Posso construir uma relação com o dinheiro baseada em clareza, não em medo.",
+          "page": 19
+        },
+        {
+          "number": 53,
+          "text": "Minha prosperidade também inclui saúde, vínculos e tempo para viver.",
+          "page": 19
+        }
+      ]
+    },
+    {
+      "id": "equilibrio",
+      "number": 3,
+      "title": "Meu espaço de equilíbrio",
+      "theme": "Proteção e equilíbrio energético",
+      "startPage": 30,
+      "mantraRange": {
+        "first": 101,
+        "last": 150
+      },
+      "samples": [
+        {
+          "number": 101,
+          "text": "Eu posso observar o ambiente sem absorver todos os sentimentos ao meu redor.",
+          "page": 31
+        },
+        {
+          "number": 102,
+          "text": "Meus limites são uma forma legítima de cuidar da minha energia.",
+          "page": 31
+        },
+        {
+          "number": 103,
+          "text": "Hoje escolho preservar momentos de silêncio na minha rotina.",
+          "page": 31
+        }
+      ]
+    },
+    {
+      "id": "gratidao",
+      "number": 4,
+      "title": "A beleza de reconhecer",
+      "theme": "Gratidão e conexão com o universo",
+      "startPage": 42,
+      "mantraRange": {
+        "first": 151,
+        "last": 200
+      },
+      "samples": [
+        {
+          "number": 151,
+          "text": "Hoje percebo a beleza de uma coisa simples que normalmente passa despercebida.",
+          "page": 43
+        },
+        {
+          "number": 152,
+          "text": "Sou grato pelo que aprendi, mesmo quando o aprendizado foi difícil.",
+          "page": 43
+        },
+        {
+          "number": 153,
+          "text": "Posso agradecer por algo bom sem negar o que ainda me preocupa.",
+          "page": 43
+        }
+      ]
+    },
+    {
+      "id": "serenidade",
+      "number": 5,
+      "title": "O sossego possível",
+      "theme": "Paz interior e serenidade",
+      "startPage": 54,
+      "mantraRange": {
+        "first": 201,
+        "last": 250
+      },
+      "samples": [
+        {
+          "number": 201,
+          "text": "Neste instante, permito que minha respiração encontre um ritmo confortável.",
+          "page": 55
+        },
+        {
+          "number": 202,
+          "text": "Eu não preciso resolver minha vida inteira durante um único dia.",
+          "page": 55
+        },
+        {
+          "number": 203,
+          "text": "A paz pode começar com a decisão de diminuir a pressa.",
+          "page": 55
+        }
+      ]
+    },
+    {
+      "id": "coragem",
+      "number": 6,
+      "title": "A coragem de ser",
+      "theme": "Confiança e coragem",
+      "startPage": 66,
+      "mantraRange": {
+        "first": 251,
+        "last": 300
+      },
+      "samples": [
+        {
+          "number": 251,
+          "text": "Eu posso sentir medo e ainda escolher um passo cuidadoso.",
+          "page": 67
+        },
+        {
+          "number": 252,
+          "text": "Minha coragem se constrói quando ajo de acordo com meus valores.",
+          "page": 67
+        },
+        {
+          "number": 253,
+          "text": "Não preciso saber tudo para começar a aprender algo novo.",
+          "page": 67
+        }
+      ]
+    },
+    {
+      "id": "recomecos",
+      "number": 7,
+      "title": "O espaço do recomeço",
+      "theme": "Recomeços e desapego",
+      "startPage": 78,
+      "mantraRange": {
+        "first": 301,
+        "last": 350
+      },
+      "samples": [
+        {
+          "number": 301,
+          "text": "Eu posso encerrar um capítulo sem apagar as lições que ele trouxe.",
+          "page": 79
+        },
+        {
+          "number": 302,
+          "text": "Nem tudo o que foi importante precisa continuar presente da mesma forma.",
+          "page": 79
+        },
+        {
+          "number": 303,
+          "text": "Hoje reconheço que mudar de rota também faz parte de caminhar.",
+          "page": 79
+        }
+      ]
+    },
+    {
+      "id": "intuicao",
+      "number": 8,
+      "title": "A voz da minha intuição",
+      "theme": "Intuição e sabedoria interior",
+      "startPage": 90,
+      "mantraRange": {
+        "first": 351,
+        "last": 400
+      },
+      "samples": [
+        {
+          "number": 351,
+          "text": "Eu reservo momentos de silêncio para perceber o que realmente penso.",
+          "page": 91
+        },
+        {
+          "number": 352,
+          "text": "Minha experiência pode oferecer pistas valiosas quando observo com atenção.",
+          "page": 91
+        },
+        {
+          "number": 353,
+          "text": "Escutar a mim mesmo não significa ignorar fatos e evidências.",
+          "page": 91
+        }
+      ]
+    },
+    {
+      "id": "relacionamentos",
+      "number": 9,
+      "title": "Laços que fazem bem",
+      "theme": "Amor e relacionamentos",
+      "startPage": 102,
+      "mantraRange": {
+        "first": 401,
+        "last": 450
+      },
+      "samples": [
+        {
+          "number": 401,
+          "text": "Eu mereço relações nas quais o respeito esteja presente nos detalhes.",
+          "page": 103
+        },
+        {
+          "number": 402,
+          "text": "Posso demonstrar amor sem abandonar minhas necessidades.",
+          "page": 103
+        },
+        {
+          "number": 403,
+          "text": "Hoje escolho escutar para compreender, não apenas para responder.",
+          "page": 103
+        }
+      ]
+    },
+    {
+      "id": "intencao",
+      "number": 10,
+      "title": "Uma intenção para hoje",
+      "theme": "Energia positiva e intenção diária",
+      "startPage": 114,
+      "mantraRange": {
+        "first": 451,
+        "last": 500
+      },
+      "samples": [
+        {
+          "number": 451,
+          "text": "Hoje escolho começar por aquilo que está ao meu alcance.",
+          "page": 115
+        },
+        {
+          "number": 452,
+          "text": "Minha disposição pode variar, e ainda assim posso me tratar com cuidado.",
+          "page": 115
+        },
+        {
+          "number": 453,
+          "text": "Uma intenção simples pode orientar decisões importantes.",
+          "page": 115
+        }
+      ]
+    }
+  ],
+  "gallery": [
+    {
+      "id": "cover",
+      "page": 1,
+      "title": "Capa da edição premium",
+      "alt": "Capa original do e-book 500 Mantras para Elevar Sua Energia, com arte roxa e dourada.",
+      "src": "/assets/edition/cover.webp",
+      "thumbnail": "/assets/edition/cover-thumb.webp",
+      "width": 1200,
+      "height": 1800,
+      "thumbnailWidth": 600,
+      "thumbnailHeight": 900,
+      "caption": "Página 001 · Capa da edição premium"
+    },
+    {
+      "id": "como-usar",
+      "page": 4,
+      "title": "Seu ritual de presença",
+      "alt": "Página 4 real do PDF: orientações de leitura e ritual de presença.",
+      "src": "/assets/edition/como-usar.webp",
+      "thumbnail": "/assets/edition/como-usar-thumb.webp",
+      "width": 1200,
+      "height": 1800,
+      "thumbnailWidth": 600,
+      "thumbnailHeight": 900,
+      "caption": "Página 004 · Seu ritual de presença"
+    },
+    {
+      "id": "jornadas",
+      "page": 5,
+      "title": "As dez jornadas",
+      "alt": "Página 5 real do PDF: sumário com os títulos originais das dez jornadas.",
+      "src": "/assets/edition/jornadas.webp",
+      "thumbnail": "/assets/edition/jornadas-thumb.webp",
+      "width": 1200,
+      "height": 1800,
+      "thumbnailWidth": 600,
+      "thumbnailHeight": 900,
+      "caption": "Página 005 · As dez jornadas"
+    },
+    {
+      "id": "amor-proprio",
+      "page": 7,
+      "title": "Amor-próprio e autoestima",
+      "alt": "Página 7 real do PDF: mantras 001 a 005 sobre amor-próprio e autoestima.",
+      "src": "/assets/edition/amor-proprio.webp",
+      "thumbnail": "/assets/edition/amor-proprio-thumb.webp",
+      "width": 1200,
+      "height": 1800,
+      "thumbnailWidth": 600,
+      "thumbnailHeight": 900,
+      "caption": "Página 007 · Amor-próprio e autoestima"
+    },
+    {
+      "id": "abundancia",
+      "page": 19,
+      "title": "Prosperidade e abundância",
+      "alt": "Página 19 real do PDF: mantras 051 a 055 sobre prosperidade e abundância.",
+      "src": "/assets/edition/abundancia.webp",
+      "thumbnail": "/assets/edition/abundancia-thumb.webp",
+      "width": 1200,
+      "height": 1800,
+      "thumbnailWidth": 600,
+      "thumbnailHeight": 900,
+      "caption": "Página 019 · Prosperidade e abundância"
+    },
+    {
+      "id": "gratidao",
+      "page": 43,
+      "title": "Gratidão e conexão",
+      "alt": "Página 43 real do PDF: mantras 151 a 155 sobre gratidão e conexão com o universo.",
+      "src": "/assets/edition/gratidao.webp",
+      "thumbnail": "/assets/edition/gratidao-thumb.webp",
+      "width": 1200,
+      "height": 1800,
+      "thumbnailWidth": 600,
+      "thumbnailHeight": 900,
+      "caption": "Página 043 · Gratidão e conexão"
+    },
+    {
+      "id": "recomecos",
+      "page": 79,
+      "title": "Recomeços e desapego",
+      "alt": "Página 79 real do PDF: mantras 301 a 305 sobre recomeços e desapego.",
+      "src": "/assets/edition/recomecos.webp",
+      "thumbnail": "/assets/edition/recomecos-thumb.webp",
+      "width": 1200,
+      "height": 1800,
+      "thumbnailWidth": 600,
+      "thumbnailHeight": 900,
+      "caption": "Página 079 · Recomeços e desapego"
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "camila-rocha",
+      "name": "Camila Rocha",
+      "src": "/assets/testimonials/camila-rocha.webp",
+      "thumbnail": "/assets/testimonials/camila-rocha-thumb.webp",
+      "alt": "Print de conversa de WhatsApp fornecido pelo responsável pelo produto: Camila Rocha.",
+      "width": 900,
+      "height": 1600,
+      "thumbnailWidth": 450,
+      "thumbnailHeight": 800,
+      "source": "provided_by_owner",
+      "rating": null,
+      "verifiedPurchase": false,
+      "title": "Mensagem de Camila Rocha",
+      "caption": "Print fornecido pelo responsável pelo produto. Sem atribuição de nota."
+    },
+    {
+      "id": "renata-oliveira",
+      "name": "Renata Oliveira",
+      "src": "/assets/testimonials/renata-oliveira.webp",
+      "thumbnail": "/assets/testimonials/renata-oliveira-thumb.webp",
+      "alt": "Print de conversa de WhatsApp fornecido pelo responsável pelo produto: Renata Oliveira.",
+      "width": 900,
+      "height": 1600,
+      "thumbnailWidth": 450,
+      "thumbnailHeight": 800,
+      "source": "provided_by_owner",
+      "rating": null,
+      "verifiedPurchase": false,
+      "title": "Mensagem de Renata Oliveira",
+      "caption": "Print fornecido pelo responsável pelo produto. Sem atribuição de nota."
+    },
+    {
+      "id": "mariana-alves",
+      "name": "Mariana Alves",
+      "src": "/assets/testimonials/mariana-alves.webp",
+      "thumbnail": "/assets/testimonials/mariana-alves-thumb.webp",
+      "alt": "Print de conversa de WhatsApp fornecido pelo responsável pelo produto: Mariana Alves.",
+      "width": 900,
+      "height": 1600,
+      "thumbnailWidth": 450,
+      "thumbnailHeight": 800,
+      "source": "provided_by_owner",
+      "rating": null,
+      "verifiedPurchase": false,
+      "title": "Mensagem de Mariana Alves",
+      "caption": "Print fornecido pelo responsável pelo produto. Sem atribuição de nota."
+    },
+    {
+      "id": "juliana-martins",
+      "name": "Juliana Martins",
+      "src": "/assets/testimonials/juliana-martins.webp",
+      "thumbnail": "/assets/testimonials/juliana-martins-thumb.webp",
+      "alt": "Print de conversa de WhatsApp fornecido pelo responsável pelo produto: Juliana Martins.",
+      "width": 900,
+      "height": 1600,
+      "thumbnailWidth": 450,
+      "thumbnailHeight": 800,
+      "source": "provided_by_owner",
+      "rating": null,
+      "verifiedPurchase": false,
+      "title": "Mensagem de Juliana Martins",
+      "caption": "Print fornecido pelo responsável pelo produto. Sem atribuição de nota."
+    },
+    {
+      "id": "patricia-almeida",
+      "name": "Patrícia Almeida",
+      "src": "/assets/testimonials/patricia-almeida.webp",
+      "thumbnail": "/assets/testimonials/patricia-almeida-thumb.webp",
+      "alt": "Print de conversa de WhatsApp fornecido pelo responsável pelo produto: Patrícia Almeida.",
+      "width": 900,
+      "height": 1600,
+      "thumbnailWidth": 450,
+      "thumbnailHeight": 800,
+      "source": "provided_by_owner",
+      "rating": null,
+      "verifiedPurchase": false,
+      "title": "Mensagem de Patrícia Almeida",
+      "caption": "Print fornecido pelo responsável pelo produto. Sem atribuição de nota."
+    }
+  ],
+  "socialProof": {
+    "avatars": [],
+    "rating": null,
+    "ratingCount": null,
+    "buyerCount": null
+  }
+}

@@ -1,363 +1,192 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFile, stat } from "node:fs/promises";
+import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import vm from "node:vm";
 import { rootDir } from "./config.mjs";
 
 const distDir = path.join(rootDir, "dist");
-async function readOutput(file) {
-  return readFile(path.join(distDir, file), "utf8");
-}
-
-const html = await readOutput("index.html");
-const css = await readOutput("styles.css");
-const themeAsset = "/assets/landing-light-theme-v10.css";
-assert.ok(html.includes(`href="${themeAsset}"`), "landing loads its isolated light theme");
-await stat(path.join(distDir, themeAsset.slice(1)));
-await stat(path.join(distDir, "assets/brand-horizontal-v1.css"));
-await stat(path.join(distDir, "assets/logo-500-mantras-horizontal-v1.webp"));
-assert.ok(html.includes('src="/assets/logo-500-mantras-horizontal-v1.webp" width="1070" height="369"'), "the supplied horizontal logo reserves its natural proportions");
-const app = await readOutput("app.js");
-const runtimeSource = await readOutput("runtime-config.js");
-const runtimeMatch = runtimeSource.match(/Object\.freeze\(({[\s\S]*})\);\s*$/);
-assert.ok(runtimeMatch, "runtime-config.js must expose a JSON configuration object");
-const config = JSON.parse(runtimeMatch[1]);
-const vercelConfig = JSON.parse(await readFile(path.join(rootDir, "vercel.json"), "utf8"));
-const checkoutLinks = [...html.matchAll(/<a\b[^>]*\bdata-checkout\b[^>]*\bhref="([^"]+)"/g)].map((match) => match[1]);
+const output = (file) => readFile(path.join(distDir, file), "utf8");
 const expectedCheckout = "https://pay.cakto.com.br/323zgdr_1243414";
-
-// Protected source contract captured from main a3ccff6 before conversion V2.
-// Normalize Git line endings so the same contract runs on Windows and Linux.
-const digest = (source) => createHash("sha256").update(source.replace(/\r\n/g, "\n")).digest("hex");
-const protectedSources = {
-  "app.js": "9ee9b11cd92b5c2002d68871f34c33e035da0d7c31bd3dcf5f3ad69bed9cb25e",
-  "ui.js": "ffa1e4985e750d3b1c00d4969ace4f1329374d07abaecc02d830d3608022f03a",
-  "site.config.json": "457d0403e8e799ef317b2ce167c8eec89e998719db27e523f98f22b625e84aa2",
-  "vercel.json": "043eea13cad854007c92bc18510b47012534ad53d786d7e42a296e19cb0fd15b",
-  "privacy.html": "fc39f462ef9e5ebd1a09df5303184cff0133ce42c36aa99e5d264350e6b3591b",
-  "terms.html": "593c41912344e9a6e17862651d8549bdb94d3d2e959109a7d07fe3c195d8ad6b",
-  "scripts/build.mjs": "7d61419a758aa2f6eb134a52467cd76627cb5fb2aacc379ca142d3870cb75bb1",
-  "scripts/dev.mjs": "203fe0ac6c8e60171cdf5fdff14d72c2f496567b03fe1b4269c6bf1a260e9389",
-  "scripts/preview.mjs": "cd27d1ac3056337fd2889ec308d80a38f9d2c955cca8d564fc2927d37d1bc113",
+const expectedPixel = "2429955871112248";
+const expectedCta = "QUERO ACESSAR OS 500 MANTRAS";
+const attr = (tag, name) => tag.match(new RegExp("\\b" + name + "=([\\\"'])((?:(?!\\1)[\\s\\S])*?)\\1"))?.[2];
+const plainText = (markup) => markup.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+const hash = (source) => createHash("sha256").update(source).digest("hex").slice(0, 12);
+const exists = async (relative) => {
+  const info = await stat(path.join(distDir, relative.replace(/^\//, "")));
+  assert.ok(info.isFile() && info.size > 0, "production asset exists: " + relative);
 };
-for (const [file, expectedHash] of Object.entries(protectedSources)) {
-  let protectedSource = await readFile(path.join(rootDir, file), "utf8");
-  if (file === "site.config.json") {
-    // Only the requested product price and its derived PIX total may differ.
-    protectedSource = protectedSource.replace('"price": "9.90"', '"price": "19.90"')
-      .replace('"checkoutTotal": "10.89"', '"checkoutTotal": "20.89"');
+
+const html = await output("index.html");
+const runtime = await output("runtime-config.js");
+const runtimeJson = runtime.match(/Object\.freeze\(({[\s\S]*})\);?\s*$/)?.[1];
+assert.ok(runtimeJson, "runtime-config exposes a JSON configuration object");
+const config = JSON.parse(runtimeJson);
+const sourceContent = JSON.parse(await readFile(path.join(rootDir, "data", "product-content.json"), "utf8"));
+const vercel = JSON.parse(await readFile(path.join(rootDir, "vercel.json"), "utf8"));
+
+// Commercial and measurement invariants, independent of visual copy or spacing.
+assert.equal(config.checkoutUrl, expectedCheckout, "the original Cakto checkout is preserved");
+assert.equal(config.price, 9.9, "the confirmed ebook price is R$ 9,90");
+assert.equal(config.currency, "BRL");
+assert.equal(config.analytics.metaPixelId, expectedPixel, "the existing Meta Pixel is preserved");
+assert.equal(config.supportEmail, "empresakagency@gmail.com", "support contact is preserved");
+assert.equal(Math.round((config.price + config.checkoutServiceFee) * 100), Math.round(config.checkoutTotal * 100), "the configured product price, fee and total remain consistent");
+assert.equal(config.experiment.enabled, false, "unapproved copy experiments remain disabled");
+const checkoutAnchors = [...html.matchAll(/<a\b[^>]*>[\s\S]*?<\/a>/g)].map((match) => match[0]).filter((anchor) => /\bdata-checkout(?:[\s=>])/.test(anchor));
+assert.ok(checkoutAnchors.length >= 4, "checkout actions are available across the purchase journey");
+for (const anchor of checkoutAnchors) {
+  assert.equal(attr(anchor, "href"), expectedCheckout, "every checkout action uses the configured Cakto URL");
+  assert.equal(plainText(anchor), expectedCta, "purchase actions share one clear label");
+  assert.ok(attr(anchor, "data-cta-location"), "checkout actions retain placement attribution");
+}
+assert.ok(html.includes("R$ 9,90") && html.includes("127 páginas"), "the actual price and page count are visible");
+assert.ok(/pagamento único/i.test(html), "the payment model is disclosed");
+assert.ok(/(?:taxa|total)[\s\S]{0,180}checkout/i.test(plainText(html)), "the checkout total and optional fees are disclosed");
+for (const complement of ["100 Cartões Digitais de Afirmações", "21 Dias", "Oráculo das 52 Mensagens"]) assert.ok(html.includes(complement), "the existing optional complement is described: " + complement);
+assert.match(plainText(html), /complementos[\s\S]{0,180}opcionais|opcionais[\s\S]{0,180}complementos/i, "separately charged complements are explicitly optional");
+assert.ok(!/<(?:del|s)\b/.test(html), "no unverified previous price or discount is invented");
+
+// A single visual architecture, with no legacy styling or presentation runtimes.
+const stylesheets = [...html.matchAll(/<link\b[^>]*>/g)].map((match) => match[0]).filter((tag) => attr(tag, "rel") === "stylesheet");
+assert.equal(stylesheets.length, 1, "the landing page has one stylesheet, avoiding stacked themes");
+const cssUrl = attr(stylesheets[0], "href");
+assert.match(cssUrl, /^\/assets\/styles\.[a-f0-9]{12}\.css$/, "CSS has a content-versioned URL");
+const css = await output(cssUrl.slice(1));
+assert.ok(cssUrl.includes(hash(css)), "the CSS asset name matches its bytes");
+const scriptTags = [...html.matchAll(/<script\b[^>]*\bsrc=[^>]*>/g)].map((match) => match[0]);
+assert.equal(scriptTags.length, 3, "only config, integration and presentation scripts are loaded");
+const scriptSources = scriptTags.map((tag) => attr(tag, "src"));
+assert.equal(new Set(scriptSources).size, scriptSources.length, "no script is loaded twice");
+assert.equal(scriptSources.filter((url) => url === "/runtime-config.js").length, 1);
+assert.ok(scriptTags.every((tag) => /\bdefer(?:\s|>)/.test(tag)), "page scripts are deferred");
+const builtScript = async (name) => {
+  const url = scriptSources.find((src) => new RegExp("^/assets/" + name + "\\.[a-f0-9]{12}\\.js$").test(src));
+  assert.ok(url, "the current " + name + " script is loaded once with a content hash");
+  const source = await output(url.slice(1));
+  assert.ok(url.includes(hash(source)), name + " asset name matches its content");
+  new vm.Script(source, { filename: url });
+  return source;
+};
+const app = await builtScript("app");
+const interactions = await builtScript("interactions");
+assert.ok(!/(?:premium-content-v\d|premium-interactions-v\d|landing-light-theme|brand-horizontal-v\d|\/ui\.)(?:[^\"']*)\.(?:css|js)/.test(html), "legacy CSS and presentation scripts are not mounted");
+for (const id of ["inicio", "oferta", "rodape", "closing-title", "offerPopup", "imageDialog", "consentPreferences", "journeySelect"]) assert.equal((html.match(new RegExp('\\bid="' + id + '"', "g")) || []).length, 1, "there is one integrated component target: " + id);
+assert.equal((html.match(/<footer\b/g) || []).length, 1, "the institutional footer is not duplicated");
+assert.ok(css.includes("prefers-reduced-motion"), "motion reduction is supported");
+assert.ok(/font-display:\s*swap/.test(css), "local fonts have a rendering fallback");
+assert.ok(!/fonts\.googleapis|fonts\.gstatic/.test(html + css), "font loading does not depend on third-party requests");
+
+// Campaign and popup rules are configuration, never fabricated visitor deadlines.
+assert.ok(config.campaign && Object.hasOwn(config.campaign, "endsAt"), "a campaign deadline is centrally configurable");
+if (config.campaign.endsAt !== null) {
+  assert.match(config.campaign.endsAt, /(?:Z|[+-]\d{2}:\d{2})$/, "a real campaign deadline includes its timezone");
+  assert.ok(Number.isFinite(Date.parse(config.campaign.endsAt)), "the campaign deadline is a valid timestamp");
+}
+const campaignClocks = [...html.matchAll(/<[^>]+\bdata-campaign-timer(?:\s|=|>)[^>]*>/g)].map((match) => match[0]);
+assert.ok(campaignClocks.length > 0, "the configured campaign clock is integrated into the page");
+if (config.campaign.endsAt === null) assert.ok(campaignClocks.every((clock) => /\bhidden(?:\s|>)/.test(clock)), "an unconfigured clock starts hidden instead of showing artificial urgency");
+for (const unit of ["hours", "minutes", "seconds"]) assert.ok(html.includes('data-countdown="' + unit + '"'), "the clock supports " + unit);
+const popupOpening = html.match(/<dialog\b[^>]*\bid="offerPopup"[^>]*>/)?.[0];
+assert.ok(popupOpening && !/\sopen(?:[\s=>])/.test(popupOpening), "the offer popup does not bypass its configured initial delay");
+assert.equal(config.popup.initialDelayMs, 6000, "first popup delay follows the requested six seconds");
+assert.equal(config.popup.repeatDelayMs, 4000, "popup recurrence follows the requested four seconds");
+assert.equal(config.popup.repeatEnabled, true);
+assert.equal(config.popup.exitIntentEnabled, true);
+assert.ok(Number.isSafeInteger(config.popup.maxDisplaysPerSession) && config.popup.maxDisplaysPerSession > 0, "popup frequency has an explicit, adjustable session cap");
+assert.equal(config.guarantee.days, 7, "the configured warranty duration is seven days");
+assert.equal(typeof config.guarantee.confirmed, "boolean", "warranty publication requires confirmation");
+if (config.guarantee.confirmed) {
+  assert.ok(html.includes('id="garantia"') && /7\s*dias|sete dias/i.test(plainText(html)), "a confirmed warranty has its own clearly described section");
+} else {
+  assert.ok(!html.includes('id="garantia"'), "an unconfirmed warranty is not published as an offer");
+}
+
+// The final PDF and owner-supplied screenshots are the only content sources.
+assert.ok(config.content, "verified editorial content is included in runtime configuration");
+assert.equal(config.content.pageCount, 127);
+assert.equal(config.content.mantraCount, 500);
+assert.equal(config.content.journeyCount, 10);
+assert.equal(config.content.journeys.length, 10);
+assert.equal(config.content.journeys.reduce((sum, journey) => sum + journey.samples.length, 0), 30);
+assert.deepEqual(config.content.journeys, sourceContent.journeys, "explorer samples and original journey names match the audited PDF data");
+assert.equal(new Set(config.content.journeys.map((journey) => journey.id)).size, 10, "journey identifiers are unique");
+for (const journey of config.content.journeys) {
+  assert.ok(html.includes(journey.title), "each original journey is represented in the rendered page: " + journey.title);
+  assert.ok(journey.samples.every((sample) => sample.text.length > 15 && Number.isInteger(sample.number) && Number.isInteger(sample.page)), "every explorer sample has its original text and PDF source");
+}
+assert.equal(config.content.gallery.length, 7, "the final edition supplies seven selected real page previews");
+assert.equal(config.content.testimonials.length, 5, "only the five distinct owner-supplied WhatsApp screenshots are available");
+assert.deepEqual(config.content.socialProof.avatars, [], "no unprovided portrait is used as a fabricated buyer avatar");
+assert.equal(config.content.socialProof.rating, null, "there is no unverified aggregate rating");
+assert.equal(config.content.socialProof.ratingCount, null);
+assert.equal(config.content.socialProof.buyerCount, null);
+assert.ok(!/[0-5][.,]\d{1,2}\s*\/\s*5/.test(plainText(html)), "the rendered page contains no invented review score");
+for (const item of [...config.content.gallery, ...config.content.testimonials]) {
+  for (const file of [item.src, item.thumbnail]) {
+    assert.match(file, /^\/assets\/(?:edition|testimonials)\/[a-z0-9-]+\.webp$/, "content images use local, documented assets");
+    await exists(file);
   }
-  if (["privacy.html", "terms.html"].includes(file)) {
-    protectedSource = protectedSource.replace(/    <link rel="stylesheet" href="\/assets\/brand-horizontal-v1.css">\r?\n/, "");
-    const officialLogo = '<img class="brand-logo" src="/assets/logo-500-mantras-horizontal-v1.webp" width="1070" height="369" alt="500 Mantras para Elevar Sua Energia">';
-    assert.equal(protectedSource.split(officialLogo).length - 1, 1, "legal header uses the approved homepage logo: " + file);
-    protectedSource = protectedSource.replace(officialLogo, '<img class="brand-logo" src="/assets/logo-500-mantras.png" width="260" height="86" alt="500 Mantras para Elevar Sua Energia">');
-  }
-  assert.equal(digest(protectedSource), expectedHash, "protected source matches baseline, allowing only the requested legal logo update: " + file);
+  assert.ok(item.width > 0 && item.height > 0 && item.alt, "content images reserve dimensions and have alternative text");
 }
-assert.equal(digest(app), protectedSources["app.js"], "built analytics and checkout code matches the protected source");
-assert.equal(digest(await readOutput("ui.js")), protectedSources["ui.js"], "built carousel and sticky CTA code matches the protected source");
-const sourceHtml = await readFile(path.join(rootDir, "index.html"), "utf8");
-const previewCards = [...html.matchAll(/<figure class="page-preview[^>]*>([\s\S]*?)<\/figure>/g)];
-assert.equal(previewCards.length, 3, "three real page preview cards remain");
-for (const [index, page] of ["07", "19", "43"].entries()) {
-  assert.ok(previewCards[index][1].includes("PÁGINA " + page) && previewCards[index][1].includes("<blockquote>"), "each preview groups its page and corresponding message");
-}
-assert.ok(!html.includes('class="mantra-excerpts"'), "messages are integrated into their page cards");
-const heroSection = html.match(/<section class="hero section-shell"[\s\S]*?<\/section>/)?.[0];
-assert.ok(heroSection, "hero exists");
-assert.ok(heroSection.indexOf('class="hero-facts"') < heroSection.indexOf('<h1'), "product identification precedes the headline");
-assert.ok(heroSection.indexOf('class="premium-hero-art"') < heroSection.indexOf('id="heroCheckout"'), "mobile reading order presents real mockup before checkout");
-assert.equal((heroSection.match(/Pagamento único • Acesso digital • Garantia de 7 dias./g) || []).length, 1, "hero has one concise purchase reassurance");
-const includedSection = html.match(/<section class="included-section[\s\S]*?<\/section>/)?.[0];
-assert.ok(includedSection, "product content overview exists");
-assert.deepEqual([...includedSection.matchAll(/class="included-number">(\d+)</g)].map((match) => match[1]), ["500", "10", "127"], "three cards show the real product quantities");
-assert.ok(includedSection.includes("Acesso digital • Pagamento único • Sem mensalidades.") && !includedSection.includes("não gostou"), "guarantee remains a purchase condition outside content cards");
-const protectedCtaTags = [
-  '<a class="button button-gold header-cta" data-checkout data-cta-location="header" href="__CHECKOUT_URL__">',
-  '<a class="button button-gold hero-cta" id="heroCheckout" data-copy-slot="heroCta" data-checkout data-cta-location="hero" href="__CHECKOUT_URL__">',
-  '<a class="button button-gold content-cta" data-checkout data-cta-location="conteudo" href="__CHECKOUT_URL__">',
-  '<a class="button button-gold" data-checkout data-cta-location="video-final" href="__CHECKOUT_URL__">',
-  '<a class="button button-gold offer-cta" data-copy-slot="offerCta" data-checkout data-cta-location="oferta" href="__CHECKOUT_URL__">',
-  '<a class="button button-gold closing-cta" data-checkout data-cta-location="fechamento" href="__CHECKOUT_URL__">',
-  '<a class="button button-gold" data-checkout data-cta-location="mobile" href="__CHECKOUT_URL__">',
-];
-for (const openingTag of protectedCtaTags) assert.equal(sourceHtml.split(openingTag).length - 1, 1, "existing checkout opening tag is preserved: " + openingTag);
-const originalVideo = '<video id="productVideo" controls preload="none" playsinline poster="/assets/mockup-produto.webp" aria-label="Apresentação dos 500 Mantras para Elevar Sua Energia, com duração aproximada de 40 segundos."><source src="/videos/500-mantras-apresentacao-mobile.mp4" type="video/mp4">Seu navegador não consegue reproduzir este vídeo. <a href="/videos/500-mantras-apresentacao-mobile.mp4">Abra a apresentação</a> ou continue pelo botão de compra.</video>';
-assert.ok(sourceHtml.includes(originalVideo.replace('poster="/assets/mockup-produto.webp"', 'poster="/assets/video-poster-500-mantras-v1.webp"')), "only the poster changes; original video URL, controls, player attributes and fallback are preserved");
-const sourceDialog = sourceHtml.match(/<dialog\b[^>]*id="consentPreferences"[\s\S]*?<\/dialog>/)?.[0];
-assert.ok(sourceDialog, "the original consent dialog is present");
-assert.equal(digest(sourceDialog), "3d1a5351d0d4b6bac3e6cc7423aeac24547faefd012fd57b20c0125cb31c7638", "the native consent dialog is preserved from the original page");
+assert.ok(config.content.gallery.every((item) => html.includes(item.thumbnail) || html.includes(item.src)), "the real PDF gallery is integrated into HTML");
+assert.ok(config.content.testimonials.every((item) => html.includes(item.thumbnail) || html.includes(item.src)), "the real WhatsApp carousel is integrated into HTML");
 
-assert.equal(config.checkoutUrl, expectedCheckout, "configured Cakto checkout URL");
-assert.equal(config.supportEmail, "empresakagency@gmail.com", "configured support email");
-assert.equal(config.price, 9.9, "ebook price configured");
-assert.equal(config.checkoutServiceFee, 0.99, "current Cakto service fee configured");
-assert.equal(config.checkoutTotal, 10.89, "current checkout total configured");
-assert.equal(config.checkoutTotalPaymentMethod, "PIX", "the configured total is tied to the verified payment method");
-assert.equal(config.checkoutCardInstallmentCount, 4, "current default card installment count configured");
-assert.equal(config.checkoutCardInstallmentAmount, 5.88, "current default card installment amount configured");
-assert.equal(config.checkoutCardTotal, 23.52, "current default card total configured");
-assert.equal(config.analytics.metaPixelId, "2429955871112248", "the production Meta Pixel ID is configured");
-assert.equal(checkoutLinks.length, 10, "seven original and three new CTAs share the delegated checkout mechanism");
-assert.deepEqual([...new Set(checkoutLinks)], [expectedCheckout], "every CTA should share the same checkout");
-assert.ok(!/__CHECKOUT_URL__|__SUPPORT_EMAIL__|__PRODUCT_PRICE__|__PRODUCT_PRICE_SCHEMA__|__CAKTO_SERVICE_FEE__|__CHECKOUT_TOTAL__|__CHECKOUT_CARD_INSTALLMENTS__|__CHECKOUT_CARD_TOTAL__/.test(html), "production HTML has no unresolved values");
-const ctaTexts = [...html.matchAll(/<a\b[^>]*\bdata-checkout\b[^>]*>([\s\S]*?)<\/a>/g)].map((match) => match[1].replace(/<[^>]+>/g, "").trim());
-const approvedCtaCopy = { header: "QUERO ACESSAR POR R$ 9,90", hero: "QUERO ACESSAR OS 500 MANTRAS", conteudo: "QUERO COMEÇAR MINHA JORNADA", oferta: "QUERO ACESSAR POR R$ 9,90", fechamento: "QUERO ACESSAR MEUS 500 MANTRAS POR R$ 9,90", "video-final": "QUERO MEUS 500 MANTRAS POR R$ 9,90", mobile: "QUERO MEUS 500 MANTRAS POR R$ 9,90", galeria: "QUERO EXPLORAR OS 500 MANTRAS", explorador: "QUERO TER ACESSO ÀS 10 JORNADAS", saida: "QUERO MEUS 500 MANTRAS POR R$ 9,90" };
-for (const [, location, text] of html.matchAll(/<a[^>]*data-cta-location="([^"]+)"[^>]*>([^<]+)<\/a>/g)) assert.equal(text, approvedCtaCopy[location], "approved strategic CTA: " + location);
-assert.equal(config.currency, "BRL", "product currency is preserved");
-for (const location of ["header", "hero", "conteudo", "video-final", "oferta", "fechamento"]) {
-  assert.equal((html.match(new RegExp('data-cta-location="' + location + '"', "g")) || []).length, 1, "checkout location appears once: " + location);
-}
-assert.match(html, /href="\/assets\/styles\.[a-f0-9]{12}\.css"/, "production HTML references a versioned stylesheet");
-assert.match(html, /src="\/assets\/app\.[a-f0-9]{12}\.js"/, "production HTML references a versioned application script");
-assert.match(html, /src="\/assets\/ui\.[a-f0-9]{12}\.js"/, "production HTML references a versioned presentation-only script");
-assert.ok(!/<p class="eyebrow[^\"]*"><span/i.test(html + await readOutput("privacy.html") + await readOutput("terms.html")), "decorative eyebrow strokes are removed throughout the site");
-assert.ok(!css.includes(".eyebrow > span"), "eyebrow styles no longer render decorative strokes");
-assert.ok(html.includes("id=\"inicio\"") && html.includes("id=\"conteudo-do-ebook\"") && html.includes("id=\"oferta\""));
-assert.ok(html.includes("id=\"duvidas\"") && html.includes("id=\"rodape\""));
-const sectionOrder = ["hero-title", "social-proof-rating", "seu-momento", "como-funciona", "dez-jornadas", "o-que-recebe", "conteudo-do-ebook", "por-dentro", "avaliacoes", "explore-jornadas", "oferta", "garantia", "duvidas", "closing-title"];
-let previousSection = -1;
-for (const id of sectionOrder) {
-  const sectionIndex = html.indexOf('id="' + id + '"');
-  assert.ok(sectionIndex > previousSection, "purchase journey retains logical section order: " + id);
-  previousSection = sectionIndex;
-}
-assert.ok(html.includes('preload="none" playsinline poster="/assets/video-poster-500-mantras-v1.webp"') && html.includes('type="video/mp4"'), "the player uses the official poster, native controls, and lazy video loading");
-assert.equal((html.match(/id="videoPlay"/g) || []).length, 1, "one existing play control drives the real player");
-assert.match(html, /<button class="video-play"[^>]*><img src="\/assets\/video-poster-500-mantras-v1\.webp"/, "the provided artwork is the accessible functional play layer");
-assert.equal((html.match(/<video\b/g) || []).length, 1, "the existing player is moved without duplication");
-assert.ok(html.includes('id="videoEndedCta"') && html.includes('data-cta-location="video-final"'), "the optional post-completion CTA is configured");
-assert.match(html, /<meta name="description" content="[^\"]*500 mantras[^\"]*10 temas[^\"]*127 páginas/, "metadata describes the actual product");
-assert.match(html, /<link rel="canonical" href="https:\/\/500mantras\.vercel\.app\/">/, "production canonical URL is preserved");
-assert.ok(html.includes("127 páginas") && html.includes("R$ 9,90"), "page count and price are visible");
-assert.ok(!/R\$\s*19,90/.test(html.replace(/<del>[^<]+<\/del>/g, "").replace(/<span class="visually-hidden">Oferta especial[^<]+<\/span>/, "")), "old price is limited to comparisons and their accessible description");
-assert.ok(html.includes("Pagamento único") && html.includes("Não há mensalidade"), "the payment model is disclosed clearly");
-assert.ok(/<details\b/.test(html.match(/<div class="faq-list">[\s\S]*?<\/section>/)?.[0] || ""), "FAQ uses the existing native accordion handler");
-const faq = html.match(/<div class="faq-list">([\s\S]*?)<\/div>/)?.[1];
-assert.ok(faq, "FAQ is present");
-assert.equal((faq.match(/<details\b/g) || []).length, 7, "FAQ has seven accessible questions including optional complements");
-assert.match(faq, /reembolso/i, "FAQ explains how the seven-day reimbursement works");
-assert.equal((html.match(/class="page-preview-static"/g) || []).length, 3, "three authentic PDF page previews are preserved");
-assert.ok(html.includes('id="imageLightbox"'), "real page images can be enlarged in a native dialog");
-const brandLogos = [...html.matchAll(/<img\b[^>]*class="brand-logo"[^>]*>/g)].map((match) => match[0]);
-assert.equal(brandLogos.length, 1, "header retains the approved transparent logo");
-assert.ok(html.includes('class="footer-wordmark"'), "deep purple footer uses the product name with accessible contrast");
-const offerList = html.match(/<ul class="offer-list"[^>]*>([\s\S]*?)<\/ul>/)?.[1];
-assert.ok(offerList, "offer contains a practical benefits list");
-assert.equal((offerList.match(/<li\b/g) || []).length, 5, "offer explains five compact product and purchase benefits");
-const offerText = offerList.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
-for (const fact of ["500", "10 jornadas temáticas", "127", "PDF", "Pagamento único"]) assert.ok(offerText.includes(fact), "offer explains the verified benefit: " + fact);
-assert.match(html, /<p class="offer-label">SEU MOMENTO DE AUTOCUIDADO COMEÇA AQUI<\/p>/, "commercial area retains a clear product label");
-const offerSummary = html.match(/<figure class="offer-art">([\s\S]*?)<\/figure>/)?.[1];
-assert.ok(offerSummary?.includes("oferta-mantras-acolhedor-v2-960.webp"), "offer uses the owner-supplied promotional art");
-for (const width of [480, 960]) await stat(path.join(distDir, `assets/oferta-mantras-acolhedor-v2-${width}.webp`));
-assert.equal((heroSection.match(/class="premium-hero-art"/g) || []).length, 1, "hero presents one real product composition");
-assert.ok(!heroSection.includes('id="productVideo"') && html.includes('id="por-dentro"'), "single original player moves to the inside-product preview");
-assert.ok(html.includes('<link rel="preload" as="image" href="/assets/hero-mantras-premium-v1-1200.webp"'), "hero mockup is prioritized");
-const trustArea = html.match(/<div class="offer-payment"[\s\S]*?<\/section>/)?.[0];
-const trustBand = html.match(/<div class="offer-trust-row">([\s\S]*?)<p class="offer-refund">/)?.[1];
-assert.ok(trustBand?.includes('class="price-guarantee"') && trustBand.includes('class="offer-payment"'), "guarantee and payment share a band before the refund explanation");
-assert.equal((html.match(/class="offer-payment"/g) || []).length, 1, "payment band is not duplicated");
-assert.ok(trustArea, "offer has a concise purchase-confidence area");
-for (const fact of ["Pagamento seguro pela Cakto."]) assert.ok(trustArea.includes(fact), "purchase-confidence area discloses: " + fact);
-for (const brand of ["Visa", "Mastercard", "Elo"]) assert.ok(trustArea.includes('alt="' + brand + '"'), "owner-confirmed payment brand is accessible: " + brand);
+// Existing measurement has one owner and still distinguishes checkout from purchase.
+assert.equal((app.match(/window\.fbq\("track",\s*"PageView"\)/g) || []).length, 1, "PageView has one guarded dispatch point");
+assert.equal((app.match(/window\.fbq\("track",\s*"InitiateCheckout",\s*payload\)/g) || []).length, 1, "InitiateCheckout has one dispatch point");
+assert.ok(app.includes("analyticsInitialized") && app.includes("offerViewed"), "existing initialization and offer deduplication remain");
+assert.ok(app.includes("mantras.analytics.consent.v2") && app.includes("record.expiresAt > now"), "optional tracking requires a valid, unexpired consent record");
+assert.ok(app.includes("clearOptionalCookies") && app.includes("reload"), "revocation removes accessible cookies and unloads SDKs");
+assert.ok(!/\b(?:fbq|gtag)\s*\(/.test(interactions), "presentation interactions do not introduce a second analytics owner");
+assert.ok(!/(?:fbq|gtag)\s*\(\s*["'](?:track(?:Custom)?|event)["']\s*,\s*["']purchase["']|track\s*\(\s*["']purchase["']/i.test(app + interactions), "checkout clicks are never represented as completed purchases");
+for (const eventName of ["view_offer", "begin_checkout", "video_start", "video_progress", "video_complete"]) assert.ok(app.includes('"' + eventName + '"'), "the existing event is preserved: " + eventName);
 
-const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1];
-const footer = html.match(/<footer\b[^>]*id="rodape"[\s\S]*?<\/footer>/)?.[0];
-assert.ok(main && footer, "main content and legal footer are present");
-assert.ok(!/Nenhum (?:item|produto|livro) f[ií]sico|n[aã]o (?:inclui|recebe)[^.]*f[ií]sic|Apresenta[cç][aã]o ilustrativa/i.test(main), "sales sections contain no repetitive no-physical-product notices");
-const formatNotice = "Produto digital em PDF. Não inclui versão física.";
-assert.equal(html.split(formatNotice).length - 1, 1, "the final digital-product notice is shown exactly once");
-assert.ok(footer.includes(formatNotice), "the sole physical-version notice belongs to the legal footer");
-assert.equal(html.split(config.supportEmail).length - 1, 2, "landing page has one visible support email and its mailto destination");
-assert.ok(!main.includes(config.supportEmail) && footer.includes("Dúvidas ou suporte:"), "contact appears visibly in the footer, outside the offer");
-assert.ok(!html.includes('class="themes-section"') && !html.includes('class="pause-section"'), "redundant sections are removed");
-assert.ok(html.includes("10 jornadas temáticas"), "the offer still identifies ten thematic journeys");
-for (const mantra of ["Eu mereço o mesmo cuidado que ofereço às pessoas que amo.", "Meu valor não diminui nos dias em que produzo menos.", "Posso reconhecer minhas imperfeições sem deixar de me respeitar."]) {
-  assert.ok(html.includes(mantra), "verified text from the authentic PDF preview is present: " + mantra);
-}
-assert.equal((html.match(/data-cta-location="conteudo"/g) || []).length, 1, "the content panels have one CTA");
-assert.ok(app.includes("matchMedia(\"(prefers-reduced-motion: reduce)\")") && app.includes("new IntersectionObserver"), "panel reveals respect reduced-motion settings and use intersection observation");
-assert.ok(!/\.reveal-ready\s+\.reveal\s*\{[^}]*opacity:\s*0(?:[;\s}]|$)/.test(css), "content is not hidden while waiting for an observation callback");
-assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/, "reduced-motion visitors have a dedicated stylesheet override");
-assert.ok(!/<track\b/i.test(html), "no unverified or unsynchronized subtitles are declared");
-assert.ok(html.includes("O reembolso é integral, mesmo após abrir ou baixar o e-book."), "compact guarantee preserves full refund after opening the material");
-assert.ok(html.replace(/<[^>]+>/g, "").includes("Direito de arrependimento previsto no artigo 49 do Código de Defesa do Consumidor."), "the offer preserves the right of withdrawal");
-assert.ok(!html.includes('class="guarantee-panel"') && !html.includes('class="purchase-trust"'), "duplicated guarantee and payment sections are removed");
-const guaranteeImages = [...html.matchAll(/<img\b[^>]*src="\/assets\/selo-garantia-premium-7-dias-v1.webp"[^>]*>/g)].map((match) => match[0]);
-assert.equal(guaranteeImages.length, 2, "offer and guarantee section reuse the same official premium seal");
-for (const image of guaranteeImages) {
-  assert.ok(image.includes('alt="Selo de garantia de 7 dias"'), "the guarantee has the requested accessible description");
-  assert.ok(image.includes('width="640" height="640"') && image.includes('loading="lazy"'), "the guarantee reserves square proportions and loads lazily");
-}
-assert.ok(!/garantia-7-dias(?:-compacta|-medalhao)?\.svg/.test(html), "no previous guarantee artwork is referenced");
-for (const oldAsset of ["garantia-7-dias.svg", "garantia-7-dias-medalhao.svg", "garantia-7-dias-compacta.svg"]) {
-  await assert.rejects(stat(path.join(distDir, "assets", oldAsset)), { code: "ENOENT" }, "unused old guarantee artwork does not ship");
-}
-assert.equal((html.match(/<del>R\$ 19,90<\/del>/g) || []).length, 2, "only hero and offer show the confirmed prior price");
-const reviewSource = JSON.parse(await readFile(path.join(rootDir, "docs/reader-reviews.json"), "utf8"));
-const reviews = [...html.matchAll(/<article class="review-card" data-rating="(\d)"[\s\S]*?<\/article>/g)];
-assert.equal(reviews.length, 8, "all eight owner-provided reviews are visible in HTML");
-assert.equal(reviewSource.reviews.length, reviews.length);
-let starsTotal = 0;
-for (const [index, match] of reviews.entries()) {
-  const expected = reviewSource.reviews[index];
-  assert.ok(match[0].includes(expected.name), "review author is unchanged: " + expected.name);
-  assert.equal(match[0].match(/<blockquote><p>([\s\S]*?)<\/p><\/blockquote>/)?.[1], expected.text, "review text is reproduced verbatim");
-  assert.equal(Number(match[1]), expected.rating);
-  assert.equal((match[0].match(/class="star-filled"/g) || []).length, expected.rating, "individual star fills match the supplied rating");
-  assert.equal((match[0].match(/class="star-outline"/g) || []).length, 5 - expected.rating);
-  starsTotal += expected.rating;
-}
-assert.equal(starsTotal, 38);
-assert.equal(starsTotal / reviews.length, 4.75);
-assert.equal(Math.round(starsTotal / reviews.length * 10) / 10, 4.8);
-assert.ok(!html.includes('data-rating-exact=') && html.includes("Conheça as experiências de quem já utiliza o material."), "aggregate rating stays neutral until evidence is approved for publication");
-assert.ok(!html.includes("Com base em 8 avaliações de compradores."), "the requested review-count sentence is removed");
-assert.ok(!html.includes("Compra verificada") && !html.includes("4,9"), "reviews do not invent verification or inflate the score");
-const reviewScript = html.match(/src="\/(assets\/reviews-carousel\.[a-f0-9]{12}\.js)"/)?.[1];
-assert.ok(reviewScript, "isolated testimonial interactions use a versioned asset");
-await stat(path.join(distDir, reviewScript));
-for (const position of ["hero", "included", "offer", "closing"]) {
-  assert.equal((html.match(new RegExp('data-guarantee="' + position + '"', "g")) || []).length, 1, "guarantee appears at the approved position: " + position);
-}
-assert.ok(!/\[PREENCHER|DEPOIMENTO REAL|FOTO REAL/.test(html), "unverified author/testimonial placeholders are not public");
-assert.ok(!/<(?:em|i)(?:\s|>)/.test(html) && !/\bitalic\b/.test(css), "the redesigned sales page and stylesheet contain no italics");
-assert.ok(/font-display:\s*swap/.test(css), "web fonts let text render immediately");
-assert.ok(html.includes('<a href="/privacidade">Política de privacidade</a>'), "privacy preferences link to the policy");
-assert.ok(html.includes('href="/privacidade"') && html.includes('href="/termos"'), "legal links are preserved");
-for (const [, image] of html.matchAll(/(<img\b[^>]+>)/g)) {
-  assert.match(image, /\bwidth="\d+"/, "images reserve intrinsic width");
-  assert.match(image, /\bheight="\d+"/, "images reserve intrinsic height");
-  assert.match(image, /\balt="[^\"]+"/, "product images have alternative text");
-}
-assert.ok(!/<video\b[^>]*\bautoplay/.test(html), "product video does not autoplay");
-assert.ok(app.includes('"mantras.analytics.consent.v2"') && app.includes("record?.version === 2"), "consent is versioned and validated");
-assert.ok(app.includes("record.expiresAt > now") && app.includes("record.updatedAt <= now"), "saved consent requires valid timestamps");
-assert.ok(app.includes("180 * 24 * 60 * 60 * 1000"), "preferences have a bounded lifetime");
-assert.ok(app.includes('querySelectorAll("[data-consent-preferences]")'), "preferences are accessible through explicit controls");
-assert.equal((app.match(/\.showModal\(\)/g) || []).length, 1, "privacy preferences have one explicit opening point");
-assert.ok(!/consentBanner|consent-banner/.test(app), "legacy automatic banner logic is removed");
-assert.ok(app.includes("clearOptionalCookies()") && app.includes("window.location.reload()"), "revocation removes accessible optional cookies and unloads vendor scripts");
-assert.deepEqual(vercelConfig.rewrites, [
-  { source: "/privacidade", destination: "/privacy" },
-  { source: "/termos", destination: "/terms" },
-], "Vercel serves the Portuguese privacy and terms routes");
-assert.ok(app.includes('"begin_checkout"') && app.includes('"view_offer"'), "checkout and offer events remain configured");
-assert.ok(app.includes('track("video_start"') && app.includes('track("video_progress"') && app.includes('track("video_complete"'), "video start, progress, and completion analytics use the existing consent-aware tracking");
-assert.ok(app.includes("analyticsInitialized") && app.includes("offerViewed"), "analytics and offer events are guarded against duplicates");
-assert.ok(app.includes('typeof window.fbq !== "function"') && app.includes("window._fbq = fbq") && app.includes("fbq.push = fbq"), "Meta Pixel uses a single compatible loader instance");
-assert.ok(app.includes('window.fbq("track", "PageView")'), "Meta Pixel sends the standard PageView event after consent");
-assert.ok(app.includes('window.fbq("track", "InitiateCheckout", payload)'), "Cakto CTA clicks send the standard Meta InitiateCheckout event");
-assert.equal((app.match(/window\.fbq\("track", "PageView"\)/g) || []).length, 1, "PageView has one guarded dispatch point");
-assert.equal((app.match(/window\.fbq\("track", "InitiateCheckout", payload\)/g) || []).length, 1, "InitiateCheckout has one delegated dispatch point");
-assert.ok(app.includes('window.fbq("consent", allowed ? "grant" : "revoke")'), "Meta consent can be changed after the initial choice");
-assert.ok(app.includes('window.gtag("consent", "update"'), "GA consent can be changed after the initial choice");
-assert.ok(!app.includes('window.fbq("trackCustom", "CheckoutClick"'), "the legacy custom checkout event is not sent alongside InitiateCheckout");
-assert.ok(!/(?:fbq|gtag)\s*\(\s*["'](?:track(?:Custom)?|event)["']\s*,\s*["']purchase["']|track\s*\(\s*["']purchase["']/i.test(app), "checkout clicks must not be reported as purchases");
-assert.ok(app.includes("value: Number(config.price || 19.9)"), "checkout-click analytics reports product price, not the PIX total or a purchase");
-assert.ok(app.includes("data-copy-slot") && app.includes("lp_variant"), "copy test variants are configurable and attributed");
-assert.equal(config.experiment.enabled, false, "copy experiment stays off until campaign setup");
-assert.equal(config.experiment.variants["variante-b"].heroCta, "QUERO ACESSAR OS 500 MANTRAS", "CTA label remains standardized in hero copy variants");
-assert.equal(config.experiment.variants["variante-b"].offerCta, "QUERO ACESSAR OS 500 MANTRAS", "CTA label remains standardized in offer copy variants");
-
-const schemaMatch = html.match(/<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/);
-assert.ok(schemaMatch, "Product structured data is required");
-const product = JSON.parse(schemaMatch[1]);
-assert.equal(product.name, "500 Mantras para Elevar Sua Energia");
-assert.equal(product.offers.price, "9.90");
+// SEO, legal navigation, accessible semantics and production resource integrity.
+const schema = html.match(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/)?.[1];
+assert.ok(schema, "product structured data is present");
+const product = JSON.parse(schema);
+assert.equal(product.name, config.productName);
+assert.equal(Number(product.offers.price), config.price);
 assert.equal(product.offers.priceCurrency, "BRL");
-assert.equal(product.offers.url, expectedCheckout, "Product schema retains the Cakto checkout");
-assert.equal(html.match(/<meta property="product:price:amount" content="([^"]+)"/)?.[1], "9.90", "social product price matches schema and configuration");
-
-for (const asset of [
-  ...brandLogos.map((tag) => tag.match(/src="\/([^"]+)"/)?.[1]),
-  "assets/video-poster-500-mantras-v1.webp", "assets/hero-mantras-premium-v1-720.webp", "assets/hero-mantras-premium-v1-1200.webp", "assets/selo-garantia-premium-7-dias-v1.webp", "assets/payment-visa-aligned-v1.webp", "assets/payment-mastercard.svg", "assets/payment-elo.svg", "assets/mockup-produto.webp", "assets/preview-autocuidado.webp",
-  "assets/preview-abundancia.webp", "assets/preview-gratidao.webp", "assets/simbolo-celestial.svg",
-  ...[...html.matchAll(/(?:href|src)="\/(assets\/(?:styles\.[a-f0-9]{12}\.css|(?:app|ui)\.[a-f0-9]{12}\.js))"/g)].map((match) => match[1]),
-  ...[...css.matchAll(/url\(["']?(\/assets\/[^)'"\s]+)["']?\)/g)].map((match) => match[1].slice(1)),
-  "videos/500-mantras-apresentacao-mobile.mp4",
-  "styles.css", "app.js", "privacy.html", "terms.html", "robots.txt",
-]) {
-  const info = await stat(path.join(distDir, asset));
-  assert.ok(info.isFile() && info.size > 0, "production asset exists: " + asset);
-}
-await assert.rejects(stat(path.join(distDir, "assets/mockup-completo.webp")), { code: "ENOENT" }, "unused promo artwork should not ship");
-await assert.rejects(stat(path.join(distDir, "videos/500-mantras-apresentacao.mp4")), { code: "ENOENT" }, "the heavy original video stays in Git, outside the production build");
-
-const privacy = await readOutput("privacy.html");
-const terms = await readOutput("terms.html");
-assert.ok(!privacy.includes(themeAsset) && !terms.includes(themeAsset), "landing palette does not change legal pages");
-assert.ok(privacy.includes("empresakagency@gmail.com"), "privacy page includes configured support");
-assert.ok(privacy.includes("só é carregado após você aceitar o rastreamento opcional"), "privacy disclosure documents consent-gated tracking");
-assert.ok(privacy.includes("180 dias") && privacy.includes("revogar"), "privacy disclosure describes expiration and revision");
-assert.ok(terms.includes("empresakagency@gmail.com"), "terms page includes configured support");
-assert.ok(terms.includes("R$ 0,99") && terms.includes("R$ 10,89"), "terms disclose the configured checkout fee and derived PIX total");
-for (const [name, page] of [["index", html], ["privacy", privacy], ["terms", terms]]) {
-  assert.ok(!/__CHECKOUT_URL__|__SUPPORT_EMAIL__|__PRODUCT_PRICE__|__PRODUCT_PRICE_SCHEMA__|__CAKTO_SERVICE_FEE__|__CHECKOUT_TOTAL__|__CHECKOUT_CARD_INSTALLMENTS__|__CHECKOUT_CARD_TOTAL__/.test(page), name + " has no unresolved build values");
-  assert.match(page, /<html lang="pt-BR">/, name + " declares its language");
+assert.equal(product.offers.url, expectedCheckout);
+assert.ok(!product.aggregateRating, "structured data has no fabricated review aggregate");
+assert.match(html, /<link rel="canonical" href="https:\/\/500mantras\.vercel\.app\/">/);
+assert.match(html, /<meta name="description" content="[^\"]+"/);
+assert.equal(Number(html.match(/<meta property="product:price:amount" content="([^\"]+)"/)?.[1]), config.price);
+assert.deepEqual(vercel.rewrites, [{ source: "/privacidade", destination: "/privacy" }, { source: "/termos", destination: "/terms" }], "Portuguese legal routes are preserved");
+for (const [name, page] of [["index", html], ["privacy", await output("privacy.html")], ["terms", await output("terms.html")]]) {
+  assert.ok(!/__[A-Z][A-Z0-9_]+__/.test(page), name + " contains no unresolved template values");
+  assert.match(page, /<html lang="pt-BR">/);
   assert.equal((page.match(/<h1\b/g) || []).length, 1, name + " has one primary heading");
-  assert.match(page, /href="\/assets\/styles\.[a-f0-9]{12}\.css"/, name + " references versioned CSS");
-  assert.match(page, /<script defer src="\/runtime-config\.js"><\/script>/, name + " defers runtime configuration");
-  assert.match(page, /<script defer src="\/assets\/app\.[a-f0-9]{12}\.js"><\/script>/, name + " defers versioned JavaScript");
-  assert.ok(!/consentBanner|consent-banner/.test(page), name + " has no intrusive cookie banner");
-  const dialogOpening = page.match(/<dialog\b[^>]*\bid="consentPreferences"[^>]*>/)?.[0];
-  assert.ok(dialogOpening, name + " provides privacy preferences in a native dialog");
-  assert.ok(!/\sopen(?:[\s=>])/.test(dialogOpening), name + " does not open privacy preferences automatically");
-  assert.match(dialogOpening, /aria-labelledby="consent-title"/, name + " labels its privacy dialog");
-  assert.match(dialogOpening, /aria-describedby="consent-description"/, name + " describes its privacy dialog");
-  assert.match(page, /data-consent-preferences/, name + " provides an explicit preferences control");
-  assert.match(page, /<button\b[^>]*\bdata-consent="accepted"[^>]*>[^<]+<\/button>/, name + " provides explicit acceptance");
-  assert.match(page, /<button\b[^>]*\bdata-consent="denied"[^>]*>[^<]+<\/button>/, name + " provides explicit rejection");
-  assert.match(page, /data-consent-close/, name + " allows closing preferences without choosing");
   const ids = [...page.matchAll(/\bid="([^\"]+)"/g)].map((match) => match[1]);
   assert.equal(ids.length, new Set(ids).size, name + " has no duplicated IDs");
-  for (const [, references] of page.matchAll(/\baria-(?:labelledby|describedby)="([^\"]+)"/g)) {
-    for (const reference of references.split(/\s+/)) assert.ok(ids.includes(reference), name + " has a valid ARIA reference: " + reference);
+  for (const [, references] of page.matchAll(/\baria-(?:labelledby|describedby)="([^\"]+)"/g)) for (const id of references.split(/\s+/)) assert.ok(ids.includes(id), name + " has a valid ARIA reference: " + id);
+  for (const [, id] of page.matchAll(/\bhref="#([^\"]+)"/g)) assert.ok(ids.includes(id), name + " has a valid fragment target: " + id);
+  assert.ok(!/consentBanner|consent-banner/.test(page), name + " does not mount the old cookie banner");
+  const dialog = page.match(/<dialog\b[^>]*\bid="consentPreferences"[^>]*>/)?.[0];
+  assert.ok(dialog && !/\sopen(?:[\s=>])/.test(dialog), name + " keeps privacy choices closed until explicitly requested");
+  for (const action of ["data-consent-preferences", 'data-consent="accepted"', 'data-consent="denied"', "data-consent-close"]) assert.ok(page.includes(action), name + " retains its explicit privacy control: " + action);
+  assert.ok(page.includes(config.supportEmail), name + " preserves support contact");
+  assert.ok(!/<(?:script|img)\b[^>]*src="https?:\/\/(?:connect\.facebook\.net|www\.facebook\.com\/tr|www\.googletagmanager\.com)/.test(page), name + " loads no tracking directly in HTML before consent");
+  for (const [image] of [...page.matchAll(/<img\b[^>]*>/g)]) {
+    assert.ok(Number(attr(image, "width")) > 0 && Number(attr(image, "height")) > 0, name + " reserves image dimensions");
+    assert.notEqual(attr(image, "alt"), undefined, name + " declares alternative text for each image");
   }
-  for (const [, target] of page.matchAll(/\bhref="#([^\"]+)"/g)) assert.ok(ids.includes(target), name + " has a valid fragment link: " + target);
-  assert.ok(!/<(?:script|img)\b[^>]*(?:src="https?:\/\/(?:connect\.facebook\.net|www\.facebook\.com\/tr|www\.googletagmanager\.com))/.test(page), name + " loads no tracking directly in HTML before consent");
 }
+assert.ok(html.includes('href="/privacidade"') && html.includes('href="/termos"'), "legal links remain available");
+const video = html.match(/<video\b[^>]*>/)?.[0];
+assert.ok(video && /\bcontrols\b/.test(video) && /\bplaysinline\b/.test(video) && /\bpreload="none"/.test(video) && !/\bautoplay\b/.test(video), "the original video remains lazy, inline and user controlled");
+assert.equal((html.match(/<video\b/g) || []).length, 1, "the presentation video is not duplicated");
+for (const [, asset] of [...html.matchAll(/(?:src|href|poster)="(\/(?:assets|videos)\/[^\"]+)"/g), ...css.matchAll(/url\(["']?(\/assets\/[^)'"\s]+)["']?\)/g)]) await exists(asset);
+await exists("robots.txt");
+async function filesIn(dir) {
+  const entries = await readdir(dir, { withFileTypes: true });
+  return (await Promise.all(entries.map((entry) => entry.isDirectory() ? filesIn(path.join(dir, entry.name)) : path.join(dir, entry.name)))).flat();
+}
+const publishedFiles = await filesIn(distDir);
+assert.ok(!publishedFiles.some((file) => /\.pdf$/i.test(file)), "the paid PDF is never distributed with the sales page");
+assert.ok(!publishedFiles.some((file) => path.basename(file) === "500-mantras-apresentacao.mp4"), "the heavy source video stays outside the production build");
 
-const contentContext = { window: {} };
-vm.runInNewContext(await readOutput("assets/premium-content-v1.js"), contentContext);
-const editorial = contentContext.window.MANTRAS_CONTENT;
-assert.equal(editorial.rating.target, 4.8);
-assert.equal(editorial.rating.publish, false);
-assert.equal(editorial.rating.count, null);
-assert.equal(editorial.rating.source, "");
-assert.equal(editorial.rating.avatars.length, 0);
-assert.equal(editorial.whatsapp.length, 0);
-assert.equal(editorial.promotion.endsAt, null, "no countdown without a genuine campaign deadline");
-const policy = contentContext.window.MANTRAS_CONTENT_POLICY;
-assert.equal(policy.ratingIsPublishable(editorial.rating), false);
-for (const data of [
-  { target: 4.8, source: "", publish: true },
-  { target: 4.8, source: "   ", publish: true },
-  { target: 5.1, source: "Approved evidence", publish: true },
-  { target: 4.8, source: "Approved evidence", publish: false },
-]) assert.equal(policy.ratingIsPublishable(data), false, "unapproved or invalid aggregate cannot be published");
-assert.equal(policy.ratingIsPublishable({ target: 4.8, source: "Approved evidence", publish: true }), true);
-const screenshotFixture = { src: "/assets/test-only.webp", alt: "Technical fixture", authorized: true, privacyReviewed: true };
-for (const invalid of [
-  { ...screenshotFixture, authorized: false }, { ...screenshotFixture, privacyReviewed: false },
-  { ...screenshotFixture, alt: " " }, { ...screenshotFixture, src: "https://example.com/private.png" },
-  { ...screenshotFixture, src: "/assets/../private.png" },
-]) assert.equal(policy.approvedTestimonials([invalid]).length, 0, "unauthorized or unredacted screenshots never reach visitors");
-assert.equal(policy.approvedTestimonials([screenshotFixture]).length, 1);
-assert.equal(policy.approvedAvatars([{ ...screenshotFixture, authorized: false }]).length, 0);
-assert.equal(editorial.journeys.length, 3, "only documented excerpts are selectable until the full PDF is supplied");
-for (const journey of editorial.journeys) assert.ok(html.includes(journey.text), "explorer uses a genuine message from existing page samples");
-assert.match(html, /id="whatsapp-testimonials"[^>]*hidden/, "empty WhatsApp section does not display blank cards");
-const interactionSource = await readOutput("assets/premium-interactions-v1.js");
-for (const id of ["journeySelect", "journeyMessage", "journeySource", "imageLightbox", "exitOffer", "promotionCountdown"]) {
-  assert.ok(html.includes('id="' + id + '"'), "interactive component has its required DOM target: " + id);
-}
-for (const attribute of ["data-toggle-journeys", "data-close-lightbox", "data-open-exit", "data-close-exit"]) {
-  assert.ok(html.includes(attribute), "interactive component has its accessible control: " + attribute);
-}
-assert.ok(!/fbq|gtag|track\(/.test(interactionSource), "presentation interactions add no independent analytics dispatch");
-for (const file of ["assets/premium-interactions-v1.js", "assets/premium-content-v1.js"]) new vm.Script(await readOutput(file), { filename: file });
-console.log("Smoke test OK: protected integrations, 10 checkout CTAs, 8 authentic reviews, 3 real samples, 7 native FAQs, safe editorial defaults, price, assets and legal pages verified.");
+console.log("Smoke test OK: single architecture, real PDF samples and WhatsApp assets, configured campaign/popup, confirmed offer, seven-day warranty, consent-aware Meta events, SEO, legal pages and production resources verified.");

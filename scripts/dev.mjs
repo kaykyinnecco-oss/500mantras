@@ -3,6 +3,7 @@ import http from "node:http";
 import path from "node:path";
 import { getSiteConfig, rootDir, safeJson } from "./config.mjs";
 import { serveFile } from "./http-file.mjs";
+import { renderContent } from "./render-content.mjs";
 
 const site = await getSiteConfig();
 const port = Number(process.env.PORT || 4173);
@@ -11,7 +12,7 @@ const formatAmount = (amount) => new Intl.NumberFormat("pt-BR", {
   maximumFractionDigits: 2,
 }).format(amount);
 const formatSchemaAmount = (amount) => Number(amount).toFixed(2);
-const pageFiles = new Map([["/", "index.html"], ["/privacidade", "privacy.html"], ["/termos", "terms.html"], ["/styles.css", "styles.css"], ["/app.js", "app.js"], ["/ui.js", "ui.js"], ["/robots.txt", "robots.txt"]]);
+const pageFiles = new Map([["/", "index.html"], ["/privacidade", "privacy.html"], ["/termos", "terms.html"], ["/styles.css", "styles.css"], ["/app.js", "app.js"], ["/interactions.js", "interactions.js"], ["/robots.txt", "robots.txt"]]);
 const mimeTypes = new Map([
   [".html", "text/html; charset=utf-8"], [".css", "text/css; charset=utf-8"],
   [".js", "text/javascript; charset=utf-8"], [".json", "application/json; charset=utf-8"],
@@ -42,16 +43,14 @@ const server = http.createServer(async (request, response) => {
     if (!fileInfo.isFile()) throw new Error("Not a file");
     if (path.extname(fullPath) === ".html") {
       response.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
-      let html = await readFile(fullPath, "utf8");
+      let html = renderContent(await readFile(fullPath, "utf8"), site);
       html = html
         .replaceAll("__CHECKOUT_URL__", site.checkoutUrl)
         .replaceAll("__SUPPORT_EMAIL__", site.supportEmail)
         .replaceAll("__PRODUCT_PRICE__", formatAmount(site.price))
         .replaceAll("__PRODUCT_PRICE_SCHEMA__", formatSchemaAmount(site.price))
         .replaceAll("__CAKTO_SERVICE_FEE__", formatAmount(site.checkoutServiceFee))
-        .replaceAll("__CHECKOUT_TOTAL__", formatAmount(site.checkoutTotal))
-        .replaceAll("__CHECKOUT_CARD_INSTALLMENTS__", `${site.checkoutCardInstallmentCount} × R$ ${formatAmount(site.checkoutCardInstallmentAmount)}`)
-        .replaceAll("__CHECKOUT_CARD_TOTAL__", formatAmount(site.checkoutCardTotal));
+        .replaceAll("__CHECKOUT_TOTAL__", formatAmount(site.checkoutTotal));
       response.end(html);
       return;
     }

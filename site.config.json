@@ -6,9 +6,6 @@
   "checkoutServiceFee": "0.99",
   "checkoutTotal": "10.89",
   "checkoutTotalPaymentMethod": "PIX",
-  "checkoutCardInstallmentCount": 4,
-  "checkoutCardInstallmentAmount": "5.88",
-  "checkoutCardTotal": "23.52",
   "currency": "BRL",
   "analytics": {
     "metaPixelId": "2429955871112248",
@@ -26,5 +23,30 @@
         "offerCta": "QUERO ACESSAR OS 500 MANTRAS"
       }
     }
+  },
+  "campaign": {
+    "endsAt": null,
+    "message": "500 Mantras · Edição Premium",
+    "expiredMessage": "500 Mantras · Consulte a oferta disponível"
+  },
+  "popup": {
+    "enabled": true,
+    "initialDelayMs": 6000,
+    "repeatDelayMs": 4000,
+    "exitIntentEnabled": true,
+    "repeatEnabled": true,
+    "maxDisplaysPerSession": 3
+  },
+  "guarantee": {
+    "confirmed": true,
+    "days": 7,
+    "source": "Garantia confirmada pelo proprietário em 28/10/2026."
+  },
+  "socialProof": {
+    "avatars": [],
+    "rating": null,
+    "ratingCount": null,
+    "verified": false,
+    "text": "Experiências compartilhadas por leitores"
   }
 }

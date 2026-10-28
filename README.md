@@ -1,10 +1,10 @@
 # 500 Mantras para Elevar Sua Energia
 
-Landing page mobile-first em HTML, CSS e JavaScript nativos, sem dependências de front-end. Identidade roxo profundo, dourado e creme; logo, mockup e páginas internas originais preservados.
+Landing page premium em HTML, CSS e JavaScript nativos. Uma única arquitetura visual e componentes alimentados por conteúdo real do produto.
 
-## Executar e validar
+## Executar
 
-Requer Node.js 20 ou superior. Os scripts também podem ser executados diretamente com Node:
+Requer Node.js 20+.
 
 ```sh
 npm run dev
@@ -13,56 +13,80 @@ npm test
 npm run preview
 ```
 
-Desenvolvimento: http://localhost:4173. Prévia do build: http://localhost:4174. Os dois servidores locais suportam HEAD e requisições de intervalo de bytes para iniciar e buscar trechos do MP4, inclusive no WebKit.
+Desenvolvimento: http://localhost:4173 . Prévia do build: http://localhost:4174 . Alternativas sem npm: `node scripts/dev.mjs`, `node scripts/build.mjs`, `node scripts/smoke-test.mjs`, `node scripts/preview.mjs`.
 
-Não há lint configurado. A sintaxe pode ser validada com `node --check app.js` e `node --check scripts/arquivo.mjs`.
+Não há lint configurado. Validar sintaxe com `node --check app.js`, `node --check interactions.js` e os arquivos `.mjs` em scripts.
 
-## Jornada e apresentação
+## Arquitetura
 
-- Hero curto: produto digital, 500 mantras, 10 temas, 127 páginas, preço e compra.
-- Identificação com a rotina e três formas práticas de usar o PDF.
-- Três páginas reais: galeria nativa por deslize no celular, composição escalonada no desktop, sem modal de ampliação. Funciona por toque e teclado.
-- Benefícios breves, amostra textual autêntica e os dez temas originais.
-- Apresentação em vídeo sob demanda, com controles nativos e reprodução inline.
-- Vídeo H.264/AAC 720p com faststart: 3,95 MB, redução de 95,4% em relação aos 85,77 MB originais. O original permanece no repositório; o build publica apenas a versão otimizada.
-- Oferta em áreas de cores distintas: produto e números; benefícios; preço, pagamento único e CTA. Taxas e total são esclarecidos antes da confirmação no checkout.
-- FAQ nativo compacto e chamada final.
+- `index.html`: estrutura semântica única, com um Hero e um encerramento institucional.
+- `styles.css`: única folha, roxo/amethyst/champagne/off-white, CTAs verdes; fontes locais Lora Semibold e Source Sans 3.
+- `app.js`: integrações existentes: checkout, UTMs, consentimento, Pixel, FAQ e vídeo.
+- `interactions.js`: cronômetro, pop-up, galeria/lightbox, carrosséis, pausa das jornadas, explorador e composição de prova social.
+- `scripts/render-content.mjs`: resolve os componentes editoriais no build e no servidor de desenvolvimento. O conteúdo principal continua disponível sem JavaScript.
+- `data/product-content.json`: títulos originais das 10 jornadas,30 mantras de amostra com fonte,7 prévias e 5 prints fornecidos.
+- `site.config.json`: configuração comercial, métricas, prazo de campanha e frequência da oferta.
 
-A página usa fontes do sistema, imagens WebP com dimensões reservadas, CSS/JS com hash de conteúdo e carregamento adiado de scripts. Revelações usam apenas opacity/transform e respeitam prefers-reduced-motion. Não há movimento contínuo ou CTA fixo cobrindo a leitura.
+CSS, app e interactions usam nomes com hash de conteúdo na produção. As antigas folhas de tema e scripts de apresentação foram removidos, inclusive ui.js, a barra móvel antiga e o carrossel de reviews anterior. Detalhes da auditoria em `docs/premium-review-2026-10-28.md`.
 
-## Checkout e suporte
+## Configuração comercial
 
-Preço, checkout Cakto e contato ficam em `site.config.json`. Os valores comerciais existentes foram preservados. O build aceita estes overrides:
+O checkout original permanece `https://pay.cakto.com.br/323 zgdr_1243414`, preçoR$ 9,90 e Meta Pixel 2429955871112248. O checkout é validado como HTTPS em domínio oficial Cakto. O suporte, preço, taxa e snapshotPIX ficam na configuração.
 
-- NEXT_PUBLIC_CAKTO_CHECKOUT_URL
-- NEXT_PUBLIC_SUPPORT_EMAIL
-- NEXT_PUBLIC_META_PIXEL_ID
-- NEXT_PUBLIC_GA4_MEASUREMENT_ID
+Os overrides de build existentes continuam disponíveis: `NEXT_PUBLIC_CAKTO_CHECKOUT_URL`, `NEXT_PUBLIC_SUPPORT_EMAIL`, `NEXT_PUBLIC_META_PIXEL_ID`, `NEXT_PUBLIC_GA 4_MEASUREMENT_ID`.
 
-O domínio do checkout precisa ser cakto.com.br ou um subdomínio oficial com HTTPS. Os sete CTAs usam o mesmo checkout e encaminham src, sck e UTMs da visita. Nenhum dado de pagamento é coletado nesta página.
+As parcelas antigas de outro preço foram removidas da configuração. A página não anuncia parcelamento fixo: taxas e total são apresentados no checkout. Os três complementos são opcionais, cobrados separadamente e explicitamente fora do e-book principal.
 
-## Privacidade e métricas
+A garantia de 7 dias foi confirmada pelo proprietário. `guarantee.confirmed` controla a publicação do componente de garantia, com duração em `guarantee.days`.
 
-O controle Preferências de cookies fica no rodapé e nas páginas legais. O diálogo só abre mediante ação do visitante. Sem escolha, com rejeição ou com registro inválido/expirado, nenhum SDK opcional é carregado. Fechar o diálogo não autoriza rastreamento.
+## Campanha e pop-up
 
-Uma escolha explícita salva um registro versionado em `mantras.analytics.consent.v2` por até 180 dias. Aceites legados sem data não habilitam tracking. Revogar bloqueia novos eventos, revoga consentimento nos SDKs já carregados, remove cookies opcionais acessíveis no domínio e recarrega para descarregar seus listeners. A preferência também se sincroniza entre abas. Sem armazenamento, a escolha vale só na página aberta.
+`campaign.endsAt` é **null** por ausência de um prazo real informado. A faixa fica visível com mensagem neutra e preço; não há contagem regressiva inventada. Para uma campanha real, informe uma dataISO absoluta com timezone (por exemplo, o formato `AAAA-MM-DDTHH:mm:ss-03:00`). `message` e `expiredMessage` controlam os textos. O relógio não reinicia por visitante e deixa de anunciar prazo quando expira.
 
-Meta Pixel público: **2429955871112248**. Após consentimento válido, preservam-se PageView, OfferViewed, InitiateCheckout e eventos de vídeo. A inicialização e a visualização da oferta têm proteção contra duplicação. O clique informa o preço do e-book, R$ 9,90, e não é enviado como Purchase. Compras confirmadas devem continuar sendo medidas pela integração real da Cakto.
-
-O experimento de copy permanece desativado. Sua configuração opcional está em `site.config.json`; uma variante só é aplicada e atribuída quando `experiment.enabled` é true e lp_variant corresponde a uma variante conhecida.
-
-## Testes de navegador
-
-```sh
-node scripts/browser-test.mjs
+```json
+{
+  "popup": {
+    "enabled": true,
+    "initialDelayMs": 6000,
+    "repeatDelayMs": 4000,
+    "exitIntentEnabled": true,
+    "repeatEnabled": true,
+    "maxDisplaysPerSession": 3
+  }
+}
 ```
 
-Requer Playwright disponível no ambiente de QA e a prévia em execução. Nenhuma biblioteca de teste é enviada no build. É possível informar `PLAYWRIGHT_MODULE_PATH`, `CHROMIUM_EXECUTABLE_PATH`, `BASE_URL` e `QA_OUTPUT_DIR`. Use `QA_BROWSER=webkit` para testar o motor do Safari, com o WebKit oficial instalado pelo Playwright em `PLAYWRIGHT_BROWSERS_PATH` (por padrão, `node_modules/.cache/ms-playwright`).
+O tempo conta com a aba visível e sem outro diálogo ativo. Fechar inicia o próximo intervalo. Há um único temporizador, limite por sessão, suporte a Escape e retorno de foco. Clique no checkout suspende a oferta durante a navegação; pagehide cancela timers e pageshow restaura o estado. Desative `repeatEnabled` ou ajuste o limite para alterar a frequência. Nenhum desconto adicional é alegado pelo pop-up.
 
-A suíte verifica 320, 375, 390, 430, 768 e 1440 px; overflow, imagens, galeria completa e teclado, CTAs, consentimento, revogação, eventos únicos, UTMs, FAQ, movimento normal/reduzido, reflow equivalente a zoom de 200%, reprodução inline e byte ranges do vídeo. Os serviços de analytics são simulados para não enviar eventos de teste reais. Capturas e relatórios ficam em `node_modules/.cache/browser-qa` e `browser-qa-webkit`, fora do Git.
+## Conteúdo e privacidade
 
-Emulação de navegador não substitui a conferência em um iPhone físico.
+As prévias foram extraídas do PDF fornecido pelo proprietário. O PDF completo pago não integra `public` nem `dist`. A capa e as páginas reais compõem os mockups em CSS, sem alterar os textos das artes. Os cinco prints foram fornecidos pelo usuário e otimizados sem fabricar conversas. Os dados não lhes atribuem nota nem compra verificada.
 
-## Publicação
+`socialProof.avatars` começa vazio e `rating`/`ratingCount` nulos. O componente `SocialProofRating` está integrado e só se torna visível com fotos reais ou uma avaliação explicitamente validada (`verified:true`). Para adicionar fotos, use `{src,alt}` em `avatars`; use assets próprios/autorizados. Nenhuma imagem de fixture ou nota de teste é publicada. `WhatsAppTestimonials` é renderizado a partir de `content.testimonials` e fica ausente quando não existem prints.
 
-`vercel.json` configura o build estático em `dist` e as rotas /privacidade e /termos. A integração Git da Vercel publica main automaticamente. Antes da publicação, rode build, smoke e a revisão de navegador. Preserve a configuração comercial e confirme o SHA do deploy e os arquivos com hash servidos em produção.
+Rastreamento opcional permanece desligado até aceite válido. As preferências são abertas pelo rodapé, sem banner automático de cookies. O registro v2 tem validade de 180 dias. Rejeição e revogação bloqueiam eventos; revogação descarrega os SDKs. PageView, InitiateCheckout, OfferViewed e eventos de vídeo são preservados, com um único proprietário de analytics. Não há Purchase simulado no frontend.
+
+A apresentação visual H.264 de 18,5 segundos (531 KB), sem narração e sem preço gravado, usa apenas páginas reais da edição premium. É carregada sob demanda, com playsinline e faststart. Os vídeos anteriores permanecem no Git, fora do build, pois ainda exibiam o preço antigo. Servidores locais e Vercel permitem requisições de byte ranges para reprodução e busca.
+
+## QA e capturas
+
+```sh
+node scripts/premium-test.mjs
+```
+
+Ou `node scripts/browser-test.mjs`, que aponta para a mesma suíte. Requer Playwright no ambiente de QA e um servidor de prévia. Bibliotecas e binários de teste nunca entram no build.
+
+Variáveis opcionais: `BASE_URL`, `PLAYWRIGHT_MODULE_PATH`, `CHROMIUM_EXECUTABLE_PATH`, `QA_OUTPUT_DIR`. Use `QA_BROWSER=webkit` para o motor WebKit oficial, instalado em `PLAYWRIGHT_BROWSERS_PATH` (default `node_modules/.cache/ms-playwright`).
+
+A suíte verifica 320/375/390/430/768/1024/1440 px: duplicações, fontes, overflow, CTAs, modais, swipe, teclado, foco, temporizadores 6/4 s, pausa/background/conflitos/checkout, campanha real simulada e expiração, galeria real, explorador, prova social preparada, consentimento e Pixel sem eventos falsos. Fixtures são interceptadas somente no processo de teste; não modificam a publicação.
+
+Capturas antes/depois e relatórios ficam em `node_modules/.cache/premium-qa/`, fora do Git. Chromium/WebKit emulados não substituem a conferência em um iPhone físico. Não foram alegados resultados de conversão medidos nem pontuações de Core Web Vitals.
+
+## Revisão e publicação
+
+Trabalho em branch `codex/premium-reference-rebuild` e Pull Request para revisão. **Não realizar merge nem deploy de produção sem autorização do usuário.** Uma prévia criada automaticamente pela integração Git da Vercel é apenas ambiente de revisão.
+
+Fontes e licenças locais preservadas em `public/assets/fonts`. Ícones adaptados de Lucide/Feather; licença em `public/third-party-licenses.txt`.
+
+
+Ao substituir imagens por uma edição futura, use novos nomes de arquivo e atualize src/thumbnail nos dados para não reutilizar uma URL com cache longa.
