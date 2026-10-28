@@ -47,7 +47,7 @@ O controle Preferências de cookies fica no rodapé e nas páginas legais. O di�
 
 Uma escolha explícita salva um registro versionado em `mantras.analytics.consent.v2` por até 180 dias. Aceites legados sem data não habilitam tracking. Revogar bloqueia novos eventos, revoga consentimento nos SDKs já carregados, remove cookies opcionais acessíveis no domínio e recarrega para descarregar seus listeners. A preferência também se sincroniza entre abas. Sem armazenamento, a escolha vale só na página aberta.
 
-Meta Pixel público: **2429955871112248**. Após consentimento válido, preservam-se PageView, OfferViewed, InitiateCheckout e eventos de vídeo. A inicialização e a visualização da oferta têm proteção contra duplicação. O clique informa o preço do e-book, R$ 19,90, e não é enviado como Purchase. Compras confirmadas devem continuar sendo medidas pela integração real da Cakto.
+Meta Pixel público: **2429955871112248**. Após consentimento válido, preservam-se PageView, OfferViewed, InitiateCheckout e eventos de vídeo. A inicialização e a visualização da oferta têm proteção contra duplicação. O clique informa o preço do e-book, R$ 9,90, e não é enviado como Purchase. Compras confirmadas devem continuar sendo medidas pela integração real da Cakto.
 
 O experimento de copy permanece desativado. Sua configuração opcional está em `site.config.json`; uma variante só é aplicada e atribuída quando `experiment.enabled` é true e lp_variant corresponde a uma variante conhecida.
 
