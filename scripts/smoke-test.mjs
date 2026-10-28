@@ -11,7 +11,7 @@ async function readOutput(file) {
 
 const html = await readOutput("index.html");
 const css = await readOutput("styles.css");
-const themeAsset = "/assets/landing-light-theme-v4.css";
+const themeAsset = "/assets/landing-light-theme-v5.css";
 assert.ok(html.includes(`href="${themeAsset}"`), "landing loads its isolated light theme");
 await stat(path.join(distDir, themeAsset.slice(1)));
 const app = await readOutput("app.js");
@@ -120,7 +120,7 @@ assert.ok(html.includes('id="videoEndedCta"') && html.includes('data-cta-locatio
 assert.match(html, /<meta name="description" content="[^\"]*500 mantras[^\"]*10 temas[^\"]*127 páginas/, "metadata describes the actual product");
 assert.match(html, /<link rel="canonical" href="https:\/\/500mantras\.vercel\.app\/">/, "production canonical URL is preserved");
 assert.ok(html.includes("127 páginas") && html.includes("R$ 9,90"), "page count and price are visible");
-assert.ok(!/R\$\s*19,90/.test(html.replace(/<del>[^<]+<\/del>/g, "")), "the old price appears only as a struck-through comparison");
+assert.ok(!/R\$\s*19,90/.test(html.replace(/<del>[^<]+<\/del>/g, "").replace(/<span class="visually-hidden">Oferta especial[^<]+<\/span>/, "")), "old price is limited to comparisons and their accessible description");
 assert.ok(html.includes("Pagamento único") && html.includes("Não há mensalidade"), "the payment model is disclosed clearly");
 assert.ok(!/<details\b/.test(html), "FAQ answers are visible by default");
 const faq = html.match(/<div class="faq-list">([\s\S]*?)<\/div>/)?.[1];
@@ -184,7 +184,7 @@ assert.ok(!/garantia-7-dias(?:-compacta|-medalhao)?\.svg/.test(html), "no previo
 for (const oldAsset of ["garantia-7-dias.svg", "garantia-7-dias-medalhao.svg", "garantia-7-dias-compacta.svg"]) {
   await assert.rejects(stat(path.join(distDir, "assets", oldAsset)), { code: "ENOENT" }, "unused old guarantee artwork does not ship");
 }
-assert.equal((html.match(/<del>R\$ 19,90<\/del>/g) || []).length, 2, "hero and offer display the owner-confirmed prior price");
+assert.equal((html.match(/<del>R\$ 19,90<\/del>/g) || []).length, 8, "hero, offer and decorative ticker show the confirmed prior price");
 const reviewSource = JSON.parse(await readFile(path.join(rootDir, "docs/reader-reviews.json"), "utf8"));
 const reviews = [...html.matchAll(/<article class="review-card" data-rating="(\d)"[\s\S]*?<\/article>/g)];
 assert.equal(reviews.length, 8, "all eight owner-provided reviews are visible in HTML");
