@@ -129,3 +129,18 @@ h1, h2, h3 { color: var(--heading); }
  .offer-trust-row { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: center; gap: 16px; }
  .offer-trust-row .offer-payment { display: grid; gap: 6px; padding: 0 0 0 16px; border-top: 0; border-left: 1px solid var(--line); }
 }
+/* Seamless ticker: identical groups translate by exactly one group width. */
+.announcement { width: 100%; overflow: hidden; padding: 8px 0; background: #351747; color: #fff; }
+.ticker-track { display: flex; width: max-content; animation: promo-ticker 70s linear infinite; }
+.ticker-group { display: flex; flex-shrink: 0; }
+.ticker-group > span { flex-shrink: 0; padding-inline: 24px; white-space: nowrap; font-size: 14px; line-height: 1.4; }
+.ticker-group strong { color: #f4d18a; }
+.announcement:hover .ticker-track { animation-play-state: paused; }
+@keyframes promo-ticker { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+ .ticker-track { animation: none; width: 100%; }
+ .ticker-group { display: block; width: 100%; }
+ .ticker-group > span { display: none; }
+ .ticker-group:first-child > span:first-child { display: block; white-space: normal; padding-inline: 16px; text-align: center; }
+ .ticker-group + .ticker-group { display: none; }
+}
