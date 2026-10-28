@@ -11,6 +11,9 @@ async function readOutput(file) {
 
 const html = await readOutput("index.html");
 const css = await readOutput("styles.css");
+const themeAsset = "/assets/landing-light-theme-v1.css";
+assert.ok(html.includes(`href="${themeAsset}"`), "landing loads its isolated light theme");
+await stat(path.join(distDir, themeAsset.slice(1)));
 const app = await readOutput("app.js");
 const runtimeSource = await readOutput("runtime-config.js");
 const runtimeMatch = runtimeSource.match(/Object\.freeze\(({[\s\S]*})\);\s*$/);
@@ -285,6 +288,7 @@ await assert.rejects(stat(path.join(distDir, "videos/500-mantras-apresentacao.mp
 
 const privacy = await readOutput("privacy.html");
 const terms = await readOutput("terms.html");
+assert.ok(!privacy.includes(themeAsset) && !terms.includes(themeAsset), "landing palette does not change legal pages");
 assert.ok(privacy.includes("empresakagency@gmail.com"), "privacy page includes configured support");
 assert.ok(privacy.includes("só é carregado após você aceitar o rastreamento opcional"), "privacy disclosure documents consent-gated tracking");
 assert.ok(privacy.includes("180 dias") && privacy.includes("revogar"), "privacy disclosure describes expiration and revision");
