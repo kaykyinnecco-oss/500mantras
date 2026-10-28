@@ -11,7 +11,7 @@ async function readOutput(file) {
 
 const html = await readOutput("index.html");
 const css = await readOutput("styles.css");
-const themeAsset = "/assets/landing-light-theme-v8.css";
+const themeAsset = "/assets/landing-light-theme-v9.css";
 assert.ok(html.includes(`href="${themeAsset}"`), "landing loads its isolated light theme");
 await stat(path.join(distDir, themeAsset.slice(1)));
 await stat(path.join(distDir, "assets/brand-horizontal-v1.css"));

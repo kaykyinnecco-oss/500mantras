@@ -209,3 +209,21 @@ h1, h2, h3 { color: var(--heading); }
 @media (max-width: 767px) { .hero h1 { text-wrap: balance; } }
 /* Owner-approved light footer keeps the original purple logo subtitle readable. */
 .site-footer { --muted: #625a69; --gold-light: #4b246b; --line: #4b246b26; background: #f8f5fa; color: #292333; }
+/* Footer-only grid: reserve intrinsic contact width instead of compressing it. */
+.site-footer .footer-main { grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 12px; }
+.site-footer .footer-brand { width: min(100%, 320px); justify-self: center; min-width: 0; }
+.site-footer .footer-email { display: flex; flex-direction: column; align-items: center; justify-self: center; max-width: 100%; width: auto; min-width: 0; font-size: 16px; line-height: 1.5; overflow-wrap: normal; word-break: normal; }
+.site-footer .footer-email span { white-space: nowrap; }
+.site-footer .footer-links { grid-column: 1 / -1; justify-content: center; gap: 4px 20px; }
+.site-footer .footer-bottom { grid-template-columns: minmax(0, 1fr); gap: 8px; text-align: center; }
+.site-footer .footer-bottom p { text-align: center; }
+.site-footer .digital-product-note { text-align: center; }
+@media (min-width: 768px) {
+ .site-footer .footer-main { grid-template-columns: minmax(0, 1fr) max-content; align-items: center; column-gap: 24px; }
+ .site-footer .footer-brand { justify-self: start; }
+ .site-footer .footer-email { align-items: flex-end; justify-self: end; }
+ .site-footer .footer-links { justify-content: flex-start; justify-self: stretch; }
+ .site-footer .footer-bottom { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; text-align: left; }
+ .site-footer .footer-bottom p { text-align: right; }
+ .site-footer .digital-product-note { text-align: left; }
+}
