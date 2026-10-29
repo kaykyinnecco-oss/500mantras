@@ -1,4 +1,52 @@
 @charset "UTF-8";
+/* Conversão: somente os fundos e os detalhes de oferta solicitados. */
+.conversion-page { background:#efedf2; color:#25202b }
+.conversion-page .section-light { background:#efedf2 }
+.conversion-page .site-header { border-bottom-color:#56357a29 }
+.conversion-page .header-action { color:#654377 }
+.conversion-page .header-nav a { color:#65596c }
+.conversion-page .hero-heading .eyebrow { color:#785925 }
+.conversion-page .hero-description { color:#65596c }
+.conversion-page .hero-price strong { color:#56357a }
+.conversion-page .hero-price>span,
+.conversion-page .hero-purchase>.trust-inline { color:#65596c }
+.conversion-page .hero-purchase>.trust-inline .icon { color:#765828 }
+.conversion-page .offer-section { background:#efedf2 }
+.conversion-page .offer-heading { color:#25202b }
+.conversion-page .offer-heading .eyebrow { color:#785925 }
+.conversion-page .offer-heading>p:not(.eyebrow) { color:#65596c }
+.conversion-page .offer-heading h2>span { color:#745181 }
+.conversion-page .closing { background:#efedf2; color:#25202b }
+.conversion-page .closing .eyebrow { color:#785925 }
+.conversion-page .closing-title>span { color:#745181 }
+.conversion-page .closing-copy,
+.conversion-page .closing-note { color:#65596c }
+.conversion-page .closing-note .icon { color:#765828 }
+.conversion-page .site-footer { color:#faf7f1 }
+.conversion-page .explorer-section,
+.conversion-page .testimonials-section,
+.conversion-page .journeys-band,
+.conversion-page .offer-popup,
+.conversion-page .image-dialog { color:#faf7f1 }
+.conversion-page .guarantee-section .text-button { color:#654377 }
+.conversion-page .hero::before { background:none }
+.conversion-page .hero :focus-visible,
+.conversion-page .closing :focus-visible { outline-color:#56357a }
+.conversion-page .reference-price { font:400 16px/1.5 var(--sans); letter-spacing:0; color:inherit }
+.conversion-page .hero-price strong>.reference-price,
+.conversion-page .price>.reference-price,
+.conversion-page .popup-price>.reference-price { display:block; font:400 16px/1.5 var(--sans); color:inherit }
+.conversion-page .hero-price strong>span:not(.reference-price):not(.visually-hidden) { font:inherit; color:inherit }
+.conversion-page .campaign-price .reference-price { font-size:inherit }
+.conversion-page .cta-microcopy { margin:14px 0 9px; font:600 16px/1.5 var(--sans); color:inherit; text-align:center }
+.conversion-page .hero-purchase>.cta-microcopy { color:#65596c }
+.conversion-page .offer-pricebox>.cta-microcopy { color:#e8d29c; font-size:16px; letter-spacing:0 }
+.conversion-page .benefit-list>h3 { color:#56357a; margin-bottom:12px }
+@media (min-width:1024px) {
+  .conversion-page .hero-purchase>.hero-price { grid-column:1; grid-row:1 / 3 }
+  .conversion-page .hero-purchase>.cta-microcopy { grid-column:2; grid-row:1; margin:0 }
+  .conversion-page .hero-purchase>.hero-cta { grid-column:2; grid-row:2 }
+}
 @font-face {
   font-family:Lora;
   font-style:normal;

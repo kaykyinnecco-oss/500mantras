@@ -80,6 +80,7 @@
   const checkoutKey = "mantras.checkout-navigation.v1";
   const storedDisplayCount = Number(safeStorage("sessionStorage", "getItem", popupKey));
   let displayCount = Number.isFinite(storedDisplayCount) ? Math.max(0, Math.floor(storedDisplayCount)) : 0;
+  if (safeStorage("sessionStorage", "getItem", "mantras.popup-continue.v1")) displayCount = maxDisplays;
   let checkoutPaused = Boolean(safeStorage("sessionStorage", "getItem", checkoutKey));
   let popupTimer;
   let popupDueAt = 0;
@@ -124,6 +125,7 @@
     displayCount += 1;
     safeStorage("sessionStorage", "setItem", popupKey, String(displayCount));
     setPopupState("open");
+    try { popup.querySelector("a[data-checkout]")?.focus({ preventScroll: true }); } catch { /* Foco não interfere no checkout. */ }
   }
 
   function resumePopup() {
@@ -164,6 +166,23 @@
   popup?.addEventListener("cancel", (event) => { event.preventDefault(); closePopup(); });
   document.querySelectorAll("[data-popup-close]").forEach((button) => {
     button.addEventListener("click", closePopup);
+  });
+  // A escolha de continuar não dispara métricas e vale para a sessão.
+  popup?.addEventListener("click", (event) => {
+    try {
+      if (!event.target.closest("[data-popup-continue]")) return;
+      displayCount = maxDisplays;
+      safeStorage("sessionStorage", "setItem", "mantras.popup-continue.v1", "true");
+      pausePopup();
+      popupHasSchedule = false;
+    } catch { /* Fechamento original permanece disponível. */ }
+  }, true);
+  popup?.addEventListener("keydown", (event) => {
+    try {
+      if (event.key !== "Tab") return;
+      const controls = [...popup.querySelectorAll("a[href],button:not([disabled])")];
+      if ((!event.shiftKey && document.activeElement === controls.at(-1)) || (event.shiftKey && document.activeElement === controls[0])) closePopup();
+    } catch { /* Escape e botão de fechar continuam disponíveis. */ }
   });
   document.addEventListener("mouseout", (event) => {
     if (popupConfig.exitIntentEnabled !== true || event.relatedTarget || event.clientY > 0 || displayCount > 0) return;
