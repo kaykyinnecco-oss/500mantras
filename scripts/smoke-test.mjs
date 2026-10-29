@@ -44,9 +44,9 @@ for (const anchor of checkoutAnchors) {
 assert.ok(html.includes("R$ 9,90") && html.includes("127 páginas"), "the actual price and page count are visible");
 assert.ok(/pagamento único/i.test(html), "the payment model is disclosed");
 assert.ok(/(?:taxa|total)[\s\S]{0,180}checkout/i.test(plainText(html)), "the checkout total and optional fees are disclosed");
-for (const complement of ["100 Cartões Digitais de Afirmações", "21 Dias", "Oráculo das 52 Mensagens"]) assert.ok(html.includes(complement), "the existing optional complement is described: " + complement);
+assert.ok(!html.includes('class="optional-complements"'), "optional complements are offered only at checkout");
 assert.match(plainText(html), /complementos[\s\S]{0,180}opcionais|opcionais[\s\S]{0,180}complementos/i, "separately charged complements are explicitly optional");
-assert.ok(!/<(?:del|s)\b/.test(html), "no unverified previous price or discount is invented");
+assert.ok(/<s>R\$ 49,90<\/s>/.test(html), "the reference price supplied by the owner is displayed accessibly");
 
 // A single visual architecture, with no legacy styling or presentation runtimes.
 const stylesheets = [...html.matchAll(/<link\b[^>]*>/g)].map((match) => match[0]).filter((tag) => attr(tag, "rel") === "stylesheet");

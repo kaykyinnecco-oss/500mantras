@@ -69,7 +69,7 @@ async function boot(overrides = {}, options = {}) {
 async function click(page, selector) { await page.locator(selector).first().evaluate((element) => element.click()); }
 async function opened(page, id = "offerPopup") { return page.locator("#" + id).evaluate((dialog) => dialog.open); }
 async function scrollAll(page) {
-  await page.evaluate(async () => { for (let position = 0; position < document.documentElement.scrollHeight; position += 650) { scrollTo(0, position); await new Promise((resolve) => setTimeout(resolve, 35)); } });
+  await page.evaluate(async () => { for (let position = 0; position < document.documentElement.scrollHeight; position += 650) { scrollTo({ top: position, behavior: "instant" }); await new Promise((resolve) => setTimeout(resolve, 100)); } });
 }
 async function settleDialogs(page) { await page.waitForFunction(() => document.querySelectorAll("dialog[open]").length === 0, null, { polling: 50 }); }
 try {
@@ -268,8 +268,7 @@ try {
     await page.clock.runFor(1); assert.equal(await opened(page), true, "popup opens at six seconds");
     assert.equal(await page.locator("dialog[open]").count(), 1);
     assert.ok(await page.locator("#offerPopup").evaluate((dialog) => dialog.contains(document.activeElement)), "popup receives focus");
-    for (let tab = 0; tab < 5; tab++) await page.keyboard.press("Tab");
-    assert.ok(await page.locator("#offerPopup").evaluate((dialog) => dialog.contains(document.activeElement)), "popup focus stays contained while tabbing");
+    assert.equal(await page.evaluate(() => document.activeElement.dataset.ctaLocation), "popup", "popup initially focuses its existing checkout CTA");
     await click(page, "[data-popup-close]"); await page.clock.runFor(1);
     assert.equal(await opened(page), false, "close button works");
     assert.equal(await page.evaluate(() => document.activeElement.id), "heroCheckout", "popup returns focus");
@@ -315,6 +314,24 @@ try {
     await context.close();
   }
   report.checks.push("Popup initial 6000ms / repeat 4000ms, close/Escape/focus, session cap, background pause, modal conflict and checkout suppression.");
+
+  {
+    const { context, page, metrics } = await boot({}, { clock: true });
+    await page.clock.runFor(6000);
+    await page.locator('#offerPopup [data-popup-close]').first().focus();
+    await page.keyboard.press('Shift+Tab');
+    assert.equal(await opened(page), false, 'keyboard can leave the offer instead of cycling indefinitely');
+    await page.clock.runFor(4000);
+    const scroll = await page.evaluate(() => scrollY);
+    await click(page, '[data-popup-continue]');
+    await page.clock.runFor(15000);
+    assert.equal(await opened(page), false, 'continue suppresses repeated offers');
+    assert.equal(await page.evaluate(() => scrollY), scroll, 'continue preserves reading position');
+    await page.reload({waitUntil:'networkidle'}); await page.clock.runFor(15000);
+    assert.equal(await opened(page), false, 'continue choice persists for the session');
+    assert.deepEqual(metrics.tracking, [], 'continue never triggers optional tracking');
+    await context.close();
+  }
 
   // A shared absolute deadline ticks correctly and does not restart on reload.
   {
