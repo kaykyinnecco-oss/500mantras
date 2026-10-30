@@ -1,1395 +1,305 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover"
-    />
-    <meta name="theme-color" content="#211335" />
-    <meta
-      name="description"
-      content="500 mantras para momentos de descanso, foco e motivação. 10 jornadas e 127 páginas em PDF por R$ __PRODUCT_PRICE__, pagamento único."
-    />
-    <link rel="canonical" href="https://500mantras.vercel.app/" />
-    <meta property="og:type" content="product" />
-    <meta
-      property="og:title"
-      content="500 Mantras para Elevar Sua Energia | Edição Premium"
-    />
-    <meta
-      property="og:description"
-      content="Acalme a mente e durma mais leve com 500 mantras em 10 jornadas. PDF por R$ __PRODUCT_PRICE__."
-    />
-    <meta property="og:url" content="https://500mantras.vercel.app/" />
-    <meta
-      property="og:image"
-      content="https://500mantras.vercel.app/assets/edition/cover.webp"
-    />
-    <meta
-      property="og:image:alt"
-      content="Capa real da Edição Premium dos 500 Mantras"
-    />
-    <meta property="og:locale" content="pt_BR" />
-    <meta property="product:price:amount" content="__PRODUCT_PRICE_SCHEMA__" />
-    <meta property="product:price:currency" content="BRL" />
-    <title>500 Mantras para Elevar Sua Energia | Edição Premium</title>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Product",
-        "name": "500 Mantras para Elevar Sua Energia",
-        "description": "E-book digital em PDF com 500 mantras, 10 jornadas e 127 páginas para momentos de descanso, reflexão e motivação.",
-        "image": "https://500mantras.vercel.app/assets/edition/cover.webp",
-        "category": "E-book digital",
-        "offers": {
-          "@type": "Offer",
-          "priceCurrency": "BRL",
-          "price": "__PRODUCT_PRICE_SCHEMA__",
-          "url": "https://pay.cakto.com.br/323zgdr_1243414"
-        }
-      }
-    </script>
-    <link
-      rel="icon"
-      href="/assets/logo-500-mantras-icon-v3.png"
-      type="image/png"
-      sizes="256x256"
-    />
-    <link
-      rel="preload"
-      as="image"
-      href="/assets/edition/cover.webp"
-      fetchpriority="high"
-    />
-    <link
-      rel="preload"
-      as="font"
-      href="/assets/fonts/playfair-display-700.ttf"
-      type="font/ttf"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      as="font"
-      href="/assets/fonts/source-sans-3-latin.woff2"
-      type="font/woff2"
-      crossorigin
-    />
-    <link rel="stylesheet" href="/assets/landing-premium-v2.css" />
-    <script defer src="/runtime-config.js"></script>
-    <script defer src="/app.js"></script>
-    <script defer src="/assets/landing-content-v2.js"></script>
-    <script defer src="/assets/popup-scheduler-v2.js"></script>
-    <script defer src="/assets/landing-ui-v2.js"></script>
-  </head>
-  <body class="lp-site">
-    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-    <div class="reading-progress" aria-hidden="true">
-      <span id="readingProgress"></span>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2b0d3d">
+  <meta name="description" content="500 mantras em 10 jornadas para ler no seu ritmo. Acesso digital imediato, sem mensalidade.">
+  <title>500 Mantras para Elevar Sua Energia — Edição Premium</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/images/capa-500-mantras.webp" fetchpriority="high">
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Meta Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+    (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init','2429955871112248');
+    fbq('track','PageView');
+  </script>
+</head>
+<body>
+  <noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=2429955871112248&ev=PageView&noscript=1"></noscript>
+
+  <svg class="svg-library" aria-hidden="true">
+    <symbol id="i-lotus" viewBox="0 0 32 32"><path d="M16 27c-4.9-2.6-7.8-6.8-8.6-12.5 3.9.5 6.7 2.2 8.6 5.1 1.9-2.9 4.7-4.6 8.6-5.1C23.8 20.2 20.9 24.4 16 27Z"/><path d="M16 19.8c-3.1-3-4.4-6.9-3.8-11.8 3.1 1.6 5.2 4 6.1 7.2M16 19.8c3.1-3 4.4-6.9 3.8-11.8-1.2.6-2.3 1.4-3.2 2.3M7.6 18.3c-2.3-.7-4.1-.7-5.6-.2 2.6 5.7 7.2 8.8 14 8.9 6.8-.1 11.4-3.2 14-8.9-1.5-.5-3.3-.5-5.6.2"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2 14 9l7 3-7 3-2 7-2-7-7-3 7-3 2-7Z"/><path d="m19 2 .7 2.3L22 5l-2.3.7L19 8l-.7-2.3L16 5l2.3-.7L19 2Z"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A3.5 3.5 0 0 1 7.5 2H11v17H7.5A3.5 3.5 0 0 0 4 22V5.5Z"/><path d="M20 5.5A3.5 3.5 0 0 0 16.5 2H13v17h3.5A3.5 3.5 0 0 1 20 22V5.5Z"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 17l9 5 9-5"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 2h8l4 4v16H6V2Z"/><path d="M14 2v5h5M9 12h6M9 16h6"/></symbol>
+    <symbol id="i-devices" viewBox="0 0 24 24"><rect x="2" y="4" width="14" height="11" rx="2"/><path d="M6 20h6M9 15v5"/><rect x="17" y="8" width="5" height="12" rx="1.5"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.7 8.3-2.2 5.2-5.2 2.2 2.2-5.2 5.2-2.2Z"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></symbol>
+    <symbol id="i-return" viewBox="0 0 24 24"><path d="M9 7 4 12l5 5"/><path d="M5 12h8a6 6 0 1 1 0 12"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 15.6A8 8 0 0 1 8.4 4 9 9 0 1 0 20 15.6Z"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2 20 5v6c0 5.4-3.3 9.2-8 11-4.7-1.8-8-5.6-8-11V5l8-3Z"/><path d="m8 12 2.5 2.5L16 9"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="12" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m5 5 14 14M19 5 5 19"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></symbol>
+  </svg>
+
+  <header class="offer-bar" aria-label="Oferta do dia">
+    <div class="offer-bar__inner">
+      <div class="today-offer">
+        <span class="today-offer__desktop">OFERTA DE HOJE · <span id="today-date">hoje</span></span>
+        <span class="today-offer__mobile">Oferta de hoje · aproveite</span>
+        <strong id="countdown" aria-label="Tempo restante para a oferta de hoje">00:00:00</strong>
+      </div>
+      <a class="top-offer-button" href="#planos">Ver oferta</a>
     </div>
-    <svg
-      class="svg-definitions"
-      aria-hidden="true"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <symbol id="icon-x" viewBox="0 0 24 24">
-        <path d="m6 6 12 12M6 18 18 6" />
-      </symbol>
-      <symbol id="icon-heart" viewBox="0 0 24 24">
-        <path d="M20 5c-3-3-7 0-8 2-1-2-5-5-8-2s-1 7 8 14c9-7 11-11 8-14Z" />
-      </symbol>
-      <symbol id="icon-sun" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="4" />
-        <path
-          d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2"
-        />
-      </symbol>
-      <symbol id="icon-moon" viewBox="0 0 24 24">
-        <path d="M20 14A9 9 0 0 1 10 3a9 9 0 1 0 10 11Z" />
-      </symbol>
-      <symbol id="icon-compass" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="9" />
-        <path d="m16 8-2 6-6 2 2-6Z" />
-      </symbol>
-      <symbol id="icon-shield" viewBox="0 0 24 24">
-        <path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6Z" />
-        <path d="m8 12 3 3 5-6" />
-      </symbol>
-      <symbol id="icon-check" viewBox="0 0 24 24">
-        <path d="m5 12 4 4L19 6" />
-      </symbol>
-      <symbol id="icon-document" viewBox="0 0 24 24">
-        <path d="M14 3H5v18h14V8Z" />
-        <path d="M14 3v5h5M8 12h8M8 16h6" />
-      </symbol>
-      <symbol id="icon-digital-book" viewBox="0 0 32 32">
-        <path d="M20 3H6a2 2 0 0 0-2 2v22a2 2 0 0 0 2 2h14V3Z" />
-        <path d="M8 9h8M8 14h8M8 19h5" />
-        <rect x="20" y="13" width="9" height="16" rx="2" />
-        <path d="M23 25h3" />
-      </symbol>
-      <symbol id="rating-star" viewBox="0 0 24 24">
-        <path
-          d="m12 2.5 2.9 5.87 6.48.94-4.69 4.57 1.11 6.46L12 17.29l-5.8 3.05 1.11-6.46-4.69-4.57 6.48-.94Z"
-        />
-      </symbol>
-      <symbol id="icon-purchase" viewBox="0 0 24 24">
-        <rect x="3" y="5" width="18" height="14" rx="3" />
-        <path d="M3 10h18m-13 5h3" />
-      </symbol>
-      <symbol id="icon-calendar" viewBox="0 0 24 24">
-        <rect x="3" y="5" width="18" height="16" rx="3" />
-        <path d="M7 3v4m10-4v4M3 10h18m-12 4h6l-4 5" />
-      </symbol>
-    </svg>
-    <aside class="lp-announcement" aria-label="Condição da oferta">
-      <div class="lp-shell lp-announcement-inner">
-        <div>
-          <span class="lp-announcement-label">UM MOMENTO PARA VOCÊ</span
-          ><strong>500 Mantras por R$ __PRODUCT_PRICE__</strong
-          ><span data-campaign-message>Pagamento único. Sem assinatura.</span>
-        </div>
-        <div
-          class="lp-countdown"
-          id="promotionCountdown"
-          role="timer"
-          hidden
-          aria-label="Tempo restante da campanha"
-        >
-          <span><b data-hours>00</b><small>HORAS</small></span
-          ><i aria-hidden="true">:</i
-          ><span><b data-minutes>00</b><small>MINUTOS</small></span
-          ><i aria-hidden="true">:</i
-          ><span><b data-seconds>00</b><small>SEGUNDOS</small></span>
+  </header>
+
+  <main id="top">
+    <!-- 1. HEADLINE -->
+    <section class="headline-section section-light">
+      <div class="particles" aria-hidden="true"></div>
+      <div class="container headline reveal is-visible">
+        <div class="headline__copy">
+          <div class="eyebrow"><svg><use href="#i-spark"></use></svg> Uma pausa possível para os seus dias</div>
+          <h1>Acalme a mente e <em>durma mais leve</em> com 500 mantras</h1>
+          <p>Para as noites em que a cabeça não desliga: 500 mantras curtos, em 10 jornadas, para ler em poucos minutos, onde e quando quiser.</p>
+          <div class="headline__action">
+            <a class="button button--primary shimmer-button" href="#receber">Quero ver o que eu recebo <svg><use href="#i-arrow"></use></svg></a>
+            <span><svg><use href="#i-spark"></use></svg> Acesso digital imediato</span>
+          </div>
         </div>
       </div>
-    </aside>
-    <header class="lp-header lp-shell">
-      <a class="lp-brand" href="#inicio" aria-label="500 Mantras, início"
-        ><img
-          src="/assets/logo-500-mantras-oficial-v3.webp"
-          width="768"
-          height="282"
-          alt="500 Mantras para Elevar Sua Energia"
-      /></a>
-      <nav class="lp-header-nav" aria-label="Navegação principal">
-        <a href="#conteudo-do-ebook">O e-book</a
-        ><a href="#explore-jornadas">Experimente uma leitura</a
-        ><a href="#duvidas">Dúvidas</a>
-      </nav>
-      <a class="button button-gold" href="#oferta"
-        >VER OFERTA<svg aria-hidden="true" viewBox="0 0 24 24">
-          <path d="M5 12h14m-6-6 6 6-6 6" /></svg
-      ></a>
-    </header>
-    <main id="conteudo">
-      <section
-        class="lp-hero lp-shell"
-        id="inicio"
-        aria-labelledby="hero-title"
-      >
-        <p class="lp-badge">
-          500 MANTRAS <span>•</span> 10 JORNADAS DE AUTOCUIDADO
-        </p>
-        <h1 id="hero-title" data-copy-slot="heroTitle">
-          Você cuida de tanta coisa.<br class="lp-desktop-break" />
-          <span>Reserve um momento para você.</span>
-        </h1>
-        <p class="lp-lead">
-          500 mantras em 10 jornadas para ler, refletir e revisitar. Encontre
-          palavras para acompanhar suas pequenas pausas, no seu ritmo.
-        </p>
-        <figure class="lp-hero-art">
-          <div
-            class="lp-product-stage"
-            aria-label="Composição com a capa e páginas reais da edição premium"
-          >
-            <figure class="lp-product-tablet">
-              <img
-                src="/assets/edition/amor-proprio-thumb.webp"
-                width="600"
-                height="900"
-                alt="Página real da jornada O amor que começa em mim"
-                decoding="async"
-              />
-            </figure>
-            <figure class="lp-product-book">
-              <img
-                src="/assets/edition/cover.webp"
-                width="1200"
-                height="1800"
-                alt="Capa real do e-book 500 Mantras, Edição Premium"
-                fetchpriority="high"
-                decoding="async"
-              />
-            </figure>
-            <figure class="lp-product-phone">
-              <img
-                src="/assets/edition/gratidao-thumb.webp"
-                width="600"
-                height="900"
-                alt="Página real da jornada A beleza de reconhecer"
-                decoding="async"
-              />
-            </figure>
+    </section>
+
+    <!-- 2. MOCKUP -->
+    <section class="mockup-section" aria-label="Prévia visual do e-book">
+      <div class="container">
+        <div class="product-stage reveal is-visible">
+          <div class="product-glow" aria-hidden="true"></div>
+          <div class="float-note note-a"><svg><use href="#i-book"></use></svg><span><strong>500 mantras</strong> para revisitar</span></div>
+          <div class="float-note note-b"><svg><use href="#i-layers"></use></svg><span><strong>10 jornadas</strong> temáticas</span></div>
+          <div class="float-note note-c"><svg><use href="#i-devices"></use></svg><span><strong>Acesso digital</strong> em qualquer tela</span></div>
+          <div class="float-note note-d"><svg><use href="#i-moon"></use></svg><span><strong>No seu ritmo</strong> sem ordem obrigatória</span></div>
+
+          <div class="device-tablet" aria-hidden="true">
+            <img src="assets/images/preview-sumario.webp" width="720" height="1080" alt="" fetchpriority="high">
           </div>
-          <figcaption class="lp-floating-facts">
-            <span
-              ><svg aria-hidden="true" viewBox="0 0 24 24">
-                <use href="#icon-document" /></svg
-              >500 mantras</span
-            ><span
-              ><svg aria-hidden="true" viewBox="0 0 24 24">
-                <use href="#icon-compass" /></svg
-              >10 jornadas</span
-            ><span
-              ><svg aria-hidden="true" viewBox="0 0 24 24">
-                <use href="#icon-moon" /></svg
-              >No seu ritmo</span
-            ><span
-              ><svg aria-hidden="true" viewBox="0 0 24 24">
-                <use href="#icon-heart" /></svg
-              >Acesso digital</span
-            >
-          </figcaption>
-        </figure>
-        <div class="lp-hero-decision">
-          <p class="lp-hero-price">
-            <span>De <s>R$ 49,90</s> por</span
-            ><strong>R$ __PRODUCT_PRICE__</strong>
-          </p>
-          <a
-            class="button button-gold hero-cta"
-            id="heroCheckout"
-            data-copy-slot="heroCta"
-            data-checkout
-            data-cta-location="hero"
-            href="__CHECKOUT_URL__"
-            >QUERO ACESSAR OS 500 MANTRAS<svg
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-            >
-              <path d="M5 12h14m-6-6 6 6-6 6" /></svg
-          ></a>
-          <p class="lp-assurance" data-guarantee="hero">
-            <svg aria-hidden="true" viewBox="0 0 24 24">
-              <use href="#icon-shield" /></svg
-            >Pagamento único • Acesso digital • Garantia de 7 dias
-          </p>
+          <div class="book-3d">
+            <div class="book-spine" aria-hidden="true"></div>
+            <img src="assets/images/capa-500-mantras.webp" width="760" height="1140" alt="Capa do e-book 500 Mantras para Elevar Sua Energia" fetchpriority="high">
+          </div>
+          <div class="device-phone" aria-hidden="true">
+            <img src="assets/images/preview-mantras.webp" width="720" height="1080" alt="" fetchpriority="high">
+          </div>
         </div>
-        <div
-          class="lp-social-proof"
-          id="social-proof-rating"
-          data-component="SocialProofRating"
-        >
-          <p class="lp-access-capsule">
-            <svg aria-hidden="true" viewBox="0 0 24 24">
-              <use href="#icon-document" /></svg
-            >Acesso digital após a confirmação do pagamento.
-          </p>
-          <div class="lp-social-row">
-            <div class="lp-avatars" data-rating-avatars hidden></div>
-            <div>
-              <p class="lp-reader-label" data-rating-label>
-                Experiências compartilhadas por leitores.
-              </p>
-              <div class="lp-rating-stars" data-rating-stars hidden></div>
-              <a href="#whatsapp-testimonials"
-                >Conheça os relatos enviados sobre o material</a
-              >
+      </div>
+    </section>
+
+    <!-- 3. SUBHEADLINE -->
+    <section class="mechanism-section">
+      <div class="container reveal">
+        <div class="section-heading section-heading--center">
+          <span class="kicker">Simples de começar. Leve de continuar.</span>
+          <h2>Escolha uma jornada, leia um mantra e faça uma pausa.</h2>
+          <p>Sem rotina rígida e sem ordem obrigatória. Você abre onde fizer sentido e volta quando quiser.</p>
+        </div>
+        <div class="steps">
+          <article class="step-card">
+            <span class="step-number">01</span><div class="icon-tile"><svg><use href="#i-compass"></use></svg></div>
+            <div class="step-content"><h3>Escolha</h3><p>Comece pela jornada que conversa com o seu momento.</p><div class="journey-chips"><span>O amor que começa em mim</span><span>O sossego possível</span><span>Uma intenção para hoje</span></div></div>
+          </article>
+          <article class="step-card step-card--quote">
+            <span class="step-number">02</span><div class="icon-tile"><svg><use href="#i-eye"></use></svg></div>
+            <div class="step-content"><h3>Leia</h3><blockquote>“Eu mereço o mesmo cuidado que ofereço às pessoas que amo.” <cite>— página 07</cite></blockquote></div>
+          </article>
+          <article class="step-card">
+            <span class="step-number">03</span><div class="icon-tile"><svg><use href="#i-heart"></use></svg></div>
+            <div class="step-content"><h3>Volte quando quiser</h3><p class="favorite-copy"><svg><use href="#i-heart"></use></svg> Salve favoritas e respire a cada releitura</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. O QUE VOCÊ VAI RECEBER -->
+    <section class="receive-section section-light" id="receber">
+      <div class="container reveal">
+        <div class="section-heading">
+          <span class="kicker">Edição Premium</span>
+          <h2>O que você vai receber</h2>
+          <p>Um material completo, organizado e pronto para acompanhar você no celular, tablet ou computador.</p>
+        </div>
+        <div class="deliverables-grid">
+          <article class="deliverable-card"><div class="icon-tile"><svg><use href="#i-book"></use></svg></div><strong class="count" data-count="500">0</strong><h3>mantras</h3><p>Mensagens curtas para ler, adaptar e revisitar.</p></article>
+          <article class="deliverable-card"><div class="icon-tile"><svg><use href="#i-layers"></use></svg></div><strong class="count" data-count="10">0</strong><h3>jornadas temáticas</h3><p>Do amor-próprio aos recomeços e à serenidade.</p></article>
+          <article class="deliverable-card"><div class="icon-tile"><svg><use href="#i-file"></use></svg></div><strong class="count" data-count="127">0</strong><h3>páginas em PDF</h3><p>Conteúdo visual, leve e fácil de consultar.</p></article>
+          <article class="deliverable-card"><div class="icon-tile"><svg><use href="#i-devices"></use></svg></div><strong class="count" data-count="3">0</strong><h3>tipos de tela</h3><p>Celular, tablet ou computador. Você escolhe.</p></article>
+        </div>
+        <div class="real-previews" aria-label="Páginas reais do material">
+          <div class="preview-copy"><span class="kicker">Por dentro do e-book</span><h3>Visual limpo. Jornadas claras. Uma mensagem de cada vez.</h3><p>Estas são páginas reais da Edição Premium que você recebe após a compra.</p></div>
+          <figure><img src="assets/images/preview-sumario.webp" width="720" height="1080" loading="lazy" alt="Página real com o sumário das 10 jornadas do e-book"><figcaption>10 jornadas para diferentes momentos</figcaption></figure>
+          <figure><img src="assets/images/preview-mantras.webp" width="720" height="1080" loading="lazy" alt="Página real de mantras da jornada Amor-próprio e autoestima"><figcaption>Mantras curtos e fáceis de revisitar</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. BÔNUS EXCLUSIVOS -->
+    <section class="bonus-section" id="bonus">
+      <div class="container reveal">
+        <div class="section-heading section-heading--center">
+          <span class="kicker">Somente no Plano Completo</span>
+          <h2>Só no Plano Completo: 2 bônus para dormir mais leve e manter o hábito</h2>
+        </div>
+        <div class="bonus-grid">
+          <article class="bonus-card">
+            <div class="bonus-card__image"><span>Bônus 01</span><img src="assets/images/capa-guia-noite-leve.webp" width="680" height="961" loading="lazy" alt="Capa do Guia Noite Leve"></div>
+            <div class="bonus-card__copy"><div class="reference-value">Valor de referência <s>R$ 80,00</s></div><h3>Guia Noite Leve</h3><p>Um ritual de 7 noites para desacelerar antes de dormir, com mini-rotinas de 5 minutos e mantras para o fim do dia.</p></div>
+          </article>
+          <article class="bonus-card">
+            <div class="bonus-card__image"><span>Bônus 02</span><img src="assets/images/capa-planner-21-dias.webp" width="680" height="1020" loading="lazy" alt="Capa do Planner 21 Dias de Intenção"></div>
+            <div class="bonus-card__copy"><div class="reference-value">Valor de referência <s>R$ 60,00</s></div><h3>Planner 21 Dias de Intenção</h3><p>Um mantra e uma intenção por dia, com check-in e gratidão. Inclui duas versões: <strong>preencher no celular</strong> e <strong>imprimir</strong>.</p></div>
+          </article>
+        </div>
+        <div class="bonus-total"><svg><use href="#i-spark"></use></svg><span>Bônus somam <strong>R$ 140,00.</strong> Mas no Plano Completo é <strong>GRÁTIS.</strong></span></div>
+      </div>
+    </section>
+
+    <!-- 6. ESCOLHA O SEU PLANO -->
+    <section class="plans-section" id="planos">
+      <div class="container reveal">
+        <div class="section-heading section-heading--center section-heading--light">
+          <span class="kicker">Pagamento único. Sem mensalidade.</span>
+          <h2>Oferta de hoje termina em <span class="sync-countdown">00:00:00</span></h2>
+          <p>Receba o material digital e comece pelo tema de que você precisa hoje.</p>
+        </div>
+        <div class="plans-grid">
+          <article class="plan-card plan-complete">
+            <div class="popular-ribbon"><span>Oferta</span> Mais escolhido</div>
+            <div class="exclusive-ribbon">Oferta exclusiva</div>
+            <div class="plan-product-stack" aria-hidden="true">
+              <img class="stack-main" src="assets/images/capa-500-mantras.webp" width="760" height="1140" loading="lazy" alt="">
+              <img class="stack-bonus stack-bonus-a" src="assets/images/capa-guia-noite-leve.webp" width="680" height="961" loading="lazy" alt="">
+              <img class="stack-bonus stack-bonus-b" src="assets/images/capa-planner-21-dias.webp" width="680" height="1020" loading="lazy" alt="">
             </div>
-          </div>
-          <p class="lp-guarantee-capsule">
-            <svg aria-hidden="true" viewBox="0 0 24 24">
-              <use href="#icon-shield" /></svg
-            >GARANTIA DE 7 DIAS
-          </p>
-        </div>
-      </section>
-      <section
-        class="lp-section lp-dark"
-        id="seu-momento"
-        aria-labelledby="moment-title"
-      >
-        <div class="lp-shell">
-          <p class="lp-kicker">UMA PAUSA QUE TAMBÉM É SUA</p>
-          <h2 id="moment-title">
-            Em meio a tantas responsabilidades,<br />
-            <span>você também merece cuidado.</span>
-          </h2>
-          <p class="lp-section-intro">
-            Não é preciso uma rotina perfeita. Um instante de leitura já pode
-            ser o seu convite para refletir.
-          </p>
-          <div class="lp-benefit-grid">
-            <article class="lp-benefit">
-              <svg aria-hidden="true" viewBox="0 0 24 24">
-                <use href="#icon-heart" />
-              </svg>
-              <h3>Amor-próprio</h3>
-              <p>Lembre do cuidado que você também merece.</p>
-            </article>
-            <article class="lp-benefit">
-              <svg aria-hidden="true" viewBox="0 0 24 24">
-                <use href="#icon-sun" />
-              </svg>
-              <h3>Gratidão</h3>
-              <p>Encontre palavras para os pequenos momentos do dia.</p>
-            </article>
-            <article class="lp-benefit">
-              <svg aria-hidden="true" viewBox="0 0 24 24">
-                <use href="#icon-moon" />
-              </svg>
-              <h3>Conexão interior</h3>
-              <p>Reserve um instante para ouvir suas próprias ideias.</p>
-            </article>
-            <article class="lp-benefit">
-              <svg aria-hidden="true" viewBox="0 0 24 24">
-                <use href="#icon-compass" />
-              </svg>
-              <h3>Intenção diária</h3>
-              <p>Escolha uma mensagem para acompanhar sua rotina.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-      <section
-        class="lp-section lp-how"
-        id="como-funciona"
-        aria-labelledby="how-title"
-      >
-        <div class="lp-shell">
-          <p class="lp-kicker">SIMPLES. PESSOAL. NO SEU RITMO.</p>
-          <h2 id="how-title">
-            Da primeira página<br />
-            <span>ao seu momento de pausa.</span>
-          </h2>
-          <div class="lp-step-grid">
-            <article class="lp-step">
-              <div>
-                <span>01</span
-                ><svg aria-hidden="true" viewBox="0 0 24 24">
-                  <use href="#icon-document" />
-                </svg>
-              </div>
-              <h3>Acesse o material</h3>
-              <p>
-                Após a confirmação do pagamento, siga as instruções de acesso.
-              </p>
-            </article>
-            <article class="lp-step">
-              <div>
-                <span>02</span
-                ><svg aria-hidden="true" viewBox="0 0 24 24">
-                  <use href="#icon-compass" />
-                </svg>
-              </div>
-              <h3>Escolha uma jornada</h3>
-              <p>Dez temas para encontrar a leitura que faz sentido hoje.</p>
-            </article>
-            <article class="lp-step">
-              <div>
-                <span>03</span
-                ><svg aria-hidden="true" viewBox="0 0 24 24">
-                  <use href="#icon-moon" />
-                </svg>
-              </div>
-              <h3>Leia no seu ritmo</h3>
-              <p>
-                Uma página, um mantra ou uma releitura. Sem sequência
-                obrigatória.
-              </p>
-            </article>
-            <article class="lp-step">
-              <div>
-                <span>04</span
-                ><svg aria-hidden="true" viewBox="0 0 24 24">
-                  <use href="#icon-heart" />
-                </svg>
-              </div>
-              <h3>Leve a reflexão com você</h3>
-              <p>Volte às suas mensagens favoritas quando sentir vontade.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-      <section
-        class="lp-journey-band lp-dark"
-        id="dez-jornadas"
-        aria-labelledby="journey-band-title"
-      >
-        <div class="lp-shell">
-          <p class="lp-kicker">ESCOLHA O TEMA DO SEU MOMENTO</p>
-          <h2 id="journey-band-title">
-            Dez jornadas. <span>Muitas formas de se encontrar.</span>
-          </h2>
-        </div>
-        <div class="lp-ticker" aria-hidden="true">
-          <div class="lp-ticker-track">
-            <div class="lp-ticker-group">
-              <span><b>01</b>O amor que começa em mim</span
-              ><span><b>02</b>A abundância que cultivo</span
-              ><span><b>03</b>Meu espaço de equilíbrio</span
-              ><span><b>04</b>A beleza de reconhecer</span
-              ><span><b>05</b>O sossego possível</span
-              ><span><b>06</b>A coragem de ser</span
-              ><span><b>07</b>O espaço do recomeço</span
-              ><span><b>08</b>A voz da minha intuição</span
-              ><span><b>09</b>Laços que fazem bem</span
-              ><span><b>10</b>Uma intenção para hoje</span>
+            <div class="plan-name"><span>Plano Completo</span><h3>A experiência completa</h3><p>500 Mantras + os 2 bônus</p></div>
+            <ul class="plan-list">
+              <li><svg><use href="#i-check"></use></svg> E-book 500 Mantras — Edição Premium</li>
+              <li><svg><use href="#i-check"></use></svg> Guia Noite Leve — 7 noites</li>
+              <li><svg><use href="#i-check"></use></svg> Planner 21 Dias de Intenção — 2 versões</li>
+              <li><svg><use href="#i-check"></use></svg> Acesso digital imediato</li>
+            </ul>
+            <div class="price-block price-block--hero">
+              <s>De R$ 189,90</s>
+              <span>por apenas</span>
+              <strong><small>R$</small> <span class="price-count" data-price="37.90">37,90</span></strong>
+              <em>Economize R$ 152,00</em>
+              <span class="price-note">Menos de 8 centavos por mantra</span>
             </div>
-            <div class="lp-ticker-group">
-              <span><b>01</b>O amor que começa em mim</span
-              ><span><b>02</b>A abundância que cultivo</span
-              ><span><b>03</b>Meu espaço de equilíbrio</span
-              ><span><b>04</b>A beleza de reconhecer</span
-              ><span><b>05</b>O sossego possível</span
-              ><span><b>06</b>A coragem de ser</span
-              ><span><b>07</b>O espaço do recomeço</span
-              ><span><b>08</b>A voz da minha intuição</span
-              ><span><b>09</b>Laços que fazem bem</span
-              ><span><b>10</b>Uma intenção para hoje</span>
+            <a class="button button--gold button--xl shimmer-button checkout-link" href="https://pay.cakto.com.br/ihyd7v3_1261754" data-plan="complete" data-value="37.90">Quero o Completo por R$ 37,90 <svg><use href="#i-arrow"></use></svg></a>
+            <div class="checkout-assurance">Pagamento único · Acesso imediato · 7 dias de garantia</div>
+            <div class="payment-methods" aria-label="Formas de pagamento: Visa, Mastercard, Elo, Pix e PicPay">
+              <img src="assets/payments/visa.svg" width="48" height="30" loading="lazy" alt="Visa"><img src="assets/payments/mastercard.svg" width="48" height="30" loading="lazy" alt="Mastercard"><img src="assets/payments/elo.svg" width="48" height="30" loading="lazy" alt="Elo"><img src="assets/payments/pix.svg" width="48" height="30" loading="lazy" alt="Pix"><img src="assets/payments/picpay.svg" width="48" height="30" loading="lazy" alt="PicPay">
             </div>
-          </div>
-        </div>
-        <div class="lp-shell">
-          <button
-            class="lp-text-control"
-            type="button"
-            data-toggle-journeys
-            aria-pressed="false"
-          >
-            Pausar movimento das jornadas
-          </button>
-          <ul class="visually-hidden">
-            <li>O amor que começa em mim</li>
-            <li>A abundância que cultivo</li>
-            <li>Meu espaço de equilíbrio</li>
-            <li>A beleza de reconhecer</li>
-            <li>O sossego possível</li>
-            <li>A coragem de ser</li>
-            <li>O espaço do recomeço</li>
-            <li>A voz da minha intuição</li>
-            <li>Laços que fazem bem</li>
-            <li>Uma intenção para hoje</li>
-          </ul>
-        </div>
-      </section>
-      <section
-        class="lp-section lp-included"
-        id="o-que-recebe"
-        aria-labelledby="included-title"
-      >
-        <div class="lp-shell">
-          <div class="lp-centered-heading">
-            <p class="lp-kicker">SEU E-BOOK POR INTEIRO</p>
-            <h2 id="included-title">
-              Conteúdo para acompanhar<br /><span
-                >diferentes momentos da vida.</span
-              >
-            </h2>
-            <p>
-              Escolha uma mensagem, faça uma pausa e volte sempre que sentir
-              vontade.
-            </p>
-          </div>
-          <ul class="lp-content-facts" aria-label="Conteúdo do e-book">
-            <li>
-              <svg aria-hidden="true" viewBox="0 0 24 24">
-                <use href="#icon-document" /></svg
-              ><strong>500</strong>
-              <h3>Mantras</h3>
-              <p>Mensagens para refletir e revisitar.</p>
-            </li>
-            <li>
-              <svg aria-hidden="true" viewBox="0 0 24 24">
-                <use href="#icon-compass" /></svg
-              ><strong>10</strong>
-              <h3>Jornadas</h3>
-              <p>Temas organizados para escolher.</p>
-            </li>
-            <li>
-              <svg aria-hidden="true" viewBox="0 0 24 24">
-                <use href="#icon-digital-book" /></svg
-              ><strong>127</strong>
-              <h3>Páginas</h3>
-              <p>Todo o conteúdo reunido em PDF.</p>
-            </li>
-          </ul>
-          <p class="lp-content-note">
-            Leia no celular, tablet ou computador. Sem sequência obrigatória.
-          </p>
-          <div class="lp-centered-action">
-            <a
-              class="button button-gold"
-              data-checkout
-              data-cta-location="conteudo"
-              href="__CHECKOUT_URL__"
-              >QUERO COMEÇAR MINHA LEITURA<svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-              >
-                <path d="M5 12h14m-6-6 6 6-6 6" /></svg
-            ></a>
-            <p class="lp-assurance">Pagamento único. Sem mensalidades.</p>
-          </div>
-        </div>
-      </section>
-      <section
-        class="lp-section lp-gallery-section"
-        id="conteudo-do-ebook"
-        aria-labelledby="content-title"
-      >
-        <div class="lp-shell">
-          <div class="lp-gallery-heading">
-            <div>
-              <p class="lp-kicker">PÁGINAS REAIS DA EDIÇÃO PREMIUM</p>
-              <h2 id="content-title">
-                Você não precisa imaginar.<br /><span
-                  >Veja o que vai encontrar.</span
-                >
-              </h2>
+          </article>
+
+          <article class="plan-card plan-essential">
+            <div class="plan-name"><span>Plano Essencial</span><h3>Só o e-book</h3><p>500 Mantras — Edição Premium</p></div>
+            <img class="essential-cover" src="assets/images/capa-500-mantras.webp" width="760" height="1140" loading="lazy" alt="Capa do e-book 500 Mantras">
+            <ul class="plan-list">
+              <li><svg><use href="#i-check"></use></svg> 500 mantras</li>
+              <li><svg><use href="#i-check"></use></svg> 10 jornadas temáticas</li>
+              <li><svg><use href="#i-check"></use></svg> 127 páginas em PDF</li>
+            </ul>
+            <div class="price-block"><s>De R$ 49,90</s><span>por</span><strong><small>R$</small> 9,90</strong><span class="price-note">Só R$ 9,90, pagamento único</span></div>
+            <a class="button button--outline checkout-link" href="https://pay.cakto.com.br/323zgdr_1243414" data-plan="essential" data-value="9.90">Quero só o e-book por R$ 9,90</a>
+            <div class="checkout-assurance">Pagamento único · Acesso imediato · 7 dias de garantia</div>
+            <div class="payment-methods" aria-label="Formas de pagamento: Visa, Mastercard, Elo, Pix e PicPay">
+              <img src="assets/payments/visa.svg" width="48" height="30" loading="lazy" alt="Visa"><img src="assets/payments/mastercard.svg" width="48" height="30" loading="lazy" alt="Mastercard"><img src="assets/payments/elo.svg" width="48" height="30" loading="lazy" alt="Elo"><img src="assets/payments/pix.svg" width="48" height="30" loading="lazy" alt="Pix"><img src="assets/payments/picpay.svg" width="48" height="30" loading="lazy" alt="PicPay">
             </div>
-            <p>
-              Abra as prévias, leia as mensagens e conheça a organização do
-              material. Toque em uma página para ampliar.
-            </p>
-          </div>
-          <div
-            class="lp-carousel lp-gallery"
-            id="previewGallery"
-            data-carousel
-            tabindex="0"
-            role="region"
-            aria-label="Páginas reais do e-book"
-          >
-            <figure class="lp-page-card">
-              <button
-                class="lp-image-trigger"
-                type="button"
-                data-zoom-group="ebook"
-                data-full="/assets/edition/amor-proprio.webp"
-                data-caption="Página 7 · Amor-próprio e autoestima"
-                aria-label="Ampliar página 7: Amor-próprio e autoestima"
-              >
-                <img
-                  src="/assets/edition/amor-proprio-thumb.webp"
-                  width="840"
-                  height="1260"
-                  alt="Página 7 real da edição premium: Amor-próprio e autoestima."
-                  loading="lazy"
-                  decoding="async"
-                /><span
-                  >Ampliar página 07
-                  <svg aria-hidden="true" viewBox="0 0 24 24">
-                    <use href="#icon-document" /></svg
-                ></span>
-              </button>
-              <figcaption>
-                <span class="lp-kicker">PÁGINA 07</span>
-                <h3>Amor-próprio e autoestima</h3>
-                <blockquote>
-                  “Eu mereço o mesmo cuidado que ofereço às pessoas que amo.”
-                </blockquote>
-              </figcaption>
-            </figure>
-            <figure class="lp-page-card">
-              <button
-                class="lp-image-trigger"
-                type="button"
-                data-zoom-group="ebook"
-                data-full="/assets/edition/abundancia.webp"
-                data-caption="Página 19 · Prosperidade e abundância"
-                aria-label="Ampliar página 19: Prosperidade e abundância"
-              >
-                <img
-                  src="/assets/edition/abundancia-thumb.webp"
-                  width="840"
-                  height="1260"
-                  alt="Página 19 real da edição premium: Prosperidade e abundância."
-                  loading="lazy"
-                  decoding="async"
-                /><span
-                  >Ampliar página 19
-                  <svg aria-hidden="true" viewBox="0 0 24 24">
-                    <use href="#icon-document" /></svg
-                ></span>
-              </button>
-              <figcaption>
-                <span class="lp-kicker">PÁGINA 19</span>
-                <h3>Prosperidade e abundância</h3>
-                <blockquote>
-                  “Eu reconheço as oportunidades que surgem quando me preparo
-                  para percebê-las.”
-                </blockquote>
-              </figcaption>
-            </figure>
-            <figure class="lp-page-card">
-              <button
-                class="lp-image-trigger"
-                type="button"
-                data-zoom-group="ebook"
-                data-full="/assets/edition/gratidao.webp"
-                data-caption="Página 43 · Gratidão e conexão com o universo"
-                aria-label="Ampliar página 43: Gratidão e conexão com o universo"
-              >
-                <img
-                  src="/assets/edition/gratidao-thumb.webp"
-                  width="840"
-                  height="1260"
-                  alt="Página 43 real da edição premium: Gratidão e conexão com o universo."
-                  loading="lazy"
-                  decoding="async"
-                /><span
-                  >Ampliar página 43
-                  <svg aria-hidden="true" viewBox="0 0 24 24">
-                    <use href="#icon-document" /></svg
-                ></span>
-              </button>
-              <figcaption>
-                <span class="lp-kicker">PÁGINA 43</span>
-                <h3>Gratidão e conexão com o universo</h3>
-                <blockquote>
-                  “Hoje percebo a beleza de uma coisa simples que normalmente
-                  passa despercebida.”
-                </blockquote>
-              </figcaption>
-            </figure>
-            <figure class="lp-page-card">
-              <button
-                class="lp-image-trigger"
-                type="button"
-                data-zoom-group="ebook"
-                data-full="/assets/ebook-premium/page-067-840.webp"
-                data-caption="Página 67 · Confiança e coragem"
-                aria-label="Ampliar página 67: Confiança e coragem"
-              >
-                <img
-                  src="/assets/ebook-premium/page-067-480.webp"
-                  width="840"
-                  height="1260"
-                  alt="Página 67 real da edição premium: Confiança e coragem."
-                  loading="lazy"
-                  decoding="async"
-                /><span
-                  >Ampliar página 67
-                  <svg aria-hidden="true" viewBox="0 0 24 24">
-                    <use href="#icon-document" /></svg
-                ></span>
-              </button>
-              <figcaption>
-                <span class="lp-kicker">PÁGINA 67</span>
-                <h3>Confiança e coragem</h3>
-                <blockquote>
-                  “Eu posso sentir medo e ainda escolher um passo cuidadoso.”
-                </blockquote>
-              </figcaption>
-            </figure>
-            <figure class="lp-page-card">
-              <button
-                class="lp-image-trigger"
-                type="button"
-                data-zoom-group="ebook"
-                data-full="/assets/ebook-premium/page-091-840.webp"
-                data-caption="Página 91 · Intuição e sabedoria interior"
-                aria-label="Ampliar página 91: Intuição e sabedoria interior"
-              >
-                <img
-                  src="/assets/ebook-premium/page-091-480.webp"
-                  width="840"
-                  height="1260"
-                  alt="Página 91 real da edição premium: Intuição e sabedoria interior."
-                  loading="lazy"
-                  decoding="async"
-                /><span
-                  >Ampliar página 91
-                  <svg aria-hidden="true" viewBox="0 0 24 24">
-                    <use href="#icon-document" /></svg
-                ></span>
-              </button>
-              <figcaption>
-                <span class="lp-kicker">PÁGINA 91</span>
-                <h3>Intuição e sabedoria interior</h3>
-                <blockquote>
-                  “Eu reservo momentos de silêncio para perceber o que realmente
-                  penso.”
-                </blockquote>
-              </figcaption>
-            </figure>
-            <figure class="lp-page-card">
-              <button
-                class="lp-image-trigger"
-                type="button"
-                data-zoom-group="ebook"
-                data-full="/assets/ebook-premium/page-115-840.webp"
-                data-caption="Página 115 · Energia positiva e intenção diária"
-                aria-label="Ampliar página 115: Energia positiva e intenção diária"
-              >
-                <img
-                  src="/assets/ebook-premium/page-115-480.webp"
-                  width="840"
-                  height="1260"
-                  alt="Página 115 real da edição premium: Energia positiva e intenção diária."
-                  loading="lazy"
-                  decoding="async"
-                /><span
-                  >Ampliar página 115
-                  <svg aria-hidden="true" viewBox="0 0 24 24">
-                    <use href="#icon-document" /></svg
-                ></span>
-              </button>
-              <figcaption>
-                <span class="lp-kicker">PÁGINA 115</span>
-                <h3>Energia positiva e intenção diária</h3>
-                <blockquote>
-                  “Hoje escolho começar por aquilo que está ao meu alcance.”
-                </blockquote>
-              </figcaption>
-            </figure>
-          </div>
-          <div class="lp-carousel-controls">
-            <button
-              type="button"
-              data-carousel-prev="previewGallery"
-              aria-controls="previewGallery"
-              aria-label="Página anterior"
-            >
-              ←</button
-            ><span data-carousel-status="previewGallery" aria-live="polite"
-              >1 de 6</span
-            ><button
-              type="button"
-              data-carousel-next="previewGallery"
-              aria-controls="previewGallery"
-              aria-label="Próxima página"
-            >
-              →
-            </button>
-          </div>
-          <div class="lp-centered-action">
-            <a
-              class="button button-gold"
-              data-checkout
-              data-cta-location="galeria"
-              href="__CHECKOUT_URL__"
-              >QUERO EXPLORAR OS 500 MANTRAS<svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-              >
-                <path d="M5 12h14m-6-6 6 6-6 6" /></svg
-            ></a>
-          </div>
+          </article>
         </div>
-      </section>
-      <section
-        class="lp-section lp-dark"
-        id="por-dentro"
-        aria-labelledby="inside-title"
-      >
-        <div class="lp-shell lp-inside-grid">
-          <div>
-            <p class="lp-kicker">CONHEÇA O MATERIAL</p>
-            <h2 id="inside-title">
-              Uma leitura para ter por perto.<br /><span
-                >Veja a apresentação.</span
-              >
-            </h2>
-            <p class="lp-section-intro">
-              Em cerca de 19 segundos, conheça a proposta dos 500 Mantras e
-              descubra como aproveitar o e-book no seu dia a dia.
-            </p>
-            <p class="lp-caption">
-              Apresentação de cerca de 19 segundos. Você escolhe quando
-              assistir.
-            </p>
-          </div>
-          <div class="lp-video-frame">
-            <video id="productVideo" controls preload="none" playsinline poster="/assets/edition/video-poster.webp" aria-label="Apresentação visual das páginas reais dos 500 Mantras, com duração aproximada de 19 segundos"><source src="/videos/500-mantras-edicao-premium.mp4" type="video/mp4">Seu navegador não consegue reproduzir este vídeo. <a href="/videos/500-mantras-edicao-premium.mp4">Abra a apresentação</a>.</video><button
-              class="video-play"
-              id="videoPlay"
-              type="button"
-              aria-label="Reproduzir a apresentação dos 500 Mantras"
-              hidden
-            >
-              <img
-                src="/assets/edition/video-poster.webp"
-                width="1280"
-                height="720"
-                alt="Capa da apresentação da edição premium dos 500 Mantras."
-                loading="lazy"
-                decoding="async"
-              />
-              <span class="lp-video-play-mark" aria-hidden="true"
-                ><svg viewBox="0 0 24 24"><path d="m9 5 11 7-11 7Z" /></svg
-              ></span>
-            </button>
-          </div>
+        <div class="payment-note"><svg><use href="#i-lock"></use></svg> Pagamento processado pela Cakto via PIX, cartão ou PicPay. Condições disponíveis no checkout.</div>
+      </div>
+    </section>
+
+    <!-- 7. DEPOIMENTOS -->
+    <section class="testimonials-section" id="depoimentos">
+      <div class="container reveal">
+        <div class="section-heading section-heading--row">
+          <div><span class="kicker">Depoimentos em 2026</span><h2>Quem abriu, encontrou seu próprio jeito de usar</h2></div>
+          <div class="carousel-buttons"><button type="button" class="carousel-arrow carousel-prev" aria-label="Depoimento anterior"><svg><use href="#i-arrow"></use></svg></button><button type="button" class="carousel-arrow carousel-next" aria-label="Próximo depoimento"><svg><use href="#i-arrow"></use></svg></button></div>
         </div>
-      </section>
-      <section
-        class="lp-section lp-feedback-section"
-        id="whatsapp-testimonials"
-        data-component="WhatsAppTestimonials"
-        hidden
-        aria-labelledby="feedback-title"
-      >
-        <div class="lp-shell">
-          <div class="lp-centered-heading">
-            <p class="lp-kicker">EXPERIÊNCIAS COMPARTILHADAS</p>
-            <h2 id="feedback-title">
-              Quem já conheceu os 500 Mantras<br /><span
-                >conta sua experiência.</span
-              >
-            </h2>
-            <p>
-              Leitores compartilham como usam o material no dia a dia. Toque nos
-              prints para ler as conversas completas.
-            </p>
-          </div>
-          <div
-            class="lp-carousel lp-feedback"
-            id="readerFeedback"
-            data-carousel
-            tabindex="0"
-            role="region"
-            aria-label="Depoimentos enviados pelo WhatsApp"
-          ></div>
-          <div class="lp-carousel-controls">
-            <button
-              type="button"
-              data-carousel-prev="readerFeedback"
-              aria-controls="readerFeedback"
-              aria-label="Depoimento anterior"
-            >
-              ←</button
-            ><span data-carousel-status="readerFeedback" aria-live="polite"
-              >1 de 5</span
-            ><button
-              type="button"
-              data-carousel-next="readerFeedback"
-              aria-controls="readerFeedback"
-              aria-label="Próximo depoimento"
-            >
-              →
-            </button>
-          </div>
+        <div class="testimonial-carousel" tabindex="0" aria-label="Carrossel de depoimentos reais">
+          <button class="testimonial-shot" type="button" data-full="assets/images/depoimento-01.webp" aria-label="Ampliar depoimento de Cláudia Farias"><img src="assets/images/depoimento-01.webp" width="520" height="921" loading="lazy" alt="Depoimento real de Cláudia Farias sobre os 500 Mantras"><span><svg><use href="#i-expand"></use></svg> Ampliar</span></button>
+          <button class="testimonial-shot" type="button" data-full="assets/images/depoimento-02.webp" aria-label="Ampliar depoimento de Sofia Ribeiro"><img src="assets/images/depoimento-02.webp" width="520" height="924" loading="lazy" alt="Depoimento real de Sofia Ribeiro sobre os 500 Mantras"><span><svg><use href="#i-expand"></use></svg> Ampliar</span></button>
+          <button class="testimonial-shot" type="button" data-full="assets/images/depoimento-03.webp" aria-label="Ampliar depoimento de Larissa Menezes"><img src="assets/images/depoimento-03.webp" width="520" height="924" loading="lazy" alt="Depoimento real de Larissa Menezes sobre os 500 Mantras"><span><svg><use href="#i-expand"></use></svg> Ampliar</span></button>
+          <button class="testimonial-shot" type="button" data-full="assets/images/depoimento-04.webp" aria-label="Ampliar depoimento de Vanessa Azevedo"><img src="assets/images/depoimento-04.webp" width="520" height="924" loading="lazy" alt="Depoimento real de Vanessa Azevedo sobre os 500 Mantras"><span><svg><use href="#i-expand"></use></svg> Ampliar</span></button>
+          <button class="testimonial-shot" type="button" data-full="assets/images/depoimento-05.webp" aria-label="Ampliar depoimento de Bianca Souza"><img src="assets/images/depoimento-05.webp" width="520" height="924" loading="lazy" alt="Depoimento real de Bianca Souza sobre os 500 Mantras"><span><svg><use href="#i-expand"></use></svg> Ampliar</span></button>
+          <button class="testimonial-shot" type="button" data-full="assets/images/depoimento-06.webp" aria-label="Ampliar depoimento de Débora Lima"><img src="assets/images/depoimento-06.webp" width="520" height="924" loading="lazy" alt="Depoimento real de Débora Lima sobre os 500 Mantras"><span><svg><use href="#i-expand"></use></svg> Ampliar</span></button>
+          <button class="testimonial-shot" type="button" data-full="assets/images/depoimento-07.webp" aria-label="Ampliar depoimento de Ana Beatriz"><img src="assets/images/depoimento-07.webp" width="520" height="924" loading="lazy" alt="Depoimento real de Ana Beatriz sobre os 500 Mantras"><span><svg><use href="#i-expand"></use></svg> Ampliar</span></button>
+          <button class="testimonial-shot" type="button" data-full="assets/images/depoimento-08.webp" aria-label="Ampliar depoimento de Eduardo Torres"><img src="assets/images/depoimento-08.webp" width="520" height="924" loading="lazy" alt="Depoimento real de Eduardo Torres sobre os 500 Mantras"><span><svg><use href="#i-expand"></use></svg> Ampliar</span></button>
+          <button class="testimonial-shot" type="button" data-full="assets/images/depoimento-09.webp" aria-label="Ampliar depoimento de Gustavo Nogueira"><img src="assets/images/depoimento-09.webp" width="520" height="924" loading="lazy" alt="Depoimento real de Gustavo Nogueira sobre os 500 Mantras"><span><svg><use href="#i-expand"></use></svg> Ampliar</span></button>
+          <button class="testimonial-shot" type="button" data-full="assets/images/depoimento-10.webp" aria-label="Ampliar depoimento de Mirela Costa"><img src="assets/images/depoimento-10.webp" width="520" height="924" loading="lazy" alt="Depoimento real de Mirela Costa sobre os 500 Mantras"><span><svg><use href="#i-expand"></use></svg> Ampliar</span></button>
         </div>
-      </section>
-      <section
-        class="lp-section lp-explorer-section"
-        id="explore-jornadas"
-        aria-labelledby="explorer-title"
-      >
-        <div class="lp-shell lp-explorer-grid">
-          <div>
-            <p class="lp-kicker">ENCONTRE AS SUAS PALAVRAS</p>
-            <h2 id="explorer-title">
-              Qual jornada combina<br /><span>com o seu momento?</span>
-            </h2>
-            <p>Escolha um dos dez temas e leia uma mensagem real do e-book.</p>
-            <label for="journeySelect">Sua jornada de hoje</label
-            ><select id="journeySelect">
-              <option value="0">O amor que começa em mim</option>
-              <option value="1">A abundância que cultivo</option>
-              <option value="2">Meu espaço de equilíbrio</option>
-              <option value="3">A beleza de reconhecer</option>
-              <option value="4">O sossego possível</option>
-              <option value="5">A coragem de ser</option>
-              <option value="6">O espaço do recomeço</option>
-              <option value="7">A voz da minha intuição</option>
-              <option value="8">Laços que fazem bem</option>
-              <option value="9">Uma intenção para hoje</option></select
-            ><a
-              class="button button-gold"
-              data-checkout
-              data-cta-location="explorador"
-              href="__CHECKOUT_URL__"
-              >QUERO ACESSAR AS 10 JORNADAS<svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-              >
-                <path d="M5 12h14m-6-6 6 6-6 6" /></svg
-            ></a>
-          </div>
-          <figure class="lp-journey-message" aria-live="polite">
-            <span class="lp-quote-mark" aria-hidden="true">“</span>
-            <blockquote id="journeyMessage">
-              Eu mereço o mesmo cuidado que ofereço às pessoas que amo.
-            </blockquote>
-            <figcaption>
-              <span id="journeyName">Amor-próprio e autoestima</span
-              ><small id="journeySource">Página 07 · Mantra 001</small>
-            </figcaption>
-            <button type="button" class="lp-another-mantra" data-next-mantra>
-              Outra mensagem nesta jornada <span aria-hidden="true">→</span>
-            </button>
-          </figure>
-        </div>
-      </section>
-      <section
-        class="lp-section lp-offer-section"
-        id="oferta"
-        aria-labelledby="offer-title"
-      >
-        <div class="lp-shell">
-          <div class="lp-centered-heading">
-            <p class="lp-kicker">SEU MOMENTO DE AUTOCUIDADO COMEÇA AQUI</p>
-            <h2>500 mensagens para ter<br /><span>sempre à mão.</span></h2>
-          </div>
-          <div class="lp-offer-card">
-            <figure class="lp-offer-art">
-              <img
-                src="/assets/edition/cover.webp"
-                srcset="
-                  /assets/edition/cover-thumb.webp  600w,
-                  /assets/edition/cover.webp       1200w
-                "
-                sizes="(min-width: 960px) 480px, calc(100vw - 80px)"
-                width="1200"
-                height="1800"
-                alt="Capa real da Edição Premium dos 500 Mantras."
-                loading="lazy"
-                decoding="async"
-              />
-              <figcaption>
-                E-book em PDF • Leia nos seus dispositivos
-              </figcaption>
-            </figure>
-            <div class="lp-offer-content">
-              <span class="lp-offer-tag">SEU E-BOOK COMPLETO</span>
-              <h3 id="offer-title" data-copy-slot="offerTitle">
-                Uma pequena escolha.<br />Um momento que é seu.
-              </h3>
-              <p>
-                Mensagens organizadas para acompanhar suas pausas de leitura e
-                reflexão.
-              </p>
-              <ul class="lp-offer-list">
-                <li>
-                  <svg aria-hidden="true" viewBox="0 0 24 24">
-                    <use href="#icon-check" /></svg
-                  ><span
-                    ><strong>500 mantras</strong> para consultar e
-                    revisitar.</span
-                  >
-                </li>
-                <li>
-                  <svg aria-hidden="true" viewBox="0 0 24 24">
-                    <use href="#icon-check" /></svg
-                  ><span
-                    ><strong>10 jornadas temáticas</strong> para diferentes
-                    momentos.</span
-                  >
-                </li>
-                <li>
-                  <svg aria-hidden="true" viewBox="0 0 24 24">
-                    <use href="#icon-check" /></svg
-                  ><span
-                    ><strong>127 páginas em PDF,</strong> em um só e-book.</span
-                  >
-                </li>
-                <li>
-                  <svg aria-hidden="true" viewBox="0 0 24 24">
-                    <use href="#icon-check" /></svg
-                  ><span
-                    ><strong>Leia no celular,</strong> tablet ou
-                    computador.</span
-                  >
-                </li>
-                <li>
-                  <svg aria-hidden="true" viewBox="0 0 24 24">
-                    <use href="#icon-check" /></svg
-                  ><span
-                    ><strong>Pagamento único.</strong> Sem assinatura.</span
-                  >
-                </li>
-              </ul>
-              <div class="lp-offer-price">
-                <span>ACESSO AO E-BOOK COMPLETO</span
-                ><strong>R$ __PRODUCT_PRICE__</strong>
-                <p>Pagamento único. Sem mensalidades.</p>
-              </div>
-              <a
-                class="button button-gold offer-cta"
-                data-copy-slot="offerCta"
-                data-checkout
-                data-cta-location="oferta"
-                href="__CHECKOUT_URL__"
-                >QUERO ACESSAR POR R$ __PRODUCT_PRICE__<svg
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M5 12h14m-6-6 6 6-6 6" /></svg
-              ></a>
-              <div class="lp-offer-trust">
-                <div>
-                  <img
-                    class="lp-offer-seal"
-                    src="/assets/selo-garantia-premium-7-dias-v1.webp"
-                    width="640"
-                    height="640"
-                    alt="Selo de garantia de 7 dias"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  Garantia de 7 dias
-                </div>
-                <div>
-                  <svg aria-hidden="true" viewBox="0 0 24 24">
-                    <use href="#icon-document" /></svg
-                  >Acesso digital
-                </div>
-              </div>
-              <div
-                class="lp-payment-brands"
-                aria-label="Bandeiras de cartão aceitas"
-              >
-                <img
-                  src="/assets/payment-visa-aligned-v1.webp"
-                  width="134"
-                  height="44"
-                  alt="Visa"
-                  loading="lazy"
-                /><img
-                  src="/assets/payment-mastercard.svg"
-                  width="41"
-                  height="26"
-                  alt="Mastercard"
-                  loading="lazy"
-                /><img
-                  class="lp-elo"
-                  src="/assets/payment-elo.svg"
-                  width="86"
-                  height="27"
-                  alt="Elo"
-                  loading="lazy"
-                />
-              </div>
-              <p class="lp-payment-note">
-                Pagamento pela Cakto. PIX, cartão e PicPay: confira as opções e
-                condições no checkout.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section
-        class="lp-section lp-guarantee-section"
-        id="garantia"
-        aria-labelledby="guarantee-title"
-      >
-        <div class="lp-shell lp-guarantee-grid">
-          <img
-            src="/assets/selo-garantia-premium-7-dias-v1.webp"
-            width="640"
-            height="640"
-            alt="Selo de garantia de 7 dias"
-            loading="lazy"
-          />
-          <div>
-            <p class="lp-kicker">TEMPO PARA CONHECER O MATERIAL</p>
-            <h2 id="guarantee-title">
-              Sua decisão merece<br /><span>tranquilidade.</span>
-            </h2>
-            <p>
-              Você tem 7 dias após a compra para solicitar o reembolso integral,
-              mesmo depois de abrir ou baixar o e-book.
-            </p>
-            <p class="lp-legal-note">
-              Direito de arrependimento previsto no artigo 49 do Código de
-              Defesa do Consumidor. Para solicitar, use o
-              <a href="#rodape">canal de atendimento no rodapé</a>.
-            </p>
-          </div>
-        </div>
-      </section>
-      <section
-        class="lp-section lp-faq-section"
-        id="duvidas"
-        aria-labelledby="faq-title"
-      >
-        <div class="lp-shell lp-faq-grid">
-          <div>
-            <p class="lp-kicker">ANTES DE COMEÇAR</p>
-            <h2 id="faq-title">Suas dúvidas,<br /><span>com clareza.</span></h2>
-            <p>Informações para escolher com tranquilidade.</p>
-          </div>
-          <div class="faq-list">
-            <details>
-              <summary>
-                O que são os 500 Mantras?<span aria-hidden="true">+</span>
-              </summary>
-              <p>
-                Um e-book digital em PDF, com 500 mensagens para leitura,
-                reflexão e autocuidado, organizadas em dez jornadas. O material
-                não substitui cuidados profissionais.
-              </p>
-            </details>
-            <details>
-              <summary>
-                O que está incluído na compra?<span aria-hidden="true">+</span>
-              </summary>
-              <p>
-                O e-book 500 Mantras para Elevar Sua Energia, com 127 páginas e
-                dez jornadas temáticas. Os três complementos são opcionais e
-                cobrados separadamente.
-              </p>
-            </details>
-            <details>
-              <summary>
-                Como recebo e acesso o material?<span aria-hidden="true"
-                  >+</span
-                >
-              </summary>
-              <p>
-                Após a confirmação do pagamento, siga as instruções de entrega e
-                acesso disponibilizadas na compra pela Cakto.
-              </p>
-            </details>
-            <details>
-              <summary>
-                Posso ler no celular?<span aria-hidden="true">+</span>
-              </summary>
-              <p>
-                Sim. O PDF pode ser aberto no celular, tablet ou computador com
-                um leitor de PDF compatível.
-              </p>
-            </details>
-            <details>
-              <summary>
-                Preciso seguir uma ordem ou pagar mensalidade?<span
-                  aria-hidden="true"
-                  >+</span
-                >
-              </summary>
-              <p>
-                Não há sequência obrigatória. Você escolhe o tema e lê no seu
-                ritmo. O produto principal custa R$ __PRODUCT_PRICE__ em
-                pagamento único, sem mensalidade.
-              </p>
-            </details>
-            <details>
-              <summary>
-                Como funciona a garantia de sete dias?<span aria-hidden="true"
-                  >+</span
-                >
-              </summary>
-              <p>
-                Você pode solicitar o reembolso integral em até sete dias após a
-                compra, mesmo após abrir ou baixar o arquivo. O contato de
-                atendimento está no rodapé.
-              </p>
-            </details>
-            <details>
-              <summary>
-                Como funcionam os complementos opcionais?<span
-                  aria-hidden="true"
-                  >+</span
-                >
-              </summary>
-              <p>
-                100 Cartões Digitais de Afirmações, Jornada dos 21 Dias de
-                Conexão Interior e Oráculo das 52 Mensagens podem ser oferecidos
-                no checkout. São opcionais, cobrados separadamente e não estão
-                incluídos no e-book principal.
-              </p>
-            </details>
-          </div>
-        </div>
-      </section>
-      <section class="lp-closing lp-dark" aria-labelledby="closing-title">
-        <div class="lp-shell">
-          <p class="lp-kicker">UMA MENSAGEM. UM NOVO MOMENTO DE LEITURA.</p>
-          <h2 id="closing-title">
-            Entre tantas coisas para fazer,<br /><span
-              >reserve uma pausa para você.</span
-            >
-          </h2>
-          <p>
-            Tenha os 500 Mantras por R$ __PRODUCT_PRICE__ e escolha sua próxima
-            leitura.
-          </p>
-          <a
-            class="button button-gold"
-            data-checkout
-            data-cta-location="fechamento"
-            href="__CHECKOUT_URL__"
-            >QUERO ACESSAR OS 500 MANTRAS<svg
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-            >
-              <path d="M5 12h14m-6-6 6 6-6 6" /></svg
-          ></a>
-          <p class="lp-assurance">
-            Pagamento único • Acesso digital • Garantia de 7 dias
-          </p>
-        </div>
-      </section>
-    </main>
-    <footer class="lp-footer" id="rodape">
-      <div class="lp-shell">
-        <div class="lp-footer-top">
-          <a
-            class="lp-footer-brand"
-            href="#inicio"
-            aria-label="500 Mantras, voltar ao início"
-            ><img
-              src="/assets/logo-500-mantras-oficial-v3.webp"
-              width="768"
-              height="282"
-              alt="500 Mantras para Elevar Sua Energia"
-              loading="lazy" /></a
-          ><a
-            class="lp-support"
-            href="mailto:__SUPPORT_EMAIL__"
-            data-support-link
-            ><span>Dúvidas ou suporte</span>__SUPPORT_EMAIL__</a
-          >
-        </div>
-        <nav aria-label="Links legais">
-          <a href="/privacidade">Privacidade</a
-          ><a href="/termos">Termos de uso</a
-          ><a href="/privacidade#preferencias" data-consent-preferences
-            >Preferências de cookies</a
-          >
-        </nav>
-        <div class="lp-footer-bottom">
-          <p>
-            © <span id="copyrightYear">2026</span> 500 Mantras para Elevar Sua
-            Energia
-          </p>
-          <p>
-            Material para reflexão e autoconhecimento. Não substitui cuidados
-            profissionais.
-          </p>
-          <p>Produto digital em PDF. Não inclui versão física.</p>
+        <div class="swipe-hint">Arraste para ver mais <svg><use href="#i-arrow"></use></svg></div>
+      </div>
+    </section>
+
+    <!-- 8. PERGUNTAS FREQUENTES -->
+    <section class="faq-section" id="faq">
+      <div class="container faq-layout reveal">
+        <div class="section-heading"><span class="kicker">Antes de escolher</span><h2>Perguntas frequentes</h2><p>O essencial para você comprar com tranquilidade.</p><a href="mailto:empresakagency@gmail.com">Ainda tem dúvida? Fale com o suporte.</a></div>
+        <div class="faq-list">
+          <details><summary>O que é o 500 Mantras?<svg><use href="#i-plus"></use></svg></summary><p>É um e-book em PDF com 500 afirmações e reflexões organizadas em 10 jornadas temáticas. Você pode escolher o tema de que precisa e ler uma mensagem por vez.</p></details>
+          <details><summary>Como recebo o material?<svg><use href="#i-plus"></use></svg></summary><p>O acesso é digital e liberado após a confirmação do pagamento pela Cakto. As orientações de acesso são enviadas para os dados informados no checkout.</p></details>
+          <details><summary>Posso ler no celular?<svg><use href="#i-plus"></use></svg></summary><p>Sim. O PDF pode ser lido no celular, tablet ou computador. Você também pode salvar o arquivo e voltar às suas páginas favoritas.</p></details>
+          <details><summary>Preciso seguir uma ordem ou pagar mensalidade?<svg><use href="#i-plus"></use></svg></summary><p>Não. Você pode começar por qualquer uma das 10 jornadas e seguir no seu ritmo. O pagamento é único, sem mensalidade.</p></details>
+          <details><summary>Como funciona a garantia?<svg><use href="#i-plus"></use></svg></summary><p>Você tem 7 dias corridos após a compra para solicitar o reembolso integral, conforme o direito de arrependimento previsto no art. 49 do Código de Defesa do Consumidor.</p></details>
         </div>
       </div>
-    </footer>
-    <dialog
-      class="lp-offer-dialog"
-      id="exitOffer"
-      aria-labelledby="exit-title"
-      aria-describedby="exit-description"
-    >
-      <button
-        class="lp-modal-close"
-        type="button"
-        data-close-exit
-        aria-label="Fechar oferta"
-      >
-        ×
-      </button>
-      <div class="lp-modal-intro">
-        <p class="lp-kicker">UM MOMENTO PARA VOCÊ</p>
-        <h2 id="exit-title">
-          Que tal começar<br /><span>pela sua próxima leitura?</span>
-        </h2>
-        <p id="exit-description">
-          500 mantras em dez jornadas para acompanhar seus momentos de
-          autocuidado.
-        </p>
+    </section>
+  </main>
+
+  <!-- 9. RODAPÉ -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><a class="brand brand--footer" href="#top" aria-label="500 Mantras, voltar ao início"><img class="brand-logo brand-logo--footer" src="assets/images/logo-500-mantras.webp" width="420" height="350" loading="lazy" alt="Logo 500 Mantras"></a><p>Palavras para acalmar, inspirar e transformar — uma pausa de cada vez.</p></div>
+      <div class="footer-links"><strong>Suporte</strong><a href="mailto:empresakagency@gmail.com">empresakagency@gmail.com</a><span><a href="/privacidade">Privacidade</a><a href="/termos">Termos</a></span></div>
+    </div>
+    <div class="container guarantee-seal">
+      <img class="guarantee-image" src="assets/images/selo-garantia-7-dias.webp" width="420" height="420" loading="lazy" alt="Selo dourado de garantia de 7 dias">
+      <div><strong>Você decide com tranquilidade</strong><p>Reembolso integral dentro de 7 dias, conforme o art. 49 do CDC.</p></div>
+    </div>
+    <div class="container footer-bottom"><span>© <span id="footer-year"></span> 500 Mantras. Todos os direitos reservados.</span><span>Produto digital • Pagamento único</span></div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Depoimento ampliado" hidden>
+    <button class="modal-close" type="button" aria-label="Fechar imagem"><svg><use href="#i-close"></use></svg></button>
+    <img id="lightbox-image" alt="Depoimento ampliado">
+  </div>
+
+  <div class="offer-popup" id="offer-popup" role="dialog" aria-modal="true" aria-labelledby="popup-title" hidden>
+    <div class="offer-popup__backdrop" data-popup-x></div>
+    <div class="offer-popup__panel">
+      <button class="modal-close popup-close" type="button" data-popup-x aria-label="Fechar oferta"><svg><use href="#i-close"></use></svg></button>
+      <div class="popup-heading"><span class="kicker">Oferta de hoje</span><h2 id="popup-title">Oferta de hoje termina em <span class="sync-countdown">00:00:00</span></h2><p>Pagamento único e acesso digital imediato.</p></div>
+      <div class="popup-plans">
+        <article class="popup-plan popup-plan--complete">
+          <div class="exclusive-ribbon">Oferta exclusiva</div><span class="popup-picked">Mais escolhido</span><h3>Plano Completo</h3>
+          <img class="popup-plan-image popup-plan-image--complete" src="assets/images/kit-completo-popup.webp" width="560" height="560" decoding="async" alt="Kit Completo com o e-book 500 Mantras, Guia Noite Leve e Planner 21 Dias de Intenção">
+          <ul class="popup-benefits"><li><svg><use href="#i-check"></use></svg>E-book 500 Mantras (127 páginas)</li><li><svg><use href="#i-check"></use></svg>Bônus 01: Guia Noite Leve (7 noites)</li><li><svg><use href="#i-check"></use></svg>Bônus 02: Planner 21 Dias de Intenção (preencher e imprimir)</li><li><svg><use href="#i-check"></use></svg>Acesso digital imediato</li></ul>
+          <s>De R$ 189,90</s><strong>R$ 37,90</strong><em>Economize R$ 152,00</em><a class="button button--gold shimmer-button checkout-link" href="https://pay.cakto.com.br/ihyd7v3_1261754" data-plan="complete" data-value="37.90">Quero o Completo por R$ 37,90</a>
+        </article>
+        <article class="popup-plan popup-plan--essential"><h3>Plano Essencial</h3><img class="popup-plan-image popup-plan-image--essential" src="assets/images/capa-500-mantras.webp" width="760" height="1140" decoding="async" alt="Capa do e-book 500 Mantras"><ul class="popup-benefits"><li><svg><use href="#i-check"></use></svg>500 mantras</li><li><svg><use href="#i-check"></use></svg>10 jornadas temáticas</li><li><svg><use href="#i-check"></use></svg>127 páginas em PDF</li></ul><s>De R$ 49,90</s><strong>R$ 9,90</strong><a class="button button--outline checkout-link" href="https://pay.cakto.com.br/323zgdr_1243414" data-plan="essential" data-value="9.90">Quero só o e-book por R$ 9,90</a></article>
       </div>
-      <div class="lp-modal-product">
-        <img
-          src="/assets/edition/cover-thumb.webp"
-          width="600"
-          height="900"
-          alt="Capa real do e-book 500 Mantras, Edição Premium"
-          loading="lazy"
-        />
-        <div>
-          <span>E-BOOK COMPLETO · De <s>R$ 49,90</s> por</span
-          ><strong>R$ __PRODUCT_PRICE__</strong>
-          <p>Pagamento único.<br />Garantia de 7 dias.</p>
-        </div>
-      </div>
-      <table>
-        <caption>
-          Da prévia ao e-book completo
-        </caption>
-        <thead>
-          <tr>
-            <th scope="col">Conteúdo</th>
-            <th scope="col">Prévia</th>
-            <th scope="col">E-book</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">Mensagens</th>
-            <td>Amostras</td>
-            <td>500 mantras</td>
-          </tr>
-          <tr>
-            <th scope="row">Jornadas</th>
-            <td>Exemplos</td>
-            <td>10 temas</td>
-          </tr>
-          <tr>
-            <th scope="row">PDF completo</th>
-            <td>Não</td>
-            <td>127 páginas</td>
-          </tr>
-          <tr>
-            <th scope="row">No seu ritmo</th>
-            <td>Sim</td>
-            <td>Sim</td>
-          </tr>
-        </tbody>
-      </table>
-      <a
-        class="button button-gold"
-        data-checkout
-        data-cta-location="popup"
-        href="__CHECKOUT_URL__"
-        >QUERO MEUS 500 MANTRAS POR R$ __PRODUCT_PRICE__<svg
-          aria-hidden="true"
-          viewBox="0 0 24 24"
-        >
-          <path d="M5 12h14m-6-6 6 6-6 6" /></svg></a
-      ><button
-        type="button"
-        class="lp-continue"
-        data-close-exit
-        data-popup-continue
-      >
-        CONTINUAR CONHECENDO O E-BOOK</button
-      ><button type="button" class="lp-close-link" data-close-exit>
-        Fechar e continuar navegando
-      </button>
-    </dialog>
-    <dialog
-      class="lp-image-dialog"
-      id="imageLightbox"
-      aria-labelledby="lightbox-title"
-    >
-      <header>
-        <h2 id="lightbox-title">Prévia ampliada</h2>
-        <button
-          type="button"
-          class="lp-modal-close"
-          data-close-lightbox
-          aria-label="Fechar imagem"
-        >
-          ×
-        </button>
-      </header>
-      <div class="lp-lightbox-viewport">
-        <img width="840" height="1260" alt="Imagem ampliada do material" />
-      </div>
-      <div class="lp-lightbox-controls">
-        <button type="button" data-lightbox-prev aria-label="Imagem anterior">
-          ←</button
-        ><span data-lightbox-status aria-live="polite"></span
-        ><button type="button" data-lightbox-next aria-label="Próxima imagem">
-          →</button
-        ><button type="button" data-lightbox-zoom aria-pressed="false">
-          Ampliar 150%
-        </button>
-      </div>
-    </dialog>
-    <dialog class="consent-dialog" id="consentPreferences" aria-labelledby="consent-title" aria-describedby="consent-description"><button class="consent-close" type="button" data-consent-close aria-label="Fechar preferências">Fechar <svg class="icon" aria-hidden="true"><use href="#icon-x"/></svg></button><p class="eyebrow">SUA PRIVACIDADE</p><h2 class="consent-heading" id="consent-title">Você escolhe.</h2><div class="consent-copy" id="consent-description"><p>O rastreamento opcional fica desativado até você aceitar. Com sua permissão, o Meta Pixel e o Google Analytics, quando configurado, medem visitas e interações.</p><p>Você pode comprar sem aceitar e revisar sua escolha no rodapé. <a href="/privacidade">Política de privacidade</a>.</p></div><p class="consent-status" data-consent-status aria-live="polite"></p><div class="consent-actions"><button class="consent-reject" type="button" data-consent="denied">Rejeitar opcionais</button><button class="consent-accept" type="button" data-consent="accepted">Aceitar opcionais</button></div></dialog>
-  </body>
+      <button class="popup-continue" type="button" data-popup-dismiss>Continuar conhecendo a página</button>
+    </div>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
 </html>
