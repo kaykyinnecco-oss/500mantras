@@ -1,7 +1,7 @@
 const SITE_CONFIG = {
   checkout: {
-    essential: { url: "https://pay.cakto.com.br/323zgdr_1243414", value: 9.90 },
-    complete: { url: "https://pay.cakto.com.br/ihyd7v3_1261754", value: 37.90 }
+    essential: { url: "https://pay.cakto.com.br/323zgdr_1243414", value: 9.99 },
+    complete: { url: "https://pay.cakto.com.br/ihyd7v3_1261754", value: 37.99 }
   },
   timezone: "America/Sao_Paulo",
   currency: "BRL"
@@ -43,42 +43,6 @@ function decorateCheckoutLinks() {
       }
     });
   });
-}
-
-function updateBrasiliaClock() {
-  const now = new Date();
-  const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone: SITE_CONFIG.timezone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hourCycle: "h23"
-  }).formatToParts(now).reduce((acc, part) => {
-    if (part.type !== "literal") acc[part.type] = Number(part.value);
-    return acc;
-  }, {});
-
-  const elapsed = parts.hour * 3600 + parts.minute * 60 + parts.second;
-  const remaining = elapsed === 0 ? 86400 : 86400 - elapsed;
-  const hours = Math.floor(remaining / 3600);
-  const minutes = Math.floor((remaining % 3600) / 60);
-  const seconds = remaining % 60;
-  const countdownText = [hours, minutes, seconds]
-    .map((value) => String(value).padStart(2, "0"))
-    .join(":");
-  document.getElementById("countdown").textContent = countdownText;
-  document.querySelectorAll(".sync-countdown").forEach((element) => {
-    element.textContent = countdownText;
-  });
-
-  document.getElementById("today-date").textContent = new Intl.DateTimeFormat("pt-BR", {
-    timeZone: SITE_CONFIG.timezone,
-    day: "2-digit",
-    month: "short"
-  }).format(now).replace(".", "");
 }
 
 function createParticles() {
@@ -224,8 +188,6 @@ function initOfferPopup() {
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("footer-year").textContent = new Intl.DateTimeFormat("pt-BR", { year: "numeric", timeZone: SITE_CONFIG.timezone }).format(new Date());
-  updateBrasiliaClock();
-  window.setInterval(updateBrasiliaClock, 1000);
   decorateCheckoutLinks();
   createParticles();
   initReveal();
