@@ -499,3 +499,26 @@ main { padding-top: var(--header-height); }
   .plan-complete .popular-ribbon { min-width: 0; max-width: calc(100% - 90px); padding-inline: 10px; white-space: nowrap; }
   .popup-plan--complete .popup-picked { max-width: calc(100% - 72px); }
 }
+
+/* Hierarquia dos planos: o Completo permanece primeiro e dominante. */
+.plans-navigation { margin-top: 28px; text-align: center; }
+.essential-choice {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; color: var(--purple-3); font-size: .875rem; font-weight: 700;
+  text-decoration: underline; text-underline-offset: 4px;
+}
+.essential-choice:hover { color: var(--purple); }
+.essential-choice:focus-visible { outline: 2px solid var(--purple-3); outline-offset: 4px; }
+.plan-essential { width: 100%; max-width: 320px; justify-self: center; padding: 22px; background: #f6f3f5; box-shadow: 0 10px 26px rgba(0,0,0,.12); }
+.plan-essential .price-block strong { font-size: 2.2rem; }
+.plan-essential .essential-choice { width: 100%; text-align: center; }
+.popup-plan--essential { align-self: center; background: #f6f3f5; }
+.popup-plan--essential .essential-choice { grid-column: 1 / -1; width: 100%; text-align: center; font-size: .8125rem; }
+@media (max-width: 900px) {
+  .plan-essential { max-width: 300px; width: calc(100% - 24px); padding: 18px; }
+  .popup-plan--essential { width: calc(100% - 16px); justify-self: center; }
+  .popup-plan--essential { padding-block: 6px; }
+  .popup-plan--essential .essential-choice { min-height: 32px; line-height: 1.25; }
+  .popup-plan--essential .popup-benefits { margin-bottom: 0; }
+  .popup-plan--essential .popup-price-actions strong { font-size: 1.5rem; }
+}
