@@ -13,9 +13,9 @@ assert.equal((html.match(/323zgdr_1243414/g) || []).length, 2);
 assert.equal((html.match(/ihyd7v3_1261754/g) || []).length, 2);
 assert.match(script, /InitiateCheckout/);
 assert.match(script, /utm_/);
-assert.match(script, /OFFER_POPUP_INITIAL_DELAY_MS = 6000/);
-assert.match(script, /OFFER_POPUP_REOPEN_DELAY_MS = 8000/);
-assert.match(script, /OFFER_POPUP_MAX_REOPENS = 6/);
+assert.doesNotMatch(script, /popupTimer|popupReopens|scheduleOfferPopup|OFFER_POPUP_(?:INITIAL|REOPEN|MAX)/);
+assert.match(script, /a\[href="#planos"\]/);
+assert.match(script, /showOfferPopup\(button\)/);
 
 const refs = [...html.matchAll(/(?:src|href)="([^"#?]+)"/g)]
   .map((match) => match[1])
