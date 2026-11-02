@@ -7,11 +7,6 @@ const SITE_CONFIG = {
   currency: "BRL"
 };
 
-// Ajuste estes valores para controlar o comportamento do pop-up.
-const OFFER_POPUP_INITIAL_DELAY_MS = 6000;
-const OFFER_POPUP_REOPEN_DELAY_MS = 8000;
-const OFFER_POPUP_MAX_REOPENS = 6;
-
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 function getUtmParams() {
@@ -145,45 +140,41 @@ function initLightbox() {
   document.addEventListener("keydown", (event) => { if (event.key === "Escape" && !lightbox.hidden) close(); });
 }
 
-let popupTimer;
-let popupReopens = 0;
+let popupTrigger;
 
-function popupIsSuppressed() {
-  return sessionStorage.getItem("checkout_started") || sessionStorage.getItem("offer_popup_dismissed");
-}
-
-function scheduleOfferPopup(delay, isReopen = false) {
-  clearTimeout(popupTimer);
-  if (popupIsSuppressed() || (isReopen && popupReopens >= OFFER_POPUP_MAX_REOPENS)) return;
-  popupTimer = window.setTimeout(() => showOfferPopup(isReopen), delay);
-}
-
-function showOfferPopup(isReopen = false) {
+function showOfferPopup(trigger) {
   const popup = document.getElementById("offer-popup");
-  if (!popup || popupIsSuppressed() || !popup.hidden) return;
-  if (isReopen) popupReopens += 1;
+  if (!popup || !popup.hidden) return;
+  popupTrigger = trigger;
   popup.hidden = false;
   document.body.classList.add("modal-open");
   popup.querySelector(".popup-close").focus();
 }
 
-function closeOfferPopup({ reopen = false, suppress = false } = {}) {
-  clearTimeout(popupTimer);
+function closeOfferPopup({ suppress = false } = {}) {
   const popup = document.getElementById("offer-popup");
   if (suppress) sessionStorage.setItem("offer_popup_dismissed", "1");
-  if (popup && !popup.hidden) popup.hidden = true;
+  const wasOpen = popup && !popup.hidden;
+  if (wasOpen) popup.hidden = true;
   document.body.classList.remove("modal-open");
-  if (reopen && !popupIsSuppressed()) scheduleOfferPopup(OFFER_POPUP_REOPEN_DELAY_MS, true);
+  if (wasOpen && !suppress) popupTrigger?.focus({ preventScroll: true });
+  popupTrigger = undefined;
 }
 
 function initOfferPopup() {
-  document.querySelectorAll("[data-popup-x]").forEach((element) => element.addEventListener("click", () => closeOfferPopup({ reopen: true })));
-  document.querySelector("[data-popup-dismiss]")?.addEventListener("click", () => closeOfferPopup({ suppress: true }));
+  // Somente ações explícitas de escolha de planos podem abrir o modal.
+  document.querySelectorAll('a[href="#planos"], [data-popup-open]').forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      showOfferPopup(button);
+    });
+  });
+  document.querySelectorAll("[data-popup-x]").forEach((element) => element.addEventListener("click", () => closeOfferPopup()));
+  document.querySelector("[data-popup-dismiss]")?.addEventListener("click", () => closeOfferPopup());
   document.addEventListener("keydown", (event) => {
     const popup = document.getElementById("offer-popup");
-    if (event.key === "Escape" && popup && !popup.hidden) closeOfferPopup({ reopen: true });
+    if (event.key === "Escape" && popup && !popup.hidden) closeOfferPopup();
   });
-  scheduleOfferPopup(OFFER_POPUP_INITIAL_DELAY_MS);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
